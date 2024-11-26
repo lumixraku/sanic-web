@@ -172,10 +172,12 @@ const handleCreateStylized = async (send_text = '') => {
     }
 
     //加入对话历史用于左边表格渲染
-    tableData.value.push({
-        index: tableData.value.length,
+    const newItem = {
+        index: tableData.value.length, // 或者根据你的需求计算新的索引
         key: inputTextString.value ? inputTextString.value : send_text
-    })
+    }
+    // 使用 unshift 方法将新元素添加到数组的最前面
+    tableData.value.unshift(newItem)
 
     //调用大模型后台服务接口
     stylizingLoading.value = true
@@ -286,26 +288,26 @@ watch(
     }
 )
 
-// 监听对话历史表格数据变化滚动条到底部
-watch(
-    tableData,
-    (newData) => {
-        nextTick(() => {
-            scrollToBottomChatTable()
-        })
-    },
-    { deep: true }
-)
+// // 监听对话历史表格数据变化滚动条到底部
+// watch(
+//     tableData,
+//     (newData) => {
+//         nextTick(() => {
+//             scrollToBottomChatTable()
+//         })
+//     },
+//     { deep: true }
+// )
 
-const scrollToBottomChatTable = () => {
-    if (tableRef.value) {
-        //这里获取到的是sidebar div 的dom
-        const bodyWrapper = document.querySelector('.scrollable-sidebar')
-        if (bodyWrapper) {
-            bodyWrapper.scrollTop = bodyWrapper.scrollHeight
-        }
-    }
-}
+// const scrollToBottomChatTable = () => {
+//     if (tableRef.value) {
+//         //这里获取到的是sidebar div 的dom
+//         const bodyWrapper = document.querySelector('.scrollable-sidebar')
+//         if (bodyWrapper) {
+//             bodyWrapper.scrollTop = bodyWrapper.scrollHeight
+//         }
+//     }
+// }
 
 const handleResetState = () => {
     if (isMockDevelopment) {
