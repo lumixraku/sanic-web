@@ -93,9 +93,6 @@ async def add_question_record(user_token, chat_id, question, t02_answer, t04_ans
         user_dict = await decode_jwt_token(user_token)
         user_id = user_dict["id"]
 
-        # 取出实际问题
-        question = question.split(":")[1]
-
         sql = f"select * from t_user_qa_record where user_id={user_id} and chat_id='{chat_id}'"
         log_dict = mysql_client.query_mysql_dict(sql)
         if len(log_dict) > 0:

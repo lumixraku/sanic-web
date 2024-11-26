@@ -28,8 +28,8 @@ export async function createOllama3Stylized(text, qa_type) {
             Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-            query: qa_type + ':' + text,
-            qa_type: 'DATABASE_QA' //这里统一使用数据问答
+            query: text,
+            qa_type
         })
     })
     return fetch(req)

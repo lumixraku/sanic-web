@@ -228,14 +228,13 @@ class DiFyRequest:
     def _get_authorization_token(source_chat: Dict):
         """
             根据请求类别获取api/token
-            固定走一个dify流
             :param source_chat
         :return:
         """
         qa_type = source_chat["qa_type"]
         if qa_type == DiFyAppEnum.DATABASE_QA.value[0]:
             return DiFyAppEnum.DATABASE_QA
-        # if qa_type == DiFyAppEnum.FILEDATA_QA.value[0]:
-        #     return DiFyAppEnum.FILEDATA_QA
+        if qa_type == DiFyAppEnum.FILEDATA_QA.value[0]:
+            return DiFyAppEnum.FILEDATA_QA
         else:
             raise ValueError("问答类型不支持")
