@@ -35,21 +35,8 @@
             </div>
         </div>
         <div class="content">
-            <div class="card-one">
-                <h2 class="title">数据问答</h2>
-                <p class="card-subtitle">基于大模型的数据问答</p>
-                <ul>
-                    <li
-                        v-for="(item, index) in hotSearchItems"
-                        :key="index"
-                        class="list-item"
-                    >
-                        {{ item }}
-                    </li>
-                </ul>
-            </div>
             <div class="card-two">
-                <h2 class="title">通用问答</h2>
+                <h4 class="title">通用问答</h4>
                 <p class="card-subtitle">基于RAG大模型的通用问答</p>
                 <ul>
                     <li
@@ -61,8 +48,21 @@
                     </li>
                 </ul>
             </div>
+            <div class="card-one">
+                <h4 class="title">数据问答</h4>
+                <p class="card-subtitle">基于大模型的数据问答</p>
+                <ul>
+                    <li
+                        v-for="(item, index) in hotSearchItems"
+                        :key="index"
+                        class="list-item"
+                    >
+                        {{ item }}
+                    </li>
+                </ul>
+            </div>
             <div class="card-three">
-                <h2 class="title">表格问答</h2>
+                <h4 class="title">表格问答</h4>
                 <p class="card-subtitle">基于大模型的表格问答</p>
                 <ul>
                     <li
@@ -151,7 +151,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .card-one,
