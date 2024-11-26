@@ -13,7 +13,7 @@ export const useBusinessStore = defineStore('business-store', {
         return {
             writerList: {},
             //全局报错问答类型
-            qa_type: 'COMMON_QA',
+            qa_type: 'DATABASE_QA',
             //全局保存文件问答地址
             file_url: ''
         }

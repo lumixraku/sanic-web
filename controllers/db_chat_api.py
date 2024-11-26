@@ -19,12 +19,9 @@ async def process_llm_out(req: request.Request):
     """
     try:
         # 获取请求体内容
-        # body_content = req.body
-        # # 将字节流解码为字符串
-        # body_str = body_content.decode("utf-8")
-
-        body_str = req.form.get("llm_text")
-
+        body_content = req.body
+        # 将字节流解码为字符串
+        body_str = body_content.decode("utf-8")
         # 用户问题
         question_str = req.args.get("question")
         logging.info(f"query param: {body_str}")
