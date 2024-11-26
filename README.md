@@ -15,7 +15,7 @@
 ![image](./images/app-01.png)
 
 ## 🎉 **特性**
-- **核心技术栈**：Dify + Ollama + Sanic + Text2SQL + LLM
+- **核心技术栈**：Dify + Ollama + RAG + LLM + Text2SQL
 - **UI 框架**：Vue 3 + TypeScript + Vite 5
 - **数据问答**：集成 ECharts大模型实现Text2SQL轻量级的图形化数据问答展示
 - **表格问答**：支持 CSV格式文件的上传与基于大模型总结预处理和Text2SQL的表格数据问答
