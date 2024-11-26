@@ -160,9 +160,9 @@
 ## QA交流群
 - 大模型应用交流群欢迎大家, 欢迎加进群讨论分享经验
 
-|             微信群                |             钉钉群             |
+|             微信群              |             钉钉群             |
 |:----------------------------:|:---------------------------:|
-|  ![image](./images/wchat.png) | ![image](./images/ding.png) |
+| ![image](./images/wchat.png) | ![image](./images/ding.png) |
 
 ## License
 
