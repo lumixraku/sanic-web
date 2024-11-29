@@ -118,6 +118,7 @@ body {
 
 .header {
     background-color: #f6f7fb;
+    /* background: linear-gradient(to right, #f1f0fe, #f3f2ff); */
     border-radius: 5px;
     text-align: center;
     display: flex;

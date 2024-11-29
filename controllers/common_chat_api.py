@@ -2,6 +2,7 @@
 通用问答
 """
 import logging
+import os
 import traceback
 
 from sanic import Blueprint, request
@@ -22,9 +23,12 @@ async def get_bing_search_url(req: request.Request):
     """
     try:
         query_str = req.args.get("query_str")
-        # result = await get_bing_first_href(query_str)
-        # 本地调试使用chromedriver
-        result = await get_first_search_result_link(query_str)
+        if os.getenv("ENV") == "test":
+            result = await get_bing_first_href(query_str)
+        else:
+            # 本地调试使用chromedriver
+            result = await get_first_search_result_link(query_str)
+
         return result
     except Exception as e:
         traceback.print_exception(e)

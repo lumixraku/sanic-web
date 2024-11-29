@@ -165,8 +165,17 @@ const handleCreateStylized = async (send_text = '') => {
         }
     }
 
-    // 新建对话 时输入新问题 清空历史数据
+    //如果没有上传文件 表格问答直接提示并返回
+    if (
+        qa_type.value == 'FILEDATA_QA' &&
+        `${businessStore.$state.file_url}` === ''
+    ) {
+        window.$ModalMessage.success('请先上传文件')
+        return
+    }
+
     if (showDefaultPage.value) {
+        // 新建对话 时输入新问题 清空历史数据
         conversationItems.value = []
         showDefaultPage.value = false
         // isInit.value = false
@@ -339,6 +348,7 @@ const finish_upload = (res) => {
             window.$ModalMessage.success(`文件上传成功`)
         } else {
             window.$ModalMessage.error(`文件上传失败`)
+            return
         }
         var query_text = file_name.value + ' 总结归纳文档的关键信息'
         handleCreateStylized(query_text)
@@ -401,6 +411,11 @@ const qa_type = ref('COMMON_QA')
 const onAqtiveChange = (val) => {
     qa_type.value = val
     businessStore.update_qa_type(val)
+
+    //清空文件上传历史url
+    if (val == 'FILEDATA_QA') {
+        businessStore.update_file_url('')
+    }
 }
 </script>
 <template>
@@ -838,6 +853,7 @@ const onAqtiveChange = (val) => {
     ); // 设置最大高度，确保输入框和导航栏有足够的空间
     padding-bottom: 20px; // 底部内边距，防止内容被遮挡
     background-color: #f6f7fb;
+    // background: linear-gradient(to bottom, #f0effe, #f6f7fb);
 }
 /* 滚动条整体部分 */
 ::-webkit-scrollbar {
@@ -869,7 +885,7 @@ const onAqtiveChange = (val) => {
     justify-content: center;
     align-items: center;
     height: 100vh; /* 使容器高度占满整个视口 */
-    background-color: #f0f2f5; /* 可选：设置背景颜色 */
+    background-color: #f6f7fb; /* 可选：设置背景颜色 */
 }
 
 .active-tab {
