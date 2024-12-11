@@ -69,7 +69,9 @@
    
 ## 🚀 **快速开始**
    - 具体步骤如下：
-
+   - 第一步参考上面***大模型部署***先安装Ollama部署qwen2.5模型
+   - 第二步Dify环境配置直接参考上面***Dify环境配置***
+   - 第三步启动应用服务具体步骤如下:
 1. **克隆仓库**
    ```bash
    git clone https://github.com/apconw/sanic-web.git
