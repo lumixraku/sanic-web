@@ -11,8 +11,8 @@ withDefaults(defineProps<Props>(), {
 })
 
 const handleToRepo = () => {
-    const link = ref('https://github.com/pdsuwwz/chatgpt-vue3-light-mvp')
-    // window.open(link.value, '_blank')
+    const link = ref('https://github.com/apconw/sanic-web')
+    window.open(link.value, '_blank')
 }
 </script>
 
