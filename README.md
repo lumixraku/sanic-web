@@ -104,7 +104,7 @@
 - 第一步克隆代码到本地
 - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
 - 第三步本地开发环境Dify配置，参考上面**Dify环境配置**里的,**第1或2种两种情况自行选择即可**
-- 第四步编辑项目根目录下的.env文件，**修改ENV=dev**，并保存
+- 第四步编辑项目根目录下的.env文件，**修改ENV=dev**，以及数据库配置信息
 - 第五步安装前后端项目依赖并启动前后端服务具体步骤如下:
 
 1. **后端依赖安装**  
@@ -117,18 +117,27 @@
    # 设置国内仓库
    poetry source add --priority=default mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
    poetry install
-   
-2. **初始化数据库**
-      ```bash
-   cd docker
-   ./init.sh
-   
-   或执行
-   
-   cd docker
-   python3 ../common/initialize_mysql.py
 
-3. **前端依赖安装**  
+2. **安装数据库**
+   ```bash
+   docker run --name mysql-local \
+   -p 13006:3306 \
+   -v /Users/lihuan/docker-mount/mysql:/var/lib/mysql \
+   -e MYSQL_ROOT_PASSWORD=1 \
+   -d mysql:latest
+   
+3. **初始化数据库**
+- 如果使用本地环境mysql,初始化数据时需修改源码initialize_mysql，修改数据库连接信息即可
+   ```bash
+  cd docker
+  ./init.sh
+   
+  或执行
+   
+  cd docker
+  python3 ../common/initialize_mysql.py
+
+4. **前端依赖安装**  
    - 前端是基于开源项目[可参考chatgpt-vue3-light-mvp安装](https://github.com/pdsuwwz/chatgpt-vue3-light-mvp)二开
    ```bash
    # 安装前端依赖&启动服务
@@ -142,13 +151,13 @@
    #启动服务
    pnpm dev
    
-4. **启动后端服务**
+5. **启动后端服务**
    ```bash
    #启动后端服务
    python serv.py
    ```
 
-5. **访问服务**
+6. **访问服务**
  - 前端服务：http://localhost:2048
 
 ## 🐳 构建镜像
