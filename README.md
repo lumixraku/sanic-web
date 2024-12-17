@@ -34,7 +34,7 @@
 在开始之前，请确保您的开发环境满足以下最低配置要求：
 
 - **操作系统**：Windows 10/11, macOs M系列, Centos/Ubuntu
-- **GPU**: 本地使用ollama部署，推荐使用Nvidia显卡或单CPU模式。
+- **GPU**: 本地使用ollama部署，推荐使用Nvidia显卡或CPU模式。
 - **内存**：8GB+
 
 ## 🔧 **前置条件**
@@ -46,32 +46,36 @@
 * Pnpm 9.x
 
 
-📚 **大模型部署**
-- [参考Ollama官网部署](https://ollama.com/docs/install)
-- 模型: Qwen2
+## 📚 **大模型部署**
+- [参考Ollama部署](https://qwen.readthedocs.io/zh-cn/latest/run_locally/ollama.html)
+- 模型: Qwen2.5
 
 ## ⚙️ **Dify环境配置**
-1. **本地容器部署**
-   - 为了兼顾第一次接触大模型应用的同学，我们提供了一键拉起Dify服务零配置，同时启动服务方式，方便大家快速体验。
+1. **使用项目脚本默认安装Dify**
+   - 为了兼顾第一次接触大模型应用的同学，本项目提供了一键拉起Dify服务零配置，同时启动服务方式，方便大家快速体验。
    - Dify本机访问地址：http://localhost 账号:admin 密码:admin123 
    ```bash
    # 拉起内置的dify服务
    cd docker/dify/docker
    docker-compose up -d
    
-2. **已安装Dify环境&本地开发调试**
-   - 第一步直接导入项目根目录下的***docker/dify/数据问答.yml画布***至Dify同时修改源码DiFyAppEnum枚举里的DATABASE_QA密钥Key
-   - 第二步修改项目根目录下的.env文件，根据环境修改实际的Dify Rest服务接口地址即可
+2. **如果已安装过Dify环境**
+   - **如果你已经有Dify环境,这种情况只能本地修改源码启动服务 !!!**
+   - 第一步直接导入项目根目录下的**docker/dify/数据问答.yml画布**至Dify
+   - 第二步修改源码DiFyAppEnum枚举里的DATABASE_QA密钥Key(**key从dify流程画布中获取**)
+   - 第三步修改项目根目录下的.env文件，根据环境修改实际的Dify Rest服务接口地址即可
    - 第三步修改Dify画布里HttpRequest配置，修改url地址为具体sanic-web服务地址
 
 3. **安装最新版本Dify**
    - 如果需要安装最新版Dify的同学,可以参考官方文档[Dify官方文档](https://docs.dify.ai/zh-hans)。
    
-## 🚀 **快速开始**
+## 🚀 **快速体验**
    - 具体步骤如下：
-   - 第一步参考上面***大模型部署***先安装Ollama部署Qwen2模型
-   - 第二步Dify环境配置直接参考上面***Dify环境配置***
-   - 第三步启动应用服务具体步骤如下:
+   - 第一步克隆代码到本地
+   - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
+   - 第三步Dify环境配置直接参考上面**Dify环境配置**里的,**第1种情况[使用项目脚本默认安装Dify]**
+   - 第四步启动服务具体步骤如下:
+
 1. **克隆仓库**
    ```bash
    git clone https://github.com/apconw/sanic-web.git
@@ -97,8 +101,11 @@
 
 
 ## 🛠️ **本地开发**
-- 需要安装项目所有前置依赖、参考上面前置条件、Dify环境配置。
-- 同时需要编辑项目根目录下的.env文件，***修改ENV=dev***，并保存。
+- 第一步：克隆代码到本地
+- 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
+- 第三步本地开发环境Dify配置，参考上面**Dify环境配置**里的,**第1或2种两种情况自行选择即可**
+- 第四步编辑项目根目录下的.env文件，**修改ENV=dev**，并保存
+- 第五步安装安装前后端项目依赖并启动前后端服务具体步骤如下:
 
 1. **后端依赖安装**  
    - poetry安装 [参考poetry官方文档](https://python-poetry.org/docs/)
@@ -122,14 +129,24 @@
    python3 ../common/initialize_mysql.py
 
 3. **前端依赖安装**  
-   - 前端基于chatgpt-vue3-light-mvp开源项目[参考chatgpt-vue3-light-mvp安装](https://github.com/pdsuwwz/chatgpt-vue3-light-mvp)
+   - 前端是基于开源项目[参考chatgpt-vue3-light-mvp安装](https://github.com/pdsuwwz/chatgpt-vue3-light-mvp)二开
    ```bash
    # 安装前端依赖&启动服务
    cd web
+   
+   #安装依赖
    pnpm i
+   
+   #启动服务
    pnpm dev
+   
+4. **启动后端服务**
+   ```bash
+   #启动后端服务
+   python serv.py
+   ```
 
-4. **访问服务**
+5. **访问服务**
  - 前端服务：http://localhost:2048
 
 ## 🐳 构建镜像
@@ -161,6 +178,7 @@
 
 ## QA交流群
 - 大模型应用交流群欢迎大家, 欢迎加进群讨论分享经验
+- 关注下面的公众号点击·**微信群**菜单添加微信入群
 
 |                 微信群                 |
 |:-----------------------------------:|
