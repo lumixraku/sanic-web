@@ -105,7 +105,7 @@
 - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
 - 第三步本地开发环境Dify配置，参考上面**Dify环境配置**里的,**第1或2种两种情况自行选择即可**
 - 第四步编辑项目根目录下的.env文件，**修改ENV=dev**，并保存
-- 第五步安装安装前后端项目依赖并启动前后端服务具体步骤如下:
+- 第五步安装前后端项目依赖并启动前后端服务具体步骤如下:
 
 1. **后端依赖安装**  
    - poetry安装 [参考poetry官方文档](https://python-poetry.org/docs/)
@@ -129,12 +129,14 @@
    python3 ../common/initialize_mysql.py
 
 3. **前端依赖安装**  
-   - 前端是基于开源项目[参考chatgpt-vue3-light-mvp安装](https://github.com/pdsuwwz/chatgpt-vue3-light-mvp)二开
+   - 前端是基于开源项目[可参考chatgpt-vue3-light-mvp安装](https://github.com/pdsuwwz/chatgpt-vue3-light-mvp)二开
    ```bash
    # 安装前端依赖&启动服务
    cd web
    
    #安装依赖
+   npm install -g pnpm
+
    pnpm i
    
    #启动服务
