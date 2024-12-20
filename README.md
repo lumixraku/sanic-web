@@ -53,7 +53,7 @@
 ## ⚙️ **Dify环境配置**
 1. **使用项目脚本默认安装Dify**
    - 为了兼顾第一次接触大模型应用的同学，本项目提供了一键拉起Dify服务零配置，同时启动服务方式，方便大家快速体验。
-   - Dify本机访问地址：http://localhost 账号:admin 密码:admin123 
+   - Dify本机访问地址：http://localhost 账号:admin@123.com 密码:admin123 
    ```bash
    # 拉起内置的dify服务
    cd docker/dify/docker
