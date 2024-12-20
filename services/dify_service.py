@@ -52,12 +52,13 @@ class DiFyRequest:
 
             uuid_str = str(uuid.uuid4())
             query = req_obj.get("query")
+            qa_type = req_obj.get("qa_type")
             #  使用正则表达式移除所有空白字符（包括空格、制表符、换行符等）
             cleaned_query = re.sub(r"\s+", "", query)
             source_chat = {
                 "chat_id": uuid_str,
                 "query": cleaned_query,
-                "qa_type": req_obj.get("qa_type"),
+                "inputs": {"qa_type": qa_type},
             }
 
             # 获取登录用户信息
@@ -107,22 +108,22 @@ class DiFyRequest:
                                             # 输出开始
                                             data_type = event_list[2]
                                             if data_type == DataTypeEnum.ANSWER.value[0]:
-                                                await self.send_message(res, qa_context, {"data": {"messageType": "begin"}, "dataType": data_type})
+                                                await self.send_message(
+                                                    res, qa_context, {"data": {"messageType": "begin"}, "dataType": data_type}, qa_type
+                                                )
                                         elif event_list[1] == "1":
                                             # 输出结束
                                             data_type = event_list[2]
                                             if data_type == DataTypeEnum.ANSWER.value[0]:
-                                                await self.send_message(res, qa_context, {"data": {"messageType": "end"}, "dataType": data_type})
+                                                await self.send_message(
+                                                    res, qa_context, {"data": {"messageType": "end"}, "dataType": data_type}, qa_type
+                                                )
 
                                             # 输出业务数据
                                             elif bus_data and data_type == DataTypeEnum.BUS_DATA.value[0]:
                                                 res_data = process(json.loads(bus_data)["data"])
                                                 # logging.info(f"chart_data: {res_data}")
-                                                await self.send_message(
-                                                    res,
-                                                    qa_context,
-                                                    {"data": res_data, "dataType": data_type},
-                                                )
+                                                await self.send_message(res, qa_context, {"data": res_data, "dataType": data_type}, qa_type)
 
                                             data_type = ""
 
@@ -133,6 +134,7 @@ class DiFyRequest:
                                                 res,
                                                 qa_context,
                                                 {"data": {"messageType": "continue", "content": answer}, "dataType": data_type},
+                                                qa_type,
                                             )
 
                                         # 这里设置业务数据
@@ -146,21 +148,22 @@ class DiFyRequest:
             await self.res_end(res)
 
     @staticmethod
-    async def send_message(response, qa_context, message):
+    async def send_message(response, qa_context, message, qa_type):
         """
             SSE 格式发送数据，每一行以 data: 开头
         :param response:
         :param qa_context
         :param message:
+        :param qa_type
         :return:
         """
         await response.write("data:" + json.dumps(message, ensure_ascii=False) + "\n\n")
 
         # 保存用户问答记录 1.保存用户问题 2.保存用户答案 t02 和 t04
         if "content" in message["data"]:
-            await add_question_record(qa_context.token, qa_context.chat_id, qa_context.question, message, "")
+            await add_question_record(qa_context.token, qa_context.chat_id, qa_context.question, message, "", qa_type)
         elif message["dataType"] == DataTypeEnum.BUS_DATA.value[0]:
-            await add_question_record(qa_context.token, qa_context.chat_id, qa_context.question, "", message)
+            await add_question_record(qa_context.token, qa_context.chat_id, qa_context.question, "", message, qa_type)
 
     @staticmethod
     async def res_begin(res, uuid_str):
@@ -232,10 +235,11 @@ class DiFyRequest:
             :param source_chat
         :return:
         """
-        qa_type = source_chat["qa_type"]
-        if qa_type == DiFyAppEnum.DATABASE_QA.value[0]:
-            return DiFyAppEnum.DATABASE_QA
+        # qa_type = source_chat["qa_type"]
+        # if qa_type == DiFyAppEnum.DATABASE_QA.value[0]:
+        #     return DiFyAppEnum.DATABASE_QA
         # if qa_type == DiFyAppEnum.FILEDATA_QA.value[0]:
         #     return DiFyAppEnum.FILEDATA_QA
-        else:
-            raise ValueError("问答类型不支持")
+        # else:
+        #     raise ValueError("问答类型不支持")
+        return DiFyAppEnum.DATABASE_QA
