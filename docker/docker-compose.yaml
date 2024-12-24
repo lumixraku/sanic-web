@@ -40,5 +40,5 @@ services:
 
 networks:
   dify_service_default:
-    external: true
+    external: false
     driver: bridge
