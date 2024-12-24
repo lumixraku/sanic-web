@@ -18,7 +18,7 @@ RUN pip install poetry==${POETRY_VERSION}
 ENV PATH="${PATH}:/root/.local/bin"
 
 # 配置清华PyPI镜像
-RUN poetry source add --priority=default mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
+RUN poetry source add --priority=primary mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
 
 # 安装依赖
 RUN poetry lock --no-update
