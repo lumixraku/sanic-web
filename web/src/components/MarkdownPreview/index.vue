@@ -46,7 +46,9 @@ const emit = defineEmits([
     'completed',
     'update:reader',
     'chartready',
-    'recycleQa'
+    'recycleQa',
+    'praiseFeadBack',
+    'belittleFeedback'
 ])
 
 const refWrapperContent = ref<HTMLElement>()
@@ -319,12 +321,14 @@ const handlePassClip = async () => {
         duration: copyDuration
     })
 }
-//反馈
-const handleCallback = () => {
-    window.$ModalMessage.destroyAll()
-    window.$ModalMessage.success('感谢反馈', {
-        duration: copyDuration
-    })
+//点赞反馈
+const praiseFeedback = () => {
+    emit('praiseFeadBack')
+}
+
+// 踩 反馈
+const belittleFeedback = () => {
+    emit('belittleFeedback')
 }
 
 // 重新提问
@@ -457,7 +461,7 @@ const onChartCompletedReader = function () {
                             size="tiny"
                             :bordered="false"
                             style="margin-right: 15px"
-                            @click="handleCallback"
+                            @click="praiseFeedback"
                         >
                             <template #icon>
                                 <n-icon size="20"
@@ -487,7 +491,7 @@ const onChartCompletedReader = function () {
                             size="tiny"
                             :bordered="false"
                             style="margin-right: 15px"
-                            @click="handleCallback"
+                            @click="belittleFeedback"
                         >
                             <template #icon>
                                 <n-icon size="20"

@@ -79,6 +79,7 @@ export const fetchConversationHistory = async function fetchConversationHistory(
     isInit: Ref<boolean>,
     conversationItems: Ref<
         Array<{
+            chat_id: string
             qa_type: string
             question: string
             role: 'user' | 'assistant'
@@ -118,18 +119,24 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                     let question_str = ''
                     //问答类型
                     let qa_type_str = ''
+                    //对话id
+                    let chat_id_str = ''
                     const streamDataArray: StreamData[] = []
 
                     ;[
                         'question',
                         'to2_answer',
                         'to4_answer',
-                        'qa_type'
+                        'qa_type',
+                        'chat_id'
                     ].forEach((key: string) => {
                         if (record.hasOwnProperty(key)) {
                             switch (key) {
                                 case 'qa_type':
                                     qa_type_str = record[key]
+                                    break
+                                case 'chat_id':
+                                    chat_id_str = record[key]
                                     break
                                 case 'question':
                                     question_str = record[key]
@@ -175,6 +182,7 @@ export const fetchConversationHistory = async function fetchConversationHistory(
 
                         if (error === 0 && reader) {
                             itemsToAdd.push({
+                                chat_id: chat_id_str,
                                 qa_type: qa_type_str,
                                 question: question_str,
                                 role: 'assistant', // 根据实际情况设置role

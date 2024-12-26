@@ -5,7 +5,7 @@ import request from '@/utils/request'
 /**
  * Event Stream 调用大模型接口 Ollama3 (Fetch 调用)
  */
-export async function createOllama3Stylized(text, qa_type) {
+export async function createOllama3Stylized(text, qa_type, uuid) {
     const userStore = useUserStore()
     const token = userStore.getUserToken()
     const businessStore = useBusinessStore()
@@ -32,7 +32,8 @@ export async function createOllama3Stylized(text, qa_type) {
         },
         body: JSON.stringify({
             query: text,
-            qa_type: qa_type
+            qa_type: qa_type,
+            chat_id: uuid
         })
     })
     return fetch(req)
@@ -104,6 +105,31 @@ export async function delete_user_record(ids) {
         },
         body: JSON.stringify({
             record_ids: ids
+        })
+    })
+    return fetch(req)
+}
+
+/**
+ * 用户反馈
+ * @param chat_id
+ * @param rating
+ * @returns
+ */
+export async function fead_back(chat_id, rating) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/user/dify_fead_back`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            chat_id,
+            rating
         })
     })
     return fetch(req)

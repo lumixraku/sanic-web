@@ -4,7 +4,14 @@ from common.exception import MyException
 from common.res_decorator import async_json_resp
 from common.token_decorator import check_token
 from constants.code_enum import SysCodeEnum
-from services.user_service import authenticate_user, generate_jwt_token, query_user_record, get_user_info, delete_user_record
+from services.user_service import (
+    authenticate_user,
+    generate_jwt_token,
+    query_user_record,
+    get_user_info,
+    delete_user_record,
+    send_dify_feedback,
+)
 
 bp = Blueprint("userService", url_prefix="/user")
 
@@ -58,3 +65,17 @@ async def delete_user_qa_record(request):
     record_ids = request.json.get("record_ids")
     user_info = await get_user_info(request)
     return await delete_user_record(user_info["id"], record_ids)
+
+
+@bp.post("/dify_fead_back", name="dify_fead_back")
+@check_token
+@async_json_resp
+async def fead_back(request):
+    """
+    用户反馈
+    :param request:
+    :return:
+    """
+    chat_id = request.json.get("chat_id")
+    rating = request.json.get("rating")
+    return await send_dify_feedback(chat_id, rating)

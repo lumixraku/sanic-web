@@ -5,10 +5,12 @@ import traceback
 from datetime import datetime, timedelta
 
 import jwt
+import requests
 
 from common.exception import MyException
 from common.mysql_util import MysqlUtil
 from constants.code_enum import SysCodeEnum
+from constants.dify_rest_api import DiFyRestApi
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +86,7 @@ async def get_user_info(request) -> dict:
     return user_info
 
 
-async def add_question_record(user_token, chat_id, question, t02_answer, t04_answer, qa_type):
+async def add_question_record(user_token, conversation_id, message_id, task_id, chat_id, question, t02_answer, t04_answer, qa_type):
     """
     记录用户问答记录，如果记录已存在，则更新之；否则，创建新记录。
     """
@@ -100,8 +102,8 @@ async def add_question_record(user_token, chat_id, question, t02_answer, t04_ans
                     where user_id={user_id} and chat_id='{chat_id}'"""
             mysql_client.update(sql)
         else:
-            insert_params = [user_id, chat_id, question, json.dumps(t02_answer, ensure_ascii=False), qa_type]
-            sql = f" insert into t_user_qa_record(user_id,chat_id,question,to2_answer,qa_type) values (%s,%s,%s,%s,%s)"
+            insert_params = [user_id, conversation_id, message_id, task_id, chat_id, question, json.dumps(t02_answer, ensure_ascii=False), qa_type]
+            sql = f" insert into t_user_qa_record(user_id,conversation_id, message_id, task_id,chat_id,question,to2_answer,qa_type) values (%s,%s,%s,%s,%s,%s,%s,%s)"
             mysql_client.insert(sql=sql, params=insert_params)
 
     except Exception as e:
@@ -152,3 +154,37 @@ async def query_user_record(user_id, page, limit):
     records = mysql_client.query_mysql_dict(sql)
 
     return {"records": records, "current_page": page, "total_pages": total_pages, "total_count": total_count}
+
+
+def query_user_qa_record(chat_id):
+    """
+    根据chat_id查询对话记录
+    :param chat_id:
+    :return:
+    """
+    sql = f"select * from t_user_qa_record where chat_id='{chat_id}'"
+    return mysql_client.query_mysql_dict(sql)
+
+
+async def send_dify_feedback(chat_id, rating):
+    """
+    发送反馈给指定的消息ID。
+
+    :param chat_id: 消息的唯一标识符。
+    :param rating: 反馈评级（例如："like" 或 "dislike"）。
+    :return: 返回服务器响应。
+    """
+    # 查询对话记录
+    qa_record = query_user_qa_record(chat_id)
+    url = DiFyRestApi.replace_path_params(DiFyRestApi.DIFY_REST_FEEDBACK, {"message_id": qa_record[0]["message_id"]})
+    api_key = os.getenv("DIFY_DATABASE_QA_API_KEY")
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    payload = {"rating": rating, "user": "abc-123"}
+
+    response = requests.post(url, headers=headers, json=payload)
+
+    # 检查请求是否成功
+    if response.status_code == 200:
+        logger.info("Feedback successfully sent.")
+    else:
+        logger.error(f"Failed to send feedback. Status code: {response.status_code},Response body: {response.text}")

@@ -8,6 +8,7 @@ import DefaultPage from './DefaultPage.vue'
 const route = useRoute()
 const router = useRouter()
 const message = useMessage()
+import * as GlobalAPI from '@/api'
 
 // 显示默认页面
 const showDefaultPage = ref(true)
@@ -131,9 +132,35 @@ const onRecycleQa = async (index: number) => {
     // console.log(item.question, item.qa_type)
     //设置当前选中的问答类型
     onAqtiveChange(item.qa_type)
+
     //发送问题重新生成
     handleCreateStylized(item.question)
 }
+
+//赞 结果反馈
+const onPraiseFeadBack = async (index: number) => {
+    const item = conversationItems.value[index]
+    const res = await GlobalAPI.fead_back(item.chat_id, 'like')
+    if (res.ok) {
+        window.$ModalMessage.destroyAll()
+        window.$ModalMessage.success('感谢反馈', {
+            duration: 1500
+        })
+    }
+}
+
+//踩 结果反馈
+const onBelittleFeedback = async (index: number) => {
+    const item = conversationItems.value[index]
+    const res = await GlobalAPI.fead_back(item.chat_id, 'dislike')
+    if (res.ok) {
+        window.$ModalMessage.destroyAll()
+        window.$ModalMessage.success('感谢反馈', {
+            duration: 1500
+        })
+    }
+}
+
 // 侧边栏对话历史
 interface TableItem {
     index: number
@@ -145,6 +172,7 @@ const tableRef = ref(null)
 //保存对话历史记录
 const conversationItems = ref<
     Array<{
+        chat_id: string
         qa_type: string
         question: string
         role: 'user' | 'assistant'
@@ -159,14 +187,16 @@ const visibleConversationItems = computed(() => {
 
 //提交对话
 const handleCreateStylized = async (send_text = '') => {
+    //设置初始化数据标识为false
     isInit.value = false
+
     // 若正在加载，则点击后恢复初始状态
     if (stylizingLoading.value) {
         onCompletedReader(conversationItems.value.length - 1)
         return
     }
 
-    //send_text
+    //如果输入为空，则直接返回
     if (send_text == '') {
         if (refInputTextString.value && !inputTextString.value.trim()) {
             inputTextString.value = ''
@@ -205,11 +235,16 @@ const handleCreateStylized = async (send_text = '') => {
         ? inputTextString.value
         : send_text
     inputTextString.value = ''
+    const uuid = uuidv4()
     const { error, reader, needLogin } =
-        await businessStore.createAssistantWriterStylized(currentChatId.value, {
-            text: textContent,
-            writer_oid: currentChatId.value
-        })
+        await businessStore.createAssistantWriterStylized(
+            uuid,
+            currentChatId.value,
+            {
+                text: textContent,
+                writer_oid: currentChatId.value
+            }
+        )
 
     if (needLogin) {
         message.error('登录已失效，请重新登录')
@@ -228,8 +263,9 @@ const handleCreateStylized = async (send_text = '') => {
 
     if (reader) {
         outputTextReader.value = reader
-        // 添加助手的回答
+        // 存储该轮对话消息
         conversationItems.value.push({
+            chat_id: uuid,
             qa_type: qa_type.value,
             question: textContent,
             role: 'assistant',
@@ -310,27 +346,7 @@ watch(
     }
 )
 
-// // 监听对话历史表格数据变化滚动条到底部
-// watch(
-//     tableData,
-//     (newData) => {
-//         nextTick(() => {
-//             scrollToBottomChatTable()
-//         })
-//     },
-//     { deep: true }
-// )
-
-// const scrollToBottomChatTable = () => {
-//     if (tableRef.value) {
-//         //这里获取到的是sidebar div 的dom
-//         const bodyWrapper = document.querySelector('.scrollable-sidebar')
-//         if (bodyWrapper) {
-//             bodyWrapper.scrollTop = bodyWrapper.scrollHeight
-//         }
-//     }
-// }
-
+//重置状态
 const handleResetState = () => {
     if (isMockDevelopment) {
         inputTextString.value = ''
@@ -550,6 +566,8 @@ const onAqtiveChange = (val) => {
                         @completed="() => onCompletedReader(index)"
                         @chartready="() => onChartReady(index + 1)"
                         @recycleQa="() => onRecycleQa(index)"
+                        @praiseFeadBack="() => onPraiseFeadBack(index)"
+                        @belittleFeedback="() => onBelittleFeedback(index)"
                     />
                 </div>
             </div>

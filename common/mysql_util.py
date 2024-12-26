@@ -18,18 +18,11 @@ class MysqlUtil:
         获取mysql链接
         :return:
         """
-        if os.getenv("ENV") == "test":
-            host = os.getenv("MYSQL_HOST_TEST")
-            port = int(os.getenv("MYSQL_PORT_TEST"))
-            user = os.getenv("MYSQL_USER_TEST")
-            password = os.getenv("MYSQL_PASSWORD_TEST")
-            database = os.getenv("MYSQL_DATABASE_TEST")
-        else:
-            host = os.getenv("MYSQL_HOST_DEV")
-            port = int(os.getenv("MYSQL_PORT_DEV"))
-            user = os.getenv("MYSQL_USER_DEV")
-            password = os.getenv("MYSQL_PASSWORD_DEV")
-            database = os.getenv("MYSQL_DATABASE_DEV")
+        host = os.getenv("MYSQL_HOST")
+        port = int(os.getenv("MYSQL_PORT"))
+        user = os.getenv("MYSQL_USER")
+        password = os.getenv("MYSQL_PASSWORD")
+        database = os.getenv("MYSQL_DATABASE")
 
         conn = pymysql.connect(
             host=host,
