@@ -8,7 +8,6 @@ import {
 } from './transform'
 import MarkdownTable from './MarkdownTable.vue'
 import { watch } from 'vue'
-
 interface Props {
     isInit: boolean
     chartId: string

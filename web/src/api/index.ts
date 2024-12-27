@@ -134,3 +134,27 @@ export async function fead_back(chat_id, rating) {
     })
     return fetch(req)
 }
+
+/**
+ * 问题建议
+ * @param chat_id
+ * @param rating
+ * @returns
+ */
+export async function dify_suggested(chat_id) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/dify/get_dify_suggested`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            chat_id
+        })
+    })
+    return fetch(req)
+}

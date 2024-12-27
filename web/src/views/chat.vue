@@ -5,6 +5,8 @@ import { useRouter } from 'vue-router'
 import { UAParser } from 'ua-parser-js'
 import TableModal from './TableModal.vue'
 import DefaultPage from './DefaultPage.vue'
+import SuggestedView from './Suggested.vue'
+
 const route = useRoute()
 const router = useRouter()
 const message = useMessage()
@@ -115,6 +117,8 @@ const onCompletedReader = (index: number) => {
             }
         })
     }
+
+    query_dify_suggested()
     // scrollToBottom()
 }
 
@@ -185,6 +189,7 @@ const visibleConversationItems = computed(() => {
     return conversationItems.value.slice(0, currentRenderIndex.value + 1)
 })
 
+const uuid = ref('')
 //提交对话
 const handleCreateStylized = async (send_text = '') => {
     //设置初始化数据标识为false
@@ -235,10 +240,11 @@ const handleCreateStylized = async (send_text = '') => {
         ? inputTextString.value
         : send_text
     inputTextString.value = ''
-    const uuid = uuidv4()
+
+    uuid.value = uuidv4()
     const { error, reader, needLogin } =
         await businessStore.createAssistantWriterStylized(
-            uuid,
+            uuid.value,
             currentChatId.value,
             {
                 text: textContent,
@@ -265,7 +271,7 @@ const handleCreateStylized = async (send_text = '') => {
         outputTextReader.value = reader
         // 存储该轮对话消息
         conversationItems.value.push({
-            chat_id: uuid,
+            chat_id: uuid.value,
             qa_type: qa_type.value,
             question: textContent,
             role: 'assistant',
@@ -445,6 +451,17 @@ const onAqtiveChange = (val) => {
         businessStore.update_file_url('')
     }
 }
+
+const suggested_array = ref([])
+//获取建议问题
+const query_dify_suggested = async () => {
+    if (!isInit.value) {
+        const res = await GlobalAPI.dify_suggested(uuid.value)
+        const json = await res.json()
+        console.log('res', json.data.data)
+        suggested_array.value = json.data.data
+    }
+}
 </script>
 <template>
     <LayoutCenterPanel :loading="loading">
@@ -569,6 +586,12 @@ const onAqtiveChange = (val) => {
                         @praiseFeadBack="() => onPraiseFeadBack(index)"
                         @belittleFeedback="() => onBelittleFeedback(index)"
                     />
+                </div>
+                <div
+                    v-if="!isInit && !stylizingLoading"
+                    style="align-items: center; width: 70%; margin-left: 11%"
+                >
+                    <SuggestedView :labels="suggested_array" />
                 </div>
             </div>
 
