@@ -12,6 +12,9 @@ class DiFyRestApi:
     # 对话反馈接口
     DIFY_REST_FEEDBACK = "/v1/messages/:message_id/feedbacks"
 
+    # 获取下一轮建议问题列表
+    DIFY_REST_SUGGESTED = "/v1/messages/:message_id/suggested"
+
     @classmethod
     def _get_env(cls, name):
         value = os.getenv(name)

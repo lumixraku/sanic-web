@@ -53,3 +53,5 @@ class DiFyCodeEnum(Enum):
     MESSAGE = ("message", "答案")
 
     MESSAGE_END = ("message_end", "结束")
+
+    MESSAGE_ERROR = ("error", "错误")

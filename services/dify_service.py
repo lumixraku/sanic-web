@@ -3,10 +3,9 @@ import logging
 import os
 import re
 import traceback
-import uuid
-from typing import Dict
 
 import aiohttp
+import requests
 
 from common.exception import MyException
 from constants.code_enum import (
@@ -17,7 +16,9 @@ from constants.code_enum import (
 )
 from constants.dify_rest_api import DiFyRestApi
 from services.db_qadata_process import process
-from services.user_service import add_question_record
+from services.user_service import add_question_record, query_user_qa_record
+
+logger = logging.getLogger(__name__)
 
 
 class QaContext:
@@ -102,6 +103,7 @@ class DiFyRequest:
                                 conversation_id = data_json.get("conversation_id")
                                 message_id = data_json.get("message_id")
                                 task_id = data_json.get("task_id")
+
                                 if DiFyCodeEnum.MESSAGE.value[0] == event_name:
                                     answer = data_json.get("answer")
                                     if answer and answer.startswith("dify_"):
@@ -165,6 +167,12 @@ class DiFyRequest:
                                         # 这里设置业务数据
                                         if data_type == DataTypeEnum.BUS_DATA.value[0]:
                                             bus_data = answer
+
+                                elif DiFyCodeEnum.MESSAGE_ERROR.value[0] == event_name:
+                                    # 输出异常情况日志
+                                    error_msg = data_json.get("message")
+                                    logging.error(f"Error during get_answer: {error_msg}")
+
         except Exception as e:
             logging.error(f"Error during get_answer: {e}")
             traceback.print_exception(e)
@@ -271,3 +279,28 @@ class DiFyRequest:
                 return os.getenv("DIFY_DATABASE_QA_API_KEY")
         else:
             raise ValueError(f"问答类型 '{qa_type}' 不支持")
+
+
+async def query_dify_suggested(chat_id) -> dict:
+    """
+    发送反馈给指定的消息ID。
+
+    :param chat_id: 消息的唯一标识符。
+    :return: 返回服务器响应。
+    """
+    # 查询对话记录
+    qa_record = query_user_qa_record(chat_id)
+    url = DiFyRestApi.replace_path_params(DiFyRestApi.DIFY_REST_SUGGESTED, {"message_id": chat_id})
+    api_key = os.getenv("DIFY_DATABASE_QA_API_KEY")
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+
+    response = requests.get(url + "?user=abc-123", headers=headers)
+    print(response.text)
+
+    # 检查请求是否成功
+    if response.status_code == 200:
+        logger.info("Feedback successfully sent.")
+        return response.json()
+    else:
+        logger.error(f"Failed to send feedback. Status code: {response.status_code},Response body: {response.text}")
+        raise
