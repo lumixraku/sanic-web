@@ -36,7 +36,7 @@ Welcome to the new `docker` directory for deploying Dify using Docker Compose. T
     - Navigate to the `docker` directory.
     - Ensure the `middleware.env` file is created by running `cp middleware.env.example middleware.env` (refer to the `middleware.env.example` file).
 2. **Running Middleware Services**:
-    - Execute `docker-compose -f docker-compose.middleware.yaml up -d` to start the middleware services.
+    - Execute `docker-compose -f docker-compose.middleware.yaml up --env-file middleware.env -d` to start the middleware services.
 
 ### Migration for Existing Users
 
@@ -83,7 +83,7 @@ The `.env.example` file provided in the Docker setup is extensive and covers a w
 
 7. **Vector Database Configuration**:
     - `VECTOR_STORE`: Type of vector database (e.g., `weaviate`, `milvus`).
-    - Specific settings for each vector store like `WEAVIATE_ENDPOINT`, `MILVUS_HOST`.
+    - Specific settings for each vector store like `WEAVIATE_ENDPOINT`, `MILVUS_URI`.
 
 8. **CORS Configuration**:
     - `WEB_API_CORS_ALLOW_ORIGINS`, `CONSOLE_CORS_ALLOW_ORIGINS`: Settings for cross-origin resource sharing.
