@@ -58,6 +58,7 @@ function newChat() {
     isInit.value = false
     conversationItems.value = []
     stylizingLoading.value = false
+    suggested_array.value = []
 }
 
 /**
@@ -132,11 +133,9 @@ const onChartReady = (index) => {
 }
 
 const onRecycleQa = async (index: number) => {
-    const item = conversationItems.value[index]
-    // console.log(item.question, item.qa_type)
     //设置当前选中的问答类型
+    const item = conversationItems.value[index]
     onAqtiveChange(item.qa_type)
-
     //发送问题重新生成
     handleCreateStylized(item.question)
 }
@@ -189,11 +188,15 @@ const visibleConversationItems = computed(() => {
     return conversationItems.value.slice(0, currentRenderIndex.value + 1)
 })
 
+// chat_id定义
 const uuid = ref('')
 //提交对话
 const handleCreateStylized = async (send_text = '') => {
     //设置初始化数据标识为false
     isInit.value = false
+
+    //清空推荐列表
+    suggested_array.value = []
 
     // 若正在加载，则点击后恢复初始状态
     if (stylizingLoading.value) {
@@ -223,7 +226,6 @@ const handleCreateStylized = async (send_text = '') => {
         // 新建对话 时输入新问题 清空历史数据
         conversationItems.value = []
         showDefaultPage.value = false
-        // isInit.value = false
     }
 
     //加入对话历史用于左边表格渲染
@@ -452,15 +454,25 @@ const onAqtiveChange = (val) => {
     }
 }
 
-const suggested_array = ref([])
 //获取建议问题
+const suggested_array = ref([])
 const query_dify_suggested = async () => {
     if (!isInit.value) {
         const res = await GlobalAPI.dify_suggested(uuid.value)
         const json = await res.json()
-        console.log('res', json.data.data)
         suggested_array.value = json.data.data
     }
+
+    // 滚动到底部
+    scrollToBottom()
+}
+// 建议问题点击事件
+const onSuggested = (index: number) => {
+    // 如果是报告问答的建议问题点击后切换到通用对话
+    if (qa_type.value == 'REPORT_QA') {
+        onAqtiveChange('COMMON_QA')
+    }
+    handleCreateStylized(suggested_array.value[index])
 }
 </script>
 <template>
@@ -589,9 +601,17 @@ const query_dify_suggested = async () => {
                 </div>
                 <div
                     v-if="!isInit && !stylizingLoading"
-                    style="align-items: center; width: 70%; margin-left: 11%"
+                    style="
+                        align-items: center;
+                        width: 70%;
+                        margin-left: 11%;
+                        margin-top: -24px;
+                    "
                 >
-                    <SuggestedView :labels="suggested_array" />
+                    <SuggestedView
+                        :labels="suggested_array"
+                        @suggested="onSuggested"
+                    />
                 </div>
             </div>
 
