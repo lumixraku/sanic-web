@@ -15,6 +15,7 @@ import requests
 
 from common.date_util import DateEncoder
 from component.pandasai.pandas_ai_response import PandasaiCustomResponse
+from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 
@@ -227,6 +228,40 @@ async def read_excel(file_url: str):
         return json.dumps(sheets_data_list_format, ensure_ascii=False, cls=DateEncoder)
     except Exception as e:
         traceback.print_exception(e)
+
+
+def read_file_columns(file_url: str):
+    """
+    仅读取并返回文件的第一个工作表或CSV文件的列名称（表头）
+
+    :param file_url: 文件的URL或路径
+    :return: 包含列名称的JSON字符串
+    """
+    try:
+        # 确认文件扩展名是否为Excel或CSV文件类型
+        parsed = urlparse(file_url)
+        path_parts = parsed.path.split(".")
+        extension = path_parts[-1] if len(path_parts) > 1 else ""
+
+        if extension not in ["xlsx", "xls", "csv"]:
+            raise ValueError("Unsupported file extension")
+
+        if extension in ["xlsx", "xls"]:
+            # 只读取Excel文件第一个sheet的表头
+            df = pd.read_excel(file_url, sheet_name=0, nrows=0)
+        elif extension == "csv":
+            # 读取CSV文件的表头
+            df = pd.read_csv(file_url, nrows=0)
+
+        # 获取列名称并转换为列表
+        columns = df.columns.tolist()
+
+        # 将列名称转为JSON格式返回
+        return json.dumps({"file_header": columns}, ensure_ascii=False)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return json.dumps({"error": str(e)}, ensure_ascii=False)
 
 
 def pyload_build(
