@@ -9,7 +9,7 @@ import requests
 
 from common.exception import MyException
 from common.mysql_util import MysqlUtil
-from constants.code_enum import SysCodeEnum
+from constants.code_enum import SysCodeEnum, DiFyAppEnum
 from constants.dify_rest_api import DiFyRestApi
 
 logger = logging.getLogger(__name__)
@@ -95,6 +95,12 @@ async def add_question_record(user_token, conversation_id, message_id, task_id, 
         user_dict = await decode_jwt_token(user_token)
         user_id = user_dict["id"]
 
+        # 文件问答时保存 minio/key
+        file_key = ""
+        if qa_type == DiFyAppEnum.FILEDATA_QA.value[0]:
+            file_key = question.split("|")[0]
+            question = question.split("|")[1]
+
         sql = f"select * from t_user_qa_record where user_id={user_id} and chat_id='{chat_id}'"
         log_dict = mysql_client.query_mysql_dict(sql)
         if len(log_dict) > 0:
@@ -102,8 +108,21 @@ async def add_question_record(user_token, conversation_id, message_id, task_id, 
                     where user_id={user_id} and chat_id='{chat_id}'"""
             mysql_client.update(sql)
         else:
-            insert_params = [user_id, conversation_id, message_id, task_id, chat_id, question, json.dumps(t02_answer, ensure_ascii=False), qa_type]
-            sql = f" insert into t_user_qa_record(user_id,conversation_id, message_id, task_id,chat_id,question,to2_answer,qa_type) values (%s,%s,%s,%s,%s,%s,%s,%s)"
+            insert_params = [
+                user_id,
+                conversation_id,
+                message_id,
+                task_id,
+                chat_id,
+                question,
+                json.dumps(t02_answer, ensure_ascii=False),
+                qa_type,
+                file_key,
+            ]
+            sql = (
+                f" insert into t_user_qa_record(user_id,conversation_id, message_id, task_id,chat_id,question,to2_answer,qa_type,file_key) "
+                f"values (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            )
             mysql_client.insert(sql=sql, params=insert_params)
 
     except Exception as e:

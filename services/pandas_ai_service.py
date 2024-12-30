@@ -230,7 +230,7 @@ async def read_excel(file_url: str):
         traceback.print_exception(e)
 
 
-def read_file_columns(file_url: str):
+async def read_file_columns(file_url: str):
     """
     仅读取并返回文件的第一个工作表或CSV文件的列名称（表头）
 
@@ -257,7 +257,7 @@ def read_file_columns(file_url: str):
         columns = df.columns.tolist()
 
         # 将列名称转为JSON格式返回
-        return json.dumps({"file_header": columns}, ensure_ascii=False)
+        return json.dumps(columns, ensure_ascii=False)
 
     except Exception as e:
         print(f"An error occurred: {e}")

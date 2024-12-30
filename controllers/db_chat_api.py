@@ -26,10 +26,10 @@ async def process_llm_out(req: request.Request):
         # body_str = req.form.get("llm_text")
 
         # 用户问题
-        question_str = req.args.get("question")
+        # question_str = req.args.get("question")
         logging.info(f"query param: {body_str}")
 
-        result = await exe_sql_query(question_str, body_str)
+        result = await exe_sql_query(body_str)
         return result
     except Exception as e:
         logging.error(f"Error processing LLM output: {e}")

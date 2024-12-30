@@ -136,6 +136,11 @@ const onRecycleQa = async (index: number) => {
     //设置当前选中的问答类型
     const item = conversationItems.value[index]
     onAqtiveChange(item.qa_type)
+
+    if (item.qa_type == 'FILEDATA_QA') {
+        businessStore.update_file_url(item.file_key)
+    }
+
     //发送问题重新生成
     handleCreateStylized(item.question)
 }
@@ -178,6 +183,7 @@ const conversationItems = ref<
         chat_id: string
         qa_type: string
         question: string
+        file_key: string
         role: 'user' | 'assistant'
         reader: ReadableStreamDefaultReader | null
     }>
@@ -276,6 +282,7 @@ const handleCreateStylized = async (send_text = '') => {
             chat_id: uuid.value,
             qa_type: qa_type.value,
             question: textContent,
+            file_key: `${businessStore.$state.file_url}`,
             role: 'assistant',
             reader: reader
         })

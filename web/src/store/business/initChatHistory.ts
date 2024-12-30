@@ -82,6 +82,7 @@ export const fetchConversationHistory = async function fetchConversationHistory(
             chat_id: string
             qa_type: string
             question: string
+            file_key: string
             role: 'user' | 'assistant'
             reader: ReadableStreamDefaultReader | null
         }>
@@ -121,6 +122,8 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                     let qa_type_str = ''
                     //对话id
                     let chat_id_str = ''
+                    //文件key
+                    let file_key_str = ''
                     const streamDataArray: StreamData[] = []
 
                     ;[
@@ -128,7 +131,8 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                         'to2_answer',
                         'to4_answer',
                         'qa_type',
-                        'chat_id'
+                        'chat_id',
+                        'file_key'
                     ].forEach((key: string) => {
                         if (record.hasOwnProperty(key)) {
                             switch (key) {
@@ -137,6 +141,9 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                                     break
                                 case 'chat_id':
                                     chat_id_str = record[key]
+                                    break
+                                case 'file_key':
+                                    file_key_str = record[key]
                                     break
                                 case 'question':
                                     question_str = record[key]
@@ -185,6 +192,7 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                                 chat_id: chat_id_str,
                                 qa_type: qa_type_str,
                                 question: question_str,
+                                file_key: file_key_str,
                                 role: 'assistant', // 根据实际情况设置role
                                 reader
                             })
