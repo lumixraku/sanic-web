@@ -4,6 +4,8 @@ services:
   chat-web:
     image: apconw/chat-vue3-mvp:1.0
     container_name: chat-vue3-mvp
+    environment:
+      - ENV=test
     ports:
       - "8081:80"
     extra_hosts:
