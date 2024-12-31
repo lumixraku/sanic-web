@@ -79,6 +79,10 @@ export const fetchConversationHistory = async function fetchConversationHistory(
     isInit: Ref<boolean>,
     conversationItems: Ref<
         Array<{
+            chat_id: string
+            qa_type: string
+            question: string
+            file_key: string
             role: 'user' | 'assistant'
             reader: ReadableStreamDefaultReader | null
         }>
@@ -112,47 +116,69 @@ export const fetchConversationHistory = async function fetchConversationHistory(
 
                 const itemsToAdd: any[] = []
                 for (const record of records) {
+                    //用户问题
+                    let question_str = ''
+                    //问答类型
+                    let qa_type_str = ''
+                    //对话id
+                    let chat_id_str = ''
+                    //文件key
+                    let file_key_str = ''
                     const streamDataArray: StreamData[] = []
 
-                    ;['question', 'to2_answer', 'to4_answer'].forEach(
-                        (key: string) => {
-                            if (record.hasOwnProperty(key)) {
-                                switch (key) {
-                                    case 'question':
+                    ;[
+                        'question',
+                        'to2_answer',
+                        'to4_answer',
+                        'qa_type',
+                        'chat_id',
+                        'file_key'
+                    ].forEach((key: string) => {
+                        if (record.hasOwnProperty(key)) {
+                            switch (key) {
+                                case 'qa_type':
+                                    qa_type_str = record[key]
+                                    break
+                                case 'chat_id':
+                                    chat_id_str = record[key]
+                                    break
+                                case 'file_key':
+                                    file_key_str = record[key]
+                                    break
+                                case 'question':
+                                    question_str = record[key]
+                                    streamDataArray.push({
+                                        dataType: 't11',
+                                        content: `问题:${record[key]}`
+                                    })
+                                    break
+                                case 'to2_answer':
+                                    try {
                                         streamDataArray.push({
-                                            dataType: 't11',
-                                            content: `问题:${record[key]}`
+                                            dataType: 't02',
+                                            data: {
+                                                content: JSON.parse(record[key])
+                                                    .data.content
+                                            }
                                         })
-                                        break
-                                    case 'to2_answer':
-                                        try {
-                                            streamDataArray.push({
-                                                dataType: 't02',
-                                                data: {
-                                                    content: JSON.parse(
-                                                        record[key]
-                                                    ).data.content
-                                                }
-                                            })
-                                        } catch (e) {
-                                            console.log(e)
-                                        }
-                                        break
-                                    case 'to4_answer':
-                                        if (
-                                            record[key] !== null &&
-                                            record[key] !== undefined
-                                        ) {
-                                            streamDataArray.push({
-                                                dataType: 't04',
-                                                data: record[key]
-                                            })
-                                        }
-                                        break
-                                }
+                                    } catch (e) {
+                                        console.log(e)
+                                    }
+                                    break
+                                case 'to4_answer':
+                                    if (
+                                        record[key] !== null &&
+                                        record[key] !== undefined
+                                    ) {
+                                        streamDataArray.push({
+                                            dataType: 't04',
+                                            data: record[key]
+                                        })
+                                    }
+                                    break
                             }
                         }
-                    )
+                    })
 
                     if (streamDataArray.length > 0) {
                         const stream = createStreamFromValue(streamDataArray) // 创建新的流
@@ -163,6 +189,10 @@ export const fetchConversationHistory = async function fetchConversationHistory(
 
                         if (error === 0 && reader) {
                             itemsToAdd.push({
+                                chat_id: chat_id_str,
+                                qa_type: qa_type_str,
+                                question: question_str,
+                                file_key: file_key_str,
                                 role: 'assistant', // 根据实际情况设置role
                                 reader
                             })

@@ -1,19 +1,13 @@
-import os
-from logging.config import fileConfig
-
-from dotenv import load_dotenv
 from sanic import Sanic
 from sanic.response import empty
 
 import controllers
 from common.route_utility import autodiscover
 from config import serv
+from config.load_env import load_env
 
-# 加载日志配置文件
-fileConfig("config/logging.conf")
-
-# 加载环境变量
-load_dotenv()
+# 加载配置文件
+load_env()
 
 app = Sanic("sanic-web")
 autodiscover(

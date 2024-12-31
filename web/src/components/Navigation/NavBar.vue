@@ -11,8 +11,8 @@ withDefaults(defineProps<Props>(), {
 })
 
 const handleToRepo = () => {
-    const link = ref('https://github.com/pdsuwwz/chatgpt-vue3-light-mvp')
-    // window.open(link.value, '_blank')
+    const link = ref('https://github.com/apconw/sanic-web')
+    window.open(link.value, '_blank')
 }
 </script>
 
@@ -73,7 +73,9 @@ const handleToRepo = () => {
     }
     // 添加具体的背景颜色
     &.bg-bgcolor {
-        background-color: #f6f7fb;
+        // background-color: #f0effe;
+        background: linear-gradient(to right, #f0effe, #ddeefe);
+
         // 替换为你的颜色
     }
 
