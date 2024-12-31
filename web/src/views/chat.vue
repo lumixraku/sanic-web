@@ -5,7 +5,7 @@ import { useRouter } from 'vue-router'
 import { UAParser } from 'ua-parser-js'
 import TableModal from './TableModal.vue'
 import DefaultPage from './DefaultPage.vue'
-import SuggestedView from './Suggested.vue'
+import SuggestedView from './SuggestedPage.vue'
 
 const route = useRoute()
 const router = useRouter()
