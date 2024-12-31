@@ -4,4 +4,3 @@ docker/
 tests/
 web/
 images/
-logs/

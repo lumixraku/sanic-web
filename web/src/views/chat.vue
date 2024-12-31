@@ -141,6 +141,8 @@ const onRecycleQa = async (index: number) => {
         businessStore.update_file_url(item.file_key)
     }
 
+    // 清空推荐列表
+    suggested_array.value = []
     //发送问题重新生成
     handleCreateStylized(item.question)
 }
@@ -596,6 +598,7 @@ const onSuggested = (index: number) => {
                         :reader="item.reader"
                         :model="defaultLLMTypeName"
                         :isInit="isInit"
+                        :qaType="`${item.qa_type}`"
                         :chart-id="`${index}devID${generateRandomSuffix()}`"
                         :parentScollBottomMethod="scrollToBottom"
                         @failed="() => onFailedReader(index)"
