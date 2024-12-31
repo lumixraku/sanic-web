@@ -20,9 +20,13 @@ class DiFyAppEnum(Enum):
     DiFy app-key 枚举
     """
 
-    DATABASE_QA = ("DATABASE_QA", "app-IzudxfuN8uO2bvuCpUHpWhvH", "数据问答")
+    DATABASE_QA = ("DATABASE_QA", "数据问答")
 
-    FILEDATA_QA = ("FILEDATA_QA", "app-lL9IirirLhuzbmqipKH6qGZO", "表格问答")
+    FILEDATA_QA = ("FILEDATA_QA", "表格问答")
+
+    COMMON_QA = ("COMMON_QA", "通用问答")
+
+    REPORT_QA = ("REPORT_QA", "报告问答")
 
 
 class DataTypeEnum(Enum):
@@ -49,3 +53,5 @@ class DiFyCodeEnum(Enum):
     MESSAGE = ("message", "答案")
 
     MESSAGE_END = ("message_end", "结束")
+
+    MESSAGE_ERROR = ("error", "错误")
