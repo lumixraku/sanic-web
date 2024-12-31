@@ -4,15 +4,12 @@ services:
   chat-web:
     image: apconw/chat-vue3-mvp:1.1
     container_name: chat-vue3-mvp
-
     ports:
       - "8081:80"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
       - chat-service
-    networks:
-      - dify_service_default
 
   minio:
     image: minio/minio:latest
@@ -26,8 +23,6 @@ services:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=12345678
     command: server /data --console-address ":9001"
-    networks:
-      - dify_service_default
 
   chat-service:
     image: apconw/sanic-web:1.1
@@ -43,8 +38,6 @@ services:
       - "8088:8088"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    networks:
-      - dify_service_default
 
   mysql:
     image: mysql:latest
@@ -58,10 +51,3 @@ services:
     volumes:
       - ./volume/mysql/data:/var/lib/mysql
       - ./my.cnf:/etc/mysql/conf.d/my.cnf
-    networks:
-      - dify_service_default
-
-networks:
-  dify_service_default:
-#    external: true
-    driver: bridge
