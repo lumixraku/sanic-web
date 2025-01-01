@@ -24,10 +24,10 @@
 - **灵活部署**：支持大模型应用开发各依赖组件docker-compose一键拉起快速部署零配置
 
 ## 运行效果
-![image](./images/chat-04.gif)
-![image](./images/chat-05.jpg)
-![image](./images/chat-01.png)
-![image](./images/chat-03.png)
+![image](./images/chat-04-v1.1.0.gif)
+![image](./images/chat-05-v1.1.0.png)
+![image](./images/chat-01-v1.1.0.png)
+![image](./images/chat-03-v1.1.0.png)
 
 ## 💡环境配置要求
 
