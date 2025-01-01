@@ -87,7 +87,7 @@
    
 3. **Minio配置**
    - 访问MinIO服务，http://localhost:19001/ 账号:admin 密码:12345678
-   - 创建一个bucket，名称filedata，同时配置Access Key并
+   - 创建一个bucket，名称filedata，同时配置Access Key
    - 修改chat-service服务里的MINIO_开头的环境变量重启服务
 
    ```bash
@@ -112,8 +112,8 @@
 ## 🛠️ **本地开发**
 - 第一步克隆代码到本地
 - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
-- 第三步本地开发环境Dify配置，参考上面**Dify环境配置**里的,**第1或2种两种情况自行选择即可**
-- 第四步编辑项目根目录下的.env文件，**修改ENV=dev**，以及数据库配置信息
+- 第三步本地开发环境Dify配置，参考上面**Dify环境配置** **根据实际情况自行选择调整即可**
+- 第四步编辑项目根目录下的.env.dev文件里面的数据库等配置信息,默认不需要修改
 - 第五步安装前后端项目依赖并启动前后端服务具体步骤如下:
 
 1. **后端依赖安装**  
@@ -124,29 +124,31 @@
    
    # 安装依赖根目录执行
    # 设置国内仓库
-   poetry source add --priority=default mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
+   poetry source add --priority=primary mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
    poetry install
 
-2. **安装数据库**
+2. **安装中间件**
    ```bash
-   docker run --name mysql-local \
-   -p 13006:3306 \
-   -v /Users/lihuan/docker-mount/mysql:/var/lib/mysql \
-   -e MYSQL_ROOT_PASSWORD=1 \
-   -d mysql:latest
+   cd docker
+   docker compose up -d mysql minio
    
-3. **初始化数据库**
-- 如果使用本地环境mysql,初始化数据时需修改源码initialize_mysql，修改数据库连接信息即可
+3. **Minio配置**
+   - 访问MinIO服务，http://localhost:19001/ 账号:admin 密码:12345678
+   - 创建一个bucket，名称filedata，同时配置Access Key
+   - 修改.evn.dev里的MINIO_开头的密钥消息
+   
+4. **初始化数据库**
+   - 如果使用本地环境mysql,初始化数据时需修改源码initialize_mysql，修改数据库连接信息即可
    ```bash
-  cd docker
-  ./init.sh
-   
-  或执行
-   
-  cd docker
-  python3 ../common/initialize_mysql.py
+     cd docker
+     ./init.sh
+      
+     或执行
+      
+     cd docker
+     python3 ../common/initialize_mysql.py
 
-4. **前端依赖安装**  
+5. **前端依赖安装**  
    - 前端是基于开源项目[可参考chatgpt-vue3-light-mvp安装](https://github.com/pdsuwwz/chatgpt-vue3-light-mvp)二开
    ```bash
    # 安装前端依赖&启动服务
@@ -160,17 +162,17 @@
    #启动服务
    pnpm dev
    
-5. **启动后端服务**
+6. **启动后端服务**
    ```bash
    #启动后端服务
    python serv.py
    ```
 
-6. **访问服务**
+7. **访问服务**
  - 前端服务：http://localhost:2048
 
 ## 🐳 构建镜像
-- 编辑项目根目录下的.env文件，***修改ENV=test***，并保存。
+
 - 执行构建命令：
    ```bash
    # 构建前端镜像 
