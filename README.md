@@ -51,29 +51,25 @@
 - 模型: Qwen2.5
 
 ## ⚙️ **Dify环境配置**
-1. **使用项目脚本默认安装Dify**
-   - 为了兼顾第一次接触大模型应用的同学，本项目提供了一键拉起Dify服务零配置，同时启动服务方式，方便大家快速体验。
-   - Dify本机访问地址：http://localhost 账号:admin@123.com 密码:admin123 
+1. **安装Dify**
+   - [官方参考文档](https://docs.dify.ai/zh-hans)
+   - 为了兼顾第一次接触大模型应用的同学，本项目提供了一键拉起Dify服务方便大家快速体验。
+   - Dify本机访问地址：http://localhost:18000 账号/密码: 需自己注册 
    ```bash
    # 拉起内置的dify服务
    cd docker/dify/docker
    docker-compose up -d
    
-2. **如果已安装过Dify环境**
-   - **如果你已经有Dify环境,这种情况只能本地修改源码启动服务 !!!**
-   - 第一步直接导入项目根目录下的**docker/dify/数据问答.yml画布**至Dify
-   - 第二步修改源码DiFyAppEnum枚举里的DATABASE_QA密钥Key(**key从dify流程画布中获取**)
-   - 第三步修改项目根目录下的.env文件，根据环境修改实际的Dify Rest服务接口地址即可
-   - 第四步修改Dify画布里HttpRequest配置，修改url地址为具体sanic-web服务地址
+2. **Dify配置**
+   - 添加Dify大模型提供商Ollama,配置Qwen2.5模型
+   - 导入项目根目录下的**docker/dify/数据问答_v1.1.0.yml画布**至Dify并获取对应的api-key
 
-3. **安装最新版本Dify**
-   - 如果需要安装最新版Dify的同学,可以参考官方文档[Dify官方文档](https://docs.dify.ai/zh-hans)。
    
 ## 🚀 **快速体验**
    - 具体步骤如下：
    - 第一步克隆代码到本地
    - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
-   - 第三步Dify环境配置直接参考上面**Dify环境配置**里的,**第1种情况[使用项目脚本默认安装Dify]** **这步很重要!!!!**
+   - 第三步Dify环境配置直接参考上面**Dify环境配置** **这步很重要!!!!**
    - 第四步启动服务具体步骤如下:
 
 1. **克隆仓库**
@@ -81,12 +77,25 @@
    git clone https://github.com/apconw/sanic-web.git
 
 2. **启动服务**
+   - 修改chat-service服务里DIFY_开头的环境变量
+   - **DIFY_DATABASE_QA_API_KEY** 配置Dify画布的api-key
+
    ```bash
    # 拉起前后端服务和中间件
    cd docker
    docker compose up -d
+   
+3. **Minio配置**
+   - 访问MinIO服务，http://localhost:19001/ 账号:admin 密码:12345678
+   - 创建一个bucket，名称filedata，同时配置Access Key并
+   - 修改chat-service服务里的MINIO_开头的环境变量重启服务
 
-3. **数据初始化**
+   ```bash
+   # 重新拉起前后端服务和中间件
+   cd docker
+   docker compose up -d
+
+4. **数据初始化**
    ```bash
    cd docker
    ./init.sh
@@ -96,7 +105,7 @@
    cd docker
    python3 ../common/initialize_mysql.py
    
-4. **访问服务**
+5. **访问服务**
  - 前端服务：http://localhost:8081
 
 
