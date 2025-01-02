@@ -77,8 +77,8 @@
    git clone https://github.com/apconw/sanic-web.git
 
 2. **启动服务**
-   - 修改chat-service服务里DIFY_开头的环境变量
-   - **DIFY_DATABASE_QA_API_KEY** 配置Dify画布的api-key
+   - 修改docker-compose里的chat-service服务DIFY_开头的环境变量
+   - 修改**DIFY_DATABASE_QA_API_KEY** 配置Dify画布的api-key
 
    ```bash
    # 拉起前后端服务和中间件
@@ -88,7 +88,7 @@
 3. **Minio配置**
    - 访问MinIO服务，http://localhost:19001/ 账号:admin 密码:12345678
    - 创建一个bucket，名称filedata，同时配置Access Key
-   - 修改chat-service服务里的MINIO_开头的环境变量重启服务
+   - 修改docker-compose里的chat-service服务的MINIO_开头的环境变量重启服务
 
    ```bash
    # 重新拉起前后端服务和中间件
