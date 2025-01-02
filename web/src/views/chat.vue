@@ -11,6 +11,7 @@ const route = useRoute()
 const router = useRouter()
 const message = useMessage()
 import * as GlobalAPI from '@/api'
+import { text } from 'stream/consumers'
 
 // 显示默认页面
 const showDefaultPage = ref(true)
@@ -251,6 +252,20 @@ const handleCreateStylized = async (send_text = '') => {
         : send_text
     inputTextString.value = ''
 
+    if (textContent) {
+        // 存储该轮用户对话消息
+        conversationItems.value.push({
+            chat_id: uuid.value,
+            qa_type: qa_type.value,
+            question: textContent,
+            file_key: '',
+            role: 'user',
+            reader: null
+        })
+        // 更新 currentRenderIndex 以包含新添加的项
+        currentRenderIndex.value = conversationItems.value.length - 1
+    }
+
     uuid.value = uuidv4()
     const { error, reader, needLogin } =
         await businessStore.createAssistantWriterStylized(
@@ -279,7 +294,7 @@ const handleCreateStylized = async (send_text = '') => {
 
     if (reader) {
         outputTextReader.value = reader
-        // 存储该轮对话消息
+        // 存储该轮AI回复的消息
         conversationItems.value.push({
             chat_id: uuid.value,
             qa_type: qa_type.value,
@@ -594,28 +609,67 @@ const onSuggested = (index: number) => {
                     class="mb-4"
                     :ref="(el) => setMarkdownPreview(index, el)"
                 >
-                    <MarkdownPreview
-                        :reader="item.reader"
-                        :model="defaultLLMTypeName"
-                        :isInit="isInit"
-                        :qaType="`${item.qa_type}`"
-                        :chart-id="`${index}devID${generateRandomSuffix()}`"
-                        :parentScollBottomMethod="scrollToBottom"
-                        @failed="() => onFailedReader(index)"
-                        @completed="() => onCompletedReader(index)"
-                        @chartready="() => onChartReady(index + 1)"
-                        @recycleQa="() => onRecycleQa(index)"
-                        @praiseFeadBack="() => onPraiseFeadBack(index)"
-                        @belittleFeedback="() => onBelittleFeedback(index)"
-                    />
+                    <div
+                        v-if="item.role == 'user'"
+                        whitespace-break-spaces
+                        text-right
+                        style="
+                            margin-left: 10%;
+                            margin-right: 10%;
+                            padding: 15px 15px;
+                            border-radius: 5px;
+                            text-align: center;
+                            float: right;
+                        "
+                    >
+                        <n-space>
+                            <n-tag
+                                size="large"
+                                :bordered="false"
+                                :round="true"
+                                :style="{
+                                    fontSize: '14px',
+                                    fontFamily: 'PMingLiU'
+                                }"
+                                :color="{
+                                    color: '#e0dfff',
+                                    borderColor: '#e0dfff'
+                                }"
+                            >
+                                {{ item.question }}
+                                <template #avatar>
+                                    <n-avatar
+                                        src="https://cdnimg103.lizhi.fm/user/2017/02/04/2583325032200238082_160x160.jpg"
+                                    />
+                                </template>
+                            </n-tag>
+                        </n-space>
+                    </div>
+                    <div v-if="item.role == 'assistant'">
+                        <MarkdownPreview
+                            :reader="item.reader"
+                            :model="defaultLLMTypeName"
+                            :isInit="isInit"
+                            :qaType="`${item.qa_type}`"
+                            :chart-id="`${index}devID${generateRandomSuffix()}`"
+                            :parentScollBottomMethod="scrollToBottom"
+                            @failed="() => onFailedReader(index)"
+                            @completed="() => onCompletedReader(index)"
+                            @chartready="() => onChartReady(index + 1)"
+                            @recycleQa="() => onRecycleQa(index)"
+                            @praiseFeadBack="() => onPraiseFeadBack(index)"
+                            @belittleFeedback="() => onBelittleFeedback(index)"
+                        />
+                    </div>
                 </div>
+
                 <div
                     v-if="!isInit && !stylizingLoading"
                     style="
                         align-items: center;
                         width: 70%;
                         margin-left: 11%;
-                        margin-top: -24px;
+                        margin-top: -20px;
                     "
                 >
                     <SuggestedView

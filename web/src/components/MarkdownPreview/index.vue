@@ -10,6 +10,7 @@ import {
 } from './transform'
 import MarkdownTable from './MarkdownTable.vue'
 import { watch } from 'vue'
+import { round } from 'lodash-es'
 interface Props {
     isInit: boolean
     chartId: string
@@ -392,7 +393,7 @@ const onChartCompletedReader = function () {
                     ref="refWrapperContent"
                     text-16
                     class="w-full h-full overflow-y-auto"
-                    p-24px
+                    p-15px
                 >
                     <div
                         class="markdown-wrapper"
@@ -448,15 +449,19 @@ const onChartCompletedReader = function () {
                     </div>
                     <div
                         v-if="isCompleted"
-                        style="
-                            background-color: #ffffff;
-                            width: 80%;
-                            margin-left: 10%;
-                            margin-right: 10%;
-                            padding: 20px;
-                            display: flex;
-                            justify-content: space-between;
-                        "
+                        :style="{
+                            'background-color': '#ffffff',
+                            width: '80%',
+                            'margin-left': '10%',
+                            'margin-right': '10%',
+                            padding: '18px 15px',
+                            display: 'flex',
+                            'border-bottom-right-radius': '15px',
+                            'border-bottom-left-radius': '15px',
+                            'justify-content': 'space-between',
+                            'margin-top':
+                                currentChartType === '' ? '-15px' : '0'
+                        }"
                     >
                         <div style="display: flex">
                             <QatypeIcon :qa_type="qaType" />
@@ -598,8 +603,10 @@ const onChartCompletedReader = function () {
     margin-right: 10%;
     background-color: #ffffff;
     // background: linear-gradient(to right, #f0effe, #d4eefc);
-    padding: 30px;
-    // font-family: 'PMingLiU';
+    padding: 2px 18px;
+    font-family: 'PMingLiU';
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
         'Helvetica Neue', Arial, sans-serif;
     h1 {
@@ -678,6 +685,7 @@ const onChartCompletedReader = function () {
 
     p {
         line-height: 2;
+        // padding-left: 15px;
         & > code {
             --at-apply: 'bg-#e5e5e5';
             --at-apply: whitespace-pre mx-4px px-6px py-3px rounded-5px;
