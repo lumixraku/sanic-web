@@ -10,7 +10,6 @@ import {
 } from './transform'
 import MarkdownTable from './MarkdownTable.vue'
 import { watch } from 'vue'
-import { round } from 'lodash-es'
 interface Props {
     isInit: boolean
     chartId: string
@@ -46,6 +45,7 @@ const isCompleted = ref(false)
 const emit = defineEmits([
     'failed',
     'completed',
+    'beginRead',
     'update:reader',
     'chartready',
     'recycleQa',
@@ -288,6 +288,13 @@ watch(
     }
 )
 
+// 监听 displayText 变化
+watch(displayText, (newValue) => {
+    if (newValue !== '') {
+        emit('beginRead')
+    }
+})
+
 onUnmounted(() => {
     resetStatus()
 })
@@ -381,15 +388,16 @@ const onChartCompletedReader = function () {
                 class="w-full h-full overflow-hidden"
                 :class="[!displayText && 'flex items-center justify-center']"
             >
-                <n-empty v-if="!displayText" size="large" class="font-bold">
+                <!-- <n-empty v-if="!displayText" size="large" class="font-bold">
                     <template #icon>
                         <n-icon>
                             <div class="i-hugeicons:ai-chat-02"></div>
                         </n-icon>
-                    </template>
-                </n-empty>
+                    </template> 
+                </n-empty> -->
+
                 <div
-                    v-else
+                    v-if="displayText"
                     ref="refWrapperContent"
                     text-16
                     class="w-full h-full overflow-y-auto"
@@ -459,8 +467,7 @@ const onChartCompletedReader = function () {
                             'border-bottom-right-radius': '15px',
                             'border-bottom-left-radius': '15px',
                             'justify-content': 'space-between',
-                            'margin-top':
-                                currentChartType === '' ? '-15px' : '0'
+                            'margin-top': currentChartType === '' ? '-5px' : '0'
                         }"
                     >
                         <div style="display: flex">

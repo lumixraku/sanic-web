@@ -115,9 +115,9 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                 }))
 
                 const itemsToAdd: any[] = []
+                //用户问题
+                let question_str = ''
                 for (const record of records) {
-                    //用户问题
-                    let question_str = ''
                     //问答类型
                     let qa_type_str = ''
                     //对话id
@@ -147,10 +147,10 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                                     break
                                 case 'question':
                                     question_str = record[key]
-                                    streamDataArray.push({
-                                        dataType: 't11',
-                                        content: `问题:${record[key]}`
-                                    })
+                                    // streamDataArray.push({
+                                    //     dataType: 't11',
+                                    //     content: `问题:${record[key]}`
+                                    // })
                                     break
                                 case 'to2_answer':
                                     try {
@@ -192,8 +192,17 @@ export const fetchConversationHistory = async function fetchConversationHistory(
                                 chat_id: chat_id_str,
                                 qa_type: qa_type_str,
                                 question: question_str,
+                                file_key: '',
+                                role: 'user',
+                                reader: null
+                            })
+
+                            itemsToAdd.push({
+                                chat_id: chat_id_str,
+                                qa_type: qa_type_str,
+                                question: question_str,
                                 file_key: file_key_str,
-                                role: 'assistant', // 根据实际情况设置role
+                                role: 'assistant',
                                 reader
                             })
                         }
@@ -202,6 +211,8 @@ export const fetchConversationHistory = async function fetchConversationHistory(
 
                 conversationItems.value = itemsToAdd
                 // 这里删除对话后需要重置当前渲染索引
+                // currentRenderIndex.value = conversationItems.value.length - 1
+                // console.log(conversationItems.value)
                 currentRenderIndex.value = 0
             }
         } else {

@@ -11,7 +11,6 @@ const route = useRoute()
 const router = useRouter()
 const message = useMessage()
 import * as GlobalAPI from '@/api'
-import { text } from 'stream/consumers'
 
 // 显示默认页面
 const showDefaultPage = ref(true)
@@ -120,14 +119,16 @@ const onCompletedReader = (index: number) => {
         })
     }
 
+    // 查询是推荐列表
     query_dify_suggested()
-    // scrollToBottom()
 }
 
-//图表子组件渲染完毕
+//当前索引位置
 const currentRenderIndex = ref(0)
+//图表子组件渲染完毕
 const onChartReady = (index) => {
     if (index < conversationItems.value.length) {
+        console.log('onChartReady', index)
         currentRenderIndex.value = index
         stylizingLoading.value = false
     }
@@ -146,6 +147,7 @@ const onRecycleQa = async (index: number) => {
     suggested_array.value = []
     //发送问题重新生成
     handleCreateStylized(item.question)
+    scrollToBottom()
 }
 
 //赞 结果反馈
@@ -158,6 +160,12 @@ const onPraiseFeadBack = async (index: number) => {
             duration: 1500
         })
     }
+}
+
+//开始输出时隐藏加载提示
+const onBeginRead = async (index: number) => {
+    //设置最上面的滚动提示图标隐藏
+    contentLoadingStates.value[currentRenderIndex.value - 1] = false
 }
 
 //踩 结果反馈
@@ -194,13 +202,38 @@ const conversationItems = ref<
 
 // 这里子组件 chart渲染慢需要子组件渲染完毕后通知父组件
 const visibleConversationItems = computed(() => {
-    return conversationItems.value.slice(0, currentRenderIndex.value + 1)
+    return conversationItems.value.slice(0, currentRenderIndex.value + 2)
 })
+//这里控制内容加载状态
+const contentLoadingStates = ref(
+    visibleConversationItems.value.map(() => false)
+)
+
+watch(
+    currentRenderIndex,
+    (newValue, oldValue) => {
+        console.log('currentRenderIndex 新值:', newValue)
+        console.log('currentRenderIndex 旧值:', oldValue)
+    },
+    { immediate: true }
+)
+
+watch(
+    conversationItems,
+    (newValue, oldValue) => {
+        console.log('visibleConversationItems 新值:', newValue)
+        console.log('visibleConversationItems 旧值:', oldValue)
+    },
+    { immediate: true }
+)
 
 // chat_id定义
 const uuid = ref('')
 //提交对话
 const handleCreateStylized = async (send_text = '') => {
+    // 滚动到底部
+    scrollToBottom()
+
     //设置初始化数据标识为false
     isInit.value = false
 
@@ -264,6 +297,7 @@ const handleCreateStylized = async (send_text = '') => {
         })
         // 更新 currentRenderIndex 以包含新添加的项
         currentRenderIndex.value = conversationItems.value.length - 1
+        contentLoadingStates.value[currentRenderIndex.value] = true
     }
 
     uuid.value = uuidv4()
@@ -423,7 +457,11 @@ const markdownPreviews = ref<Array<HTMLElement | null>>([]) // 初始化为空�
 const rowProps = (row: any) => {
     return {
         onClick: () => {
-            scrollToItem(row.index)
+            if (row.index == 0) {
+                scrollToItem(0)
+            } else {
+                scrollToItem(row.index + 1)
+            }
         }
     }
 }
@@ -459,6 +497,7 @@ const scrollToItem = (index: number) => {
             currentRenderIndex
         )
     }
+
     //关闭默认页面
     showDefaultPage.value = false
     if (markdownPreviews.value[index]) {
@@ -609,41 +648,56 @@ const onSuggested = (index: number) => {
                     class="mb-4"
                     :ref="(el) => setMarkdownPreview(index, el)"
                 >
-                    <div
-                        v-if="item.role == 'user'"
-                        whitespace-break-spaces
-                        text-right
-                        style="
-                            margin-left: 10%;
-                            margin-right: 10%;
-                            padding: 15px 15px;
-                            border-radius: 5px;
-                            text-align: center;
-                            float: right;
-                        "
-                    >
-                        <n-space>
-                            <n-tag
-                                size="large"
-                                :bordered="false"
-                                :round="true"
-                                :style="{
-                                    fontSize: '14px',
-                                    fontFamily: 'PMingLiU'
-                                }"
-                                :color="{
-                                    color: '#e0dfff',
-                                    borderColor: '#e0dfff'
-                                }"
-                            >
-                                {{ item.question }}
-                                <template #avatar>
-                                    <n-avatar
-                                        src="https://cdnimg103.lizhi.fm/user/2017/02/04/2583325032200238082_160x160.jpg"
-                                    />
-                                </template>
-                            </n-tag>
-                        </n-space>
+                    <div v-if="item.role == 'user'">
+                        <div
+                            whitespace-break-spaces
+                            text-right
+                            style="
+                                margin-left: 10%;
+                                margin-right: 10%;
+                                padding: 15px 15px;
+                                border-radius: 5px;
+                                text-align: center;
+                                float: right;
+                            "
+                        >
+                            <n-space>
+                                <n-tag
+                                    size="large"
+                                    :bordered="false"
+                                    :round="true"
+                                    :style="{
+                                        fontSize: '14px',
+                                        fontFamily: 'PMingLiU'
+                                    }"
+                                    :color="{
+                                        color: '#e0dfff',
+                                        borderColor: '#e0dfff'
+                                    }"
+                                >
+                                    {{ item.question }}
+                                    <template #avatar>
+                                        <n-avatar
+                                            src="https://cdnimg103.lizhi.fm/user/2017/02/04/2583325032200238082_160x160.jpg"
+                                        />
+                                    </template>
+                                </n-tag>
+                            </n-space>
+                        </div>
+                        <div
+                            v-if="contentLoadingStates[index]"
+                            class="i-svg-spinners:bars-scale"
+                            style="
+                                width: 24px;
+                                height: 24px;
+                                color: #b1adf3;
+                                border-left-color: #b1adf3;
+                                margin-top: 80px;
+                                animation: spin 1s linear infinite;
+                                margin-left: 12%;
+                                float: left;
+                            "
+                        />
                     </div>
                     <div v-if="item.role == 'assistant'">
                         <MarkdownPreview
@@ -659,6 +713,7 @@ const onSuggested = (index: number) => {
                             @recycleQa="() => onRecycleQa(index)"
                             @praiseFeadBack="() => onPraiseFeadBack(index)"
                             @belittleFeedback="() => onBelittleFeedback(index)"
+                            @beginRead="() => onBeginRead(index)"
                         />
                     </div>
                 </div>
@@ -694,8 +749,8 @@ const onSuggested = (index: number) => {
                         class="mr-2"
                         v-on:finish="finish_upload"
                     >
-                        <n-icon size="35"
-                            ><svg
+                        <n-icon size="35">
+                            <svg
                                 t="1729566080604"
                                 class="icon"
                                 viewBox="0 0 1024 1024"
@@ -1042,5 +1097,13 @@ const onSuggested = (index: number) => {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
     opacity: 0;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 </style>
