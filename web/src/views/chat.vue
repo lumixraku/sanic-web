@@ -128,7 +128,7 @@ const currentRenderIndex = ref(0)
 //图表子组件渲染完毕
 const onChartReady = (index) => {
     if (index < conversationItems.value.length) {
-        console.log('onChartReady', index)
+        // console.log('onChartReady', index)
         currentRenderIndex.value = index
         stylizingLoading.value = false
     }
@@ -209,23 +209,23 @@ const contentLoadingStates = ref(
     visibleConversationItems.value.map(() => false)
 )
 
-watch(
-    currentRenderIndex,
-    (newValue, oldValue) => {
-        console.log('currentRenderIndex 新值:', newValue)
-        console.log('currentRenderIndex 旧值:', oldValue)
-    },
-    { immediate: true }
-)
+// watch(
+//     currentRenderIndex,
+//     (newValue, oldValue) => {
+//         console.log('currentRenderIndex 新值:', newValue)
+//         console.log('currentRenderIndex 旧值:', oldValue)
+//     },
+//     { immediate: true }
+// )
 
-watch(
-    conversationItems,
-    (newValue, oldValue) => {
-        console.log('visibleConversationItems 新值:', newValue)
-        console.log('visibleConversationItems 旧值:', oldValue)
-    },
-    { immediate: true }
-)
+// watch(
+//     conversationItems,
+//     (newValue, oldValue) => {
+//         console.log('visibleConversationItems 新值:', newValue)
+//         console.log('visibleConversationItems 旧值:', oldValue)
+//     },
+//     { immediate: true }
+// )
 
 // chat_id定义
 const uuid = ref('')
@@ -457,10 +457,29 @@ const markdownPreviews = ref<Array<HTMLElement | null>>([]) // 初始化为空�
 const rowProps = (row: any) => {
     return {
         onClick: () => {
-            if (row.index == 0) {
-                scrollToItem(0)
+            suggested_array.value = []
+            console.log('rowProps', row.index)
+            if (row.index == tableData.value.length - 1) {
+                if (conversationItems.value.length === 0) {
+                    // console.log('fetchConversationHistory')
+                    fetchConversationHistory(
+                        isInit,
+                        conversationItems,
+                        tableData,
+                        currentRenderIndex
+                    )
+                }
+                //关闭默认页面
+                showDefaultPage.value = false
+                scrollToBottom()
             } else {
-                scrollToItem(row.index + 1)
+                if (row.index == 0) {
+                    scrollToItem(0)
+                } else if (row.index < 2) {
+                    scrollToItem(row.index + 1)
+                } else {
+                    scrollToItem(row.index + 2)
+                }
             }
         }
     }
@@ -486,10 +505,9 @@ const setMarkdownPreview = (index: number, el: any) => {
 // 滚动到指定位置的方法
 const scrollToItem = (index: number) => {
     //判断默认页面是否显示或对话历史是否初始化
-    if (
-        (!showDefaultPage.value && !isInit.value) ||
-        conversationItems.value.length === 0
-    ) {
+    //(!showDefaultPage.value && !isInit.value) ||
+    if (conversationItems.value.length === 0) {
+        console.log('fetchConversationHistory')
         fetchConversationHistory(
             isInit,
             conversationItems,
@@ -501,7 +519,11 @@ const scrollToItem = (index: number) => {
     //关闭默认页面
     showDefaultPage.value = false
     if (markdownPreviews.value[index]) {
-        markdownPreviews.value[index].scrollIntoView({ behavior: 'smooth' })
+        markdownPreviews.value[index].scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+        })
     }
 }
 
