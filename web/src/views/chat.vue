@@ -119,14 +119,16 @@ const onCompletedReader = (index: number) => {
         })
     }
 
+    // 查询是推荐列表
     query_dify_suggested()
-    // scrollToBottom()
 }
 
-//图表子组件渲染完毕
+//当前索引位置
 const currentRenderIndex = ref(0)
+//图表子组件渲染完毕
 const onChartReady = (index) => {
     if (index < conversationItems.value.length) {
+        // console.log('onChartReady', index)
         currentRenderIndex.value = index
         stylizingLoading.value = false
     }
@@ -145,6 +147,7 @@ const onRecycleQa = async (index: number) => {
     suggested_array.value = []
     //发送问题重新生成
     handleCreateStylized(item.question)
+    scrollToBottom()
 }
 
 //赞 结果反馈
@@ -157,6 +160,12 @@ const onPraiseFeadBack = async (index: number) => {
             duration: 1500
         })
     }
+}
+
+//开始输出时隐藏加载提示
+const onBeginRead = async (index: number) => {
+    //设置最上面的滚动提示图标隐藏
+    contentLoadingStates.value[currentRenderIndex.value - 1] = false
 }
 
 //踩 结果反馈
@@ -193,13 +202,38 @@ const conversationItems = ref<
 
 // 这里子组件 chart渲染慢需要子组件渲染完毕后通知父组件
 const visibleConversationItems = computed(() => {
-    return conversationItems.value.slice(0, currentRenderIndex.value + 1)
+    return conversationItems.value.slice(0, currentRenderIndex.value + 2)
 })
+//这里控制内容加载状态
+const contentLoadingStates = ref(
+    visibleConversationItems.value.map(() => false)
+)
+
+// watch(
+//     currentRenderIndex,
+//     (newValue, oldValue) => {
+//         console.log('currentRenderIndex 新值:', newValue)
+//         console.log('currentRenderIndex 旧值:', oldValue)
+//     },
+//     { immediate: true }
+// )
+
+// watch(
+//     conversationItems,
+//     (newValue, oldValue) => {
+//         console.log('visibleConversationItems 新值:', newValue)
+//         console.log('visibleConversationItems 旧值:', oldValue)
+//     },
+//     { immediate: true }
+// )
 
 // chat_id定义
 const uuid = ref('')
 //提交对话
 const handleCreateStylized = async (send_text = '') => {
+    // 滚动到底部
+    scrollToBottom()
+
     //设置初始化数据标识为false
     isInit.value = false
 
@@ -251,6 +285,21 @@ const handleCreateStylized = async (send_text = '') => {
         : send_text
     inputTextString.value = ''
 
+    if (textContent) {
+        // 存储该轮用户对话消息
+        conversationItems.value.push({
+            chat_id: uuid.value,
+            qa_type: qa_type.value,
+            question: textContent,
+            file_key: '',
+            role: 'user',
+            reader: null
+        })
+        // 更新 currentRenderIndex 以包含新添加的项
+        currentRenderIndex.value = conversationItems.value.length - 1
+        contentLoadingStates.value[currentRenderIndex.value] = true
+    }
+
     uuid.value = uuidv4()
     const { error, reader, needLogin } =
         await businessStore.createAssistantWriterStylized(
@@ -279,7 +328,7 @@ const handleCreateStylized = async (send_text = '') => {
 
     if (reader) {
         outputTextReader.value = reader
-        // 存储该轮对话消息
+        // 存储该轮AI回复的消息
         conversationItems.value.push({
             chat_id: uuid.value,
             qa_type: qa_type.value,
@@ -408,7 +457,38 @@ const markdownPreviews = ref<Array<HTMLElement | null>>([]) // 初始化为空�
 const rowProps = (row: any) => {
     return {
         onClick: () => {
-            scrollToItem(row.index)
+            suggested_array.value = []
+            // 这里*2 是因为对话渲染成两个
+            if (tableData.value.length * 2 != conversationItems.value.length) {
+                fetchConversationHistory(
+                    isInit,
+                    conversationItems,
+                    tableData,
+                    currentRenderIndex
+                )
+            }
+
+            if (row.index == tableData.value.length - 1) {
+                if (conversationItems.value.length === 0) {
+                    fetchConversationHistory(
+                        isInit,
+                        conversationItems,
+                        tableData,
+                        currentRenderIndex
+                    )
+                }
+                //关闭默认页面
+                showDefaultPage.value = false
+                scrollToBottom()
+            } else {
+                if (row.index == 0) {
+                    scrollToItem(0)
+                } else if (row.index < 2) {
+                    scrollToItem(row.index + 1)
+                } else {
+                    scrollToItem(row.index + 2)
+                }
+            }
         }
     }
 }
@@ -433,10 +513,9 @@ const setMarkdownPreview = (index: number, el: any) => {
 // 滚动到指定位置的方法
 const scrollToItem = (index: number) => {
     //判断默认页面是否显示或对话历史是否初始化
-    if (
-        (!showDefaultPage.value && !isInit.value) ||
-        conversationItems.value.length === 0
-    ) {
+    //(!showDefaultPage.value && !isInit.value) ||
+    if (conversationItems.value.length === 0) {
+        // console.log('fetchConversationHistory')
         fetchConversationHistory(
             isInit,
             conversationItems,
@@ -444,10 +523,15 @@ const scrollToItem = (index: number) => {
             currentRenderIndex
         )
     }
+
     //关闭默认页面
     showDefaultPage.value = false
     if (markdownPreviews.value[index]) {
-        markdownPreviews.value[index].scrollIntoView({ behavior: 'smooth' })
+        markdownPreviews.value[index].scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+        })
     }
 }
 
@@ -469,7 +553,9 @@ const query_dify_suggested = async () => {
     if (!isInit.value) {
         const res = await GlobalAPI.dify_suggested(uuid.value)
         const json = await res.json()
-        suggested_array.value = json.data.data
+        if (json?.data?.data !== undefined) {
+            suggested_array.value = json.data.data
+        }
     }
 
     // 滚动到底部
@@ -482,6 +568,51 @@ const onSuggested = (index: number) => {
         onAqtiveChange('COMMON_QA')
     }
     handleCreateStylized(suggested_array.value[index])
+}
+
+// 下拉菜单的选项
+const options = [
+    {
+        label: () => h('span', null, '上传文档'),
+        icon: () =>
+            h('div', {
+                class: 'i-vscode-icons:file-type-excel2',
+                style: 'inline-block:none'
+            }),
+        key: 'excel'
+    },
+    {
+        label: () => h('span', null, '上传图片'),
+        icon: () =>
+            h('div', {
+                class: 'i-vscode-icons:file-type-image',
+                style: 'inline-block:none'
+            }),
+        key: 'image'
+    }
+]
+
+// 下拉菜单选项选择事件处理程序
+const uploadRef = ref<HTMLElement | null>(null)
+function handleSelect(key: string) {
+    if (key === 'excel') {
+        // 使用 nextTick 确保 DOM 更新完成后执行
+        nextTick(() => {
+            if (uploadRef.value) {
+                // 尝试直接调用 n-upload 的点击方法
+                // 如果 n-upload 没有提供这样的方法，可以查找内部的 input 并调用 click 方法
+                const fileInput =
+                    uploadRef.value.$el.querySelector('input[type="file"]')
+                if (fileInput) {
+                    fileInput.click()
+                }
+            }
+        })
+    } else {
+        window.$ModalMessage.success('功能开发中', {
+            duration: 1500
+        })
+    }
 }
 </script>
 <template>
@@ -503,6 +634,7 @@ const onSuggested = (index: number) => {
                         Roboto, 'Helvetica Neue', Arial, sans-serif;
                     font-weight: bold;
                     font-size: 14px;
+                    border-radius: 15px;
                 "
             >
                 <template #icon>
@@ -594,28 +726,268 @@ const onSuggested = (index: number) => {
                     class="mb-4"
                     :ref="(el) => setMarkdownPreview(index, el)"
                 >
-                    <MarkdownPreview
-                        :reader="item.reader"
-                        :model="defaultLLMTypeName"
-                        :isInit="isInit"
-                        :qaType="`${item.qa_type}`"
-                        :chart-id="`${index}devID${generateRandomSuffix()}`"
-                        :parentScollBottomMethod="scrollToBottom"
-                        @failed="() => onFailedReader(index)"
-                        @completed="() => onCompletedReader(index)"
-                        @chartready="() => onChartReady(index + 1)"
-                        @recycleQa="() => onRecycleQa(index)"
-                        @praiseFeadBack="() => onPraiseFeadBack(index)"
-                        @belittleFeedback="() => onBelittleFeedback(index)"
-                    />
+                    <div v-if="item.role == 'user'">
+                        <div
+                            whitespace-break-spaces
+                            text-right
+                            style="
+                                margin-left: 10%;
+                                margin-right: 10%;
+                                padding: 15px 15px;
+                                border-radius: 5px;
+                                text-align: center;
+                                float: right;
+                            "
+                        >
+                            <n-space>
+                                <n-tag
+                                    size="large"
+                                    :bordered="false"
+                                    :round="true"
+                                    :style="{
+                                        fontSize: '14px',
+                                        fontFamily: 'PMingLiU'
+                                    }"
+                                    :color="{
+                                        color: '#e0dfff',
+                                        borderColor: '#e0dfff'
+                                    }"
+                                >
+                                    <template #avatar>
+                                        <n-icon size="25" class="icon">
+                                            <svg
+                                                t="1736218313498"
+                                                class="icon"
+                                                viewBox="0 0 1024 1024"
+                                                version="1.1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                p-id="6605"
+                                                width="200"
+                                                height="200"
+                                            >
+                                                <path
+                                                    d="M512 512.002m-511.998 0a511.998 511.998 0 1 0 1023.996 0 511.998 511.998 0 1 0-1023.996 0Z"
+                                                    fill="#BE3D27"
+                                                    p-id="6606"
+                                                ></path>
+                                                <path
+                                                    d="M512.002 512.002m-407.00441 0a407.00441 407.00441 0 1 0 814.00882 0 407.00441 407.00441 0 1 0-814.00882 0Z"
+                                                    fill="#E65439"
+                                                    p-id="6607"
+                                                ></path>
+                                                <path
+                                                    d="M561.053808 655.681439v-49.789806l56.769779-59.443768 21.311916-126.887504 10.523959 4.923981 1.355995-7.875969 15.30794-89.155652L621.659572 178.119304l-159.999375-48.66581-47.959813 31.763876-3.375987 2.235992-24.871903-2.983989v-0.002l-20.36792-2.44399-72.093718 108.095577 50.941801 188.065266v-0.004l15.499939 92.269639 56.773778 59.443768v49.789806l-155.875391 79.999687v84.797669c0 63.451752 102.209601 114.885551 228.295108 114.885551s228.295108-51.435799 228.295109-114.885551v-84.797669l-155.867392-80.001687z"
+                                                    fill="#BE3D27"
+                                                    p-id="6608"
+                                                ></path>
+                                                <path
+                                                    d="M584.425717 619.871579h-144.847434l-155.877391 79.999687v84.797669c0 63.451752 102.213601 114.885551 228.299108 114.885551s228.295108-51.435799 228.295108-114.885551v-84.797669l-155.869391-79.999687z"
+                                                    fill="#323232"
+                                                    p-id="6609"
+                                                ></path>
+                                                <path
+                                                    d="M317.644759 699.871266l155.875391-79.999687h-33.941867l-155.877391 79.999687v84.797669c0 22.113914 12.429951 42.765833 33.945867 60.291764v-145.089433z"
+                                                    fill="#494A4A"
+                                                    p-id="6610"
+                                                ></path>
+                                                <path
+                                                    d="M442.79227 626.239554l-22.435912 11.499955L512 823.238784l86.749661-185.999273-20.957918-10.999957z"
+                                                    fill="#E8E9EC"
+                                                    p-id="6611"
+                                                ></path>
+                                                <path
+                                                    d="M584.425717 637.871508L512 688.305311l-72.421717-50.667802v-149.331416h144.847434z"
+                                                    fill="#DE8729"
+                                                    p-id="6612"
+                                                ></path>
+                                                <path
+                                                    d="M561.031808 488.306093v165.855352l23.393909-16.289937v-149.565415z"
+                                                    fill="#F79D22"
+                                                    p-id="6613"
+                                                ></path>
+                                                <path
+                                                    d="M677.359354 295.328846h-0.479998c0.285999-3.965985 0.479998-7.957969 0.479998-11.999953 0-91.325643-74.035711-165.359354-165.359354-165.359354s-165.359354 74.033711-165.359354 165.359354c0 4.041984 0.195999 8.033969 0.479998 11.999953h-0.479998l0.945996 5.629978c0.695997 6.537974 1.799993 12.947949 3.233988 19.233925l31.983875 190.445256 92.421639 96.769622H548.777856l92.417639-96.769622 31.987875-190.445256a163.78736 163.78736 0 0 0 3.229988-19.233925l0.945996-5.629978z"
+                                                    fill="#F79D22"
+                                                    p-id="6614"
+                                                ></path>
+                                                <path
+                                                    d="M517.323979 333.796696l143.139441 62.111757 3.887985-23.139909-6.523975-40.99184-77.241698-142.471443h-119.367534l-33.685868 24.203905 6.167976 42.797833 25.865899-11.441956 24.203905 11.141957zM406.91441 295.328846H346.640646l36.163859 215.309159 92.421639 96.769622h13.401947l-58.72977-96.769622z"
+                                                    fill="#DE8729"
+                                                    p-id="6615"
+                                                ></path>
+                                                <path
+                                                    d="M598.891661 377.558525m-1.637994 0a1.637994 1.637994 0 1 0 3.275987 0 1.637994 1.637994 0 1 0-3.275987 0Z"
+                                                    fill="#DE8729"
+                                                    p-id="6616"
+                                                ></path>
+                                                <path
+                                                    d="M499.20005 467.052176l9.999961-12.159953v-110.591568l-10.571959-32.141874h-9.999961l10.571959 32.475873zM531.699923 454.892223H509.200011l-9.999961 12.159953h42.499834z"
+                                                    fill="#DE8729"
+                                                    p-id="6617"
+                                                ></path>
+                                                <path
+                                                    d="M437.69829 386.724489m-59.451768 0a59.451768 59.451768 0 1 0 118.903536 0 59.451768 59.451768 0 1 0-118.903536 0Z"
+                                                    fill="#494A4A"
+                                                    p-id="6618"
+                                                ></path>
+                                                <path
+                                                    d="M437.69629 322.272741c-35.539861 0-64.449748 28.913887-64.449748 64.453748s28.909887 64.453748 64.449748 64.453749 64.453748-28.913887 64.453748-64.453749-28.915887-64.453748-64.453748-64.453748z m0 118.905536c-30.027883 0-54.449787-24.427905-54.449787-54.453788s24.421905-54.453787 54.449787-54.453787 54.453787 24.427905 54.453788 54.453787-24.427905 54.453787-54.453788 54.453788z"
+                                                    fill="#323232"
+                                                    p-id="6619"
+                                                ></path>
+                                                <path
+                                                    d="M590.201695 386.724489m-59.451768 0a59.451768 59.451768 0 1 0 118.903535 0 59.451768 59.451768 0 1 0-118.903535 0Z"
+                                                    fill="#494A4A"
+                                                    p-id="6620"
+                                                ></path>
+                                                <path
+                                                    d="M546.479865 346.448647l102.991598 44.691825c0.106-1.459994 0.179999-2.927989 0.179999-4.413983 0-32.835872-26.621896-59.453768-59.453767-59.453767-17.291932 0-32.853872 7.389971-43.71783 19.175925z"
+                                                    fill="#323232"
+                                                    p-id="6621"
+                                                ></path>
+                                                <path
+                                                    d="M590.199695 322.272741c-35.539861 0-64.449748 28.913887-64.449749 64.453748S554.659833 451.178238 590.199695 451.178238s64.453748-28.913887 64.453748-64.453749-28.915887-64.451748-64.453748-64.451748z m0 118.905536c-30.023883 0-54.449787-24.427905-54.449788-54.453788s24.425905-54.453787 54.449788-54.453787c30.027883 0 54.453787 24.427905 54.453787 54.453787S620.225577 441.178277 590.199695 441.178277z"
+                                                    fill="#323232"
+                                                    p-id="6622"
+                                                ></path>
+                                                <path
+                                                    d="M654.323444 393.242464c0.213999-2.141992 0.327999-4.317983 0.327999-6.517975 0-35.539861-28.913887-64.453748-64.453748-64.453748-19.331924 0-36.691857 8.569967-48.515811 22.093914l9.707962 4.211983c9.885961-10.055961 23.627908-16.305936 38.807849-16.305936 30.027883 0 54.453787 24.427905 54.453787 54.453787 0 0.769997-0.028 1.533994-0.062 2.295991l9.733962 4.221984z"
+                                                    fill="#323232"
+                                                    p-id="6623"
+                                                ></path>
+                                                <path
+                                                    d="M437.69629 386.724489m-10.377959 0a10.377959 10.377959 0 1 0 20.755919 0 10.377959 10.377959 0 1 0-20.755919 0Z"
+                                                    fill="#323232"
+                                                    p-id="6624"
+                                                ></path>
+                                                <path
+                                                    d="M590.199695 386.724489m-10.37796 0a10.377959 10.377959 0 1 0 20.755919 0 10.377959 10.377959 0 1 0-20.755919 0Z"
+                                                    fill="#323232"
+                                                    p-id="6625"
+                                                ></path>
+                                                <path
+                                                    d="M528.099937 383.438502c-15.167941-9.483963-28.393889-0.265999-28.523888-0.171999l-5.815978-8.133968c0.761997-0.541998 18.865926-13.165949 39.639845-0.172l-5.299979 8.477967zM362.594584 372.558545h16.355936v9.999961h-16.355936zM649.651462 372.558545h16.351936v9.999961h-16.351936z"
+                                                    fill="#323232"
+                                                    p-id="6626"
+                                                ></path>
+                                                <path
+                                                    d="M406.91441 295.328846l-2.217991-36.355858 12.93795-10.999957 16.065937 8.333968v-15.33394s-26.003898-16.335936-27.003895-15.667939-36.847856 20.667919-35.921859 22.333913c0.921996 1.665993 2.47199 37.665853 2.47199 37.665853l23.449908 22.667911 10.21796-12.643951zM427.53233 311.118785l71.057722 11.017957v-9.977961l-71.057722-11.019957z"
+                                                    fill="#DE8729"
+                                                    p-id="6627"
+                                                ></path>
+                                                <path
+                                                    d="M427.53233 311.118785l71.057722 11.017957v-9.977961l-71.057722-11.019957z"
+                                                    fill="#DE8729"
+                                                    p-id="6628"
+                                                ></path>
+                                                <path
+                                                    d="M364.476576 333.796696l67.831735-23.861907-4.713981-8.795965-67.835735 23.865906z"
+                                                    fill="#DE8729"
+                                                    p-id="6629"
+                                                ></path>
+                                                <path
+                                                    d="M427.59433 301.138824l-9.961961-60.831763-21.599916 3.831985-5.499979 67.499737 15.999938 0.519998z"
+                                                    fill="#DE8729"
+                                                    p-id="6630"
+                                                ></path>
+                                                <path
+                                                    d="M433.700306 256.306999l23.999906-20.665919 35.565861 8.719965 35.483862 76.8017 144.281436 67.511737 16.667935-97.033621-44.667826-149.333417-159.999375-48.66581-51.331799 33.999867-45.241823-5.429978-72.093719 108.095577 50.943801 188.067266 5.723978-64.06775 20.33192-29.033887-1.039996-69.265729 25.307902-15.699939z"
+                                                    fill="#323232"
+                                                    p-id="6631"
+                                                ></path>
+                                                <path
+                                                    d="M417.632369 240.307061l-39.385847 14.495944v70.933723l-18.487927 28.375889 7.54997 64.261749 5.723978-64.06775 20.33192-29.033887-1.039996-69.265729zM645.03148 142.307444l-159.999375-48.66581 136.303468 48.66581 44.667825 149.333417-14.905941 86.771661 21.933914 10.26196 16.667935-97.033621z"
+                                                    fill="#494A4A"
+                                                    p-id="6632"
+                                                ></path>
+                                                <path
+                                                    d="M520.453967 496.138062h-67.235737l9.839961 16.499936 57.395776 24.999902 57.389776-24.999902 9.843961-16.499936z"
+                                                    fill="#BE3D27"
+                                                    p-id="6633"
+                                                ></path>
+                                                <path
+                                                    d="M453.21823 496.138062l8.585966 14.395944h117.293542l8.589966-14.395944h-67.233737z"
+                                                    fill="#E8E9EC"
+                                                    p-id="6634"
+                                                ></path>
+                                                <path
+                                                    d="M829.294761 229.391104c-70.897723 0-128.371499 57.471776-128.371499 128.367499 0 41.327839 19.553924 78.069695 49.889805 101.547603l-81.519681 44.029828 106.581583-28.859887a127.839501 127.839501 0 0 0 53.417792 11.647954c70.893723 0 128.363499-57.471776 128.363498-128.367498s-57.465776-128.365499-128.361498-128.365499z"
+                                                    fill="#3AB49C"
+                                                    p-id="6635"
+                                                ></path>
+                                                <path
+                                                    d="M662.183413 384.456498l-23.889906 66.71974-31.909876 32.909871-1.827993 6.993973-13.257948-24.029906h-143.22144l-17.261933 24.245905-0.831997-2.991988-45.187823-27.333894-17.483932-42.599833v103.367596l64.999746 85.667665 81.397682 25.6659 92.085641-25.6659 56.831778-87.667657v-135.333472l-0.441999 0.052zM546.479865 585.739712h-15.729938l-12.95795-17.499932-12.499951 17.499932h-20.261921l-34.737864-24.499904-16.393936-58.85977 17.061933-11.983954h136.725466l13.541947 13.389948-15.937937 60.953762-38.809849 20.999918z"
+                                                    fill="#323232"
+                                                    p-id="6636"
+                                                ></path>
+                                                <path
+                                                    d="M420.356358 506.208023l1.939992 4.325983 28.663888-20.137922h-8.091968zM591.29569 467.052176H583.199722l22.95591 41.607837 5.13998 5.07998 2.999988-4.99998z"
+                                                    fill="#494A4A"
+                                                    p-id="6637"
+                                                ></path>
+                                                <path
+                                                    d="M662.183413 384.456498l-15.933937 44.499826v90.783646l-56.831778 87.667657-83.393675 23.24191 7.68397 2.42399 92.083641-25.6659 56.833778-87.667657v-135.333472zM368.418561 460.972199l45.187823 27.333894 20.311921 72.933715 34.733864 24.499904h16.379936l-34.739864-24.499904-20.311921-72.933715-45.187823-27.333894-17.483932-42.597833v39.895844z"
+                                                    fill="#494A4A"
+                                                    p-id="6638"
+                                                ></path>
+                                                <path
+                                                    d="M488.86009 711.437221l23.12991-23.13191 23.13191 23.13191-23.13191 23.13191zM499.590048 798.118882l12.409952 25.119902 12.117953-25.981898L512 734.571131z"
+                                                    fill="#2A81C2"
+                                                    p-id="6639"
+                                                ></path>
+                                                <path
+                                                    d="M848.806684 336.652685c-20.049922-7.543971-28.303889-12.497951-28.303889-20.279921 0-6.601974 4.953981-13.201948 20.285921-13.201948 16.975934 0 27.819891 5.417979 33.949867 8.013968l6.843973-26.645895c-7.78197-3.771985-18.397928-7.073972-34.191866-7.77997v-20.751919h-23.10991v22.399912c-25.233901 4.951981-39.851844 21.223917-39.851844 41.973837 0 22.875911 17.213933 34.663865 42.437834 43.151831 17.457932 5.895977 24.999902 11.553955 24.999902 20.51392 0 9.431963-9.191964 14.623943-22.639911 14.623943-15.31994 0-29.237886-4.951981-39.139847-10.37596l-7.073973 27.585892c8.959965 5.18998 24.289905 9.431963 40.085844 10.141961v22.397912h23.113909v-24.051906c27.113894-4.711982 41.975836-22.635912 41.975837-43.621829-0.002-21.219917-11.321956-34.191866-39.381847-44.093828z"
+                                                    fill="#EDC848"
+                                                    p-id="6640"
+                                                ></path>
+                                            </svg>
+                                        </n-icon>
+                                    </template>
+                                    {{ item.question }}
+                                </n-tag>
+                            </n-space>
+                        </div>
+                        <div
+                            v-if="contentLoadingStates[index]"
+                            class="i-svg-spinners:bars-scale"
+                            style="
+                                width: 24px;
+                                height: 24px;
+                                color: #b1adf3;
+                                border-left-color: #b1adf3;
+                                margin-top: 80px;
+                                animation: spin 1s linear infinite;
+                                margin-left: 12%;
+                                float: left;
+                            "
+                        />
+                    </div>
+                    <div v-if="item.role == 'assistant'">
+                        <MarkdownPreview
+                            :reader="item.reader"
+                            :model="defaultLLMTypeName"
+                            :isInit="isInit"
+                            :qaType="`${item.qa_type}`"
+                            :chart-id="`${index}devID${generateRandomSuffix()}`"
+                            :parentScollBottomMethod="scrollToBottom"
+                            @failed="() => onFailedReader(index)"
+                            @completed="() => onCompletedReader(index)"
+                            @chartready="() => onChartReady(index + 1)"
+                            @recycleQa="() => onRecycleQa(index)"
+                            @praiseFeadBack="() => onPraiseFeadBack(index)"
+                            @belittleFeedback="() => onBelittleFeedback(index)"
+                            @beginRead="() => onBeginRead(index)"
+                        />
+                    </div>
                 </div>
+
                 <div
                     v-if="!isInit && !stylizingLoading"
                     style="
                         align-items: center;
                         width: 70%;
                         margin-left: 11%;
-                        margin-top: -24px;
+                        margin-top: -20px;
                     "
                 >
                     <SuggestedView
@@ -631,40 +1003,6 @@ const onSuggested = (index: number) => {
                 p="60"
                 py="5"
             >
-                <div style="margin-top: 40px">
-                    <n-upload
-                        type="button"
-                        :show-file-list="false"
-                        action="sanic/file/upload_file"
-                        accept=".xlsx,.xls,.csv"
-                        class="mr-2"
-                        v-on:finish="finish_upload"
-                    >
-                        <n-icon size="35"
-                            ><svg
-                                t="1729566080604"
-                                class="icon"
-                                viewBox="0 0 1024 1024"
-                                version="1.1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                p-id="38910"
-                                width="64"
-                                height="64"
-                            >
-                                <path
-                                    d="M856.448 606.72v191.744a31.552 31.552 0 0 1-31.488 31.488H194.624a31.552 31.552 0 0 1-31.488-31.488V606.72a31.488 31.488 0 1 1 62.976 0v160.256h567.36V606.72a31.488 31.488 0 1 1 62.976 0zM359.872 381.248c-8.192 0-10.56-5.184-5.376-11.392L500.48 193.152a11.776 11.776 0 0 1 18.752 0l145.856 176.704c5.184 6.272 2.752 11.392-5.376 11.392H359.872z"
-                                    fill="#838384"
-                                    p-id="38911"
-                                ></path>
-                                <path
-                                    d="M540.288 637.248a30.464 30.464 0 1 1-61.056 0V342.656a30.464 30.464 0 1 1 61.056 0v294.592z"
-                                    fill="#838384"
-                                    p-id="38912"
-                                ></path>
-                            </svg>
-                        </n-icon>
-                    </n-upload>
-                </div>
                 <div
                     style="
                         position: relative;
@@ -678,7 +1016,7 @@ const onSuggested = (index: number) => {
                             style="
                                 display: flex;
                                 gap: 10px;
-                                margin-left: 5px;
+                                margin-left: 5%;
                                 margin-bottom: 5px;
                             "
                         >
@@ -890,9 +1228,12 @@ const onSuggested = (index: number) => {
                             class="textarea-resize-none text-15"
                             :style="{
                                 '--n-border-radius': '20px',
-                                '--n-padding-left': '20px',
+                                '--n-padding-left': '60px',
                                 '--n-padding-right': '20px',
-                                '--n-padding-vertical': '15px'
+                                '--n-padding-vertical': '15px',
+                                width: '90%',
+                                marginLeft: '5%',
+                                align: 'center'
                             }"
                             :placeholder="placeholder"
                             :autosize="{
@@ -900,10 +1241,59 @@ const onSuggested = (index: number) => {
                                 maxRows: 5
                             }"
                         />
+                        <div
+                            style="
+                                transform: translateY(-50%);
+                                position: absolute;
+                                margin-left: 6%;
+                                top: 62%;
+                            "
+                        >
+                            <n-dropdown
+                                :options="options"
+                                @select="handleSelect"
+                            >
+                                <n-icon size="30">
+                                    <svg
+                                        t="1729566080604"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="38910"
+                                        width="64"
+                                        height="64"
+                                    >
+                                        <path
+                                            d="M856.448 606.72v191.744a31.552 31.552 0 0 1-31.488 31.488H194.624a31.552 31.552 0 0 1-31.488-31.488V606.72a31.488 31.488 0 1 1 62.976 0v160.256h567.36V606.72a31.488 31.488 0 1 1 62.976 0zM359.872 381.248c-8.192 0-10.56-5.184-5.376-11.392L500.48 193.152a11.776 11.776 0 0 1 18.752 0l145.856 176.704c5.184 6.272 2.752 11.392-5.376 11.392H359.872z"
+                                            fill="#838384"
+                                            p-id="38911"
+                                        ></path>
+                                        <path
+                                            d="M540.288 637.248a30.464 30.464 0 1 1-61.056 0V342.656a30.464 30.464 0 1 1 61.056 0v294.592z"
+                                            fill="#838384"
+                                            p-id="38912"
+                                        ></path>
+                                    </svg>
+                                </n-icon>
+                            </n-dropdown>
+                            <!-- 隐藏的文件上传按钮 -->
+                            <n-upload
+                                ref="uploadRef"
+                                type="button"
+                                :show-file-list="false"
+                                action="sanic/file/upload_file"
+                                accept=".xlsx,.xls,.csv"
+                                style="display: none"
+                                @finish="finish_upload"
+                            >
+                                选择文件
+                            </n-upload>
+                        </div>
                         <n-float-button
                             position="absolute"
-                            :right="22"
-                            top="62%"
+                            :right="75"
+                            top="59%"
                             :type="stylizingLoading ? 'primary' : 'default'"
                             color
                             :class="[
@@ -988,5 +1378,13 @@ const onSuggested = (index: number) => {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
     opacity: 0;
+}
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 </style>
