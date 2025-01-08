@@ -458,10 +458,18 @@ const rowProps = (row: any) => {
     return {
         onClick: () => {
             suggested_array.value = []
-            console.log('rowProps', row.index)
+            // 这里*2 是因为对话渲染成两个
+            if (tableData.value.length * 2 != conversationItems.value.length) {
+                fetchConversationHistory(
+                    isInit,
+                    conversationItems,
+                    tableData,
+                    currentRenderIndex
+                )
+            }
+
             if (row.index == tableData.value.length - 1) {
                 if (conversationItems.value.length === 0) {
-                    // console.log('fetchConversationHistory')
                     fetchConversationHistory(
                         isInit,
                         conversationItems,
@@ -507,7 +515,7 @@ const scrollToItem = (index: number) => {
     //判断默认页面是否显示或对话历史是否初始化
     //(!showDefaultPage.value && !isInit.value) ||
     if (conversationItems.value.length === 0) {
-        console.log('fetchConversationHistory')
+        // console.log('fetchConversationHistory')
         fetchConversationHistory(
             isInit,
             conversationItems,
@@ -545,7 +553,9 @@ const query_dify_suggested = async () => {
     if (!isInit.value) {
         const res = await GlobalAPI.dify_suggested(uuid.value)
         const json = await res.json()
-        suggested_array.value = json.data.data
+        if (json?.data?.data !== undefined) {
+            suggested_array.value = json.data.data
+        }
     }
 
     // 滚动到底部
@@ -558,6 +568,51 @@ const onSuggested = (index: number) => {
         onAqtiveChange('COMMON_QA')
     }
     handleCreateStylized(suggested_array.value[index])
+}
+
+// 下拉菜单的选项
+const options = [
+    {
+        label: () => h('span', null, '上传文档'),
+        icon: () =>
+            h('div', {
+                class: 'i-vscode-icons:file-type-excel2',
+                style: 'inline-block:none'
+            }),
+        key: 'excel'
+    },
+    {
+        label: () => h('span', null, '上传图片'),
+        icon: () =>
+            h('div', {
+                class: 'i-vscode-icons:file-type-image',
+                style: 'inline-block:none'
+            }),
+        key: 'image'
+    }
+]
+
+// 下拉菜单选项选择事件处理程序
+const uploadRef = ref<HTMLElement | null>(null)
+function handleSelect(key: string) {
+    if (key === 'excel') {
+        // 使用 nextTick 确保 DOM 更新完成后执行
+        nextTick(() => {
+            if (uploadRef.value) {
+                // 尝试直接调用 n-upload 的点击方法
+                // 如果 n-upload 没有提供这样的方法，可以查找内部的 input 并调用 click 方法
+                const fileInput =
+                    uploadRef.value.$el.querySelector('input[type="file"]')
+                if (fileInput) {
+                    fileInput.click()
+                }
+            }
+        })
+    } else {
+        window.$ModalMessage.success('功能开发中', {
+            duration: 1500
+        })
+    }
 }
 </script>
 <template>
@@ -579,6 +634,7 @@ const onSuggested = (index: number) => {
                         Roboto, 'Helvetica Neue', Arial, sans-serif;
                     font-weight: bold;
                     font-size: 14px;
+                    border-radius: 15px;
                 "
             >
                 <template #icon>
@@ -888,11 +944,6 @@ const onSuggested = (index: number) => {
                                         </n-icon>
                                     </template>
                                     {{ item.question }}
-                                    <!-- <template #avatar>
-                                        <n-avatar
-                                            src="https://cdnimg103.lizhi.fm/user/2017/02/04/2583325032200238082_160x160.jpg"
-                                        />
-                                    </template> -->
                                 </n-tag>
                             </n-space>
                         </div>
@@ -952,40 +1003,6 @@ const onSuggested = (index: number) => {
                 p="60"
                 py="5"
             >
-                <div style="margin-top: 40px">
-                    <n-upload
-                        type="button"
-                        :show-file-list="false"
-                        action="sanic/file/upload_file"
-                        accept=".xlsx,.xls,.csv"
-                        class="mr-2"
-                        v-on:finish="finish_upload"
-                    >
-                        <n-icon size="35">
-                            <svg
-                                t="1729566080604"
-                                class="icon"
-                                viewBox="0 0 1024 1024"
-                                version="1.1"
-                                xmlns="http://www.w3.org/2000/svg"
-                                p-id="38910"
-                                width="64"
-                                height="64"
-                            >
-                                <path
-                                    d="M856.448 606.72v191.744a31.552 31.552 0 0 1-31.488 31.488H194.624a31.552 31.552 0 0 1-31.488-31.488V606.72a31.488 31.488 0 1 1 62.976 0v160.256h567.36V606.72a31.488 31.488 0 1 1 62.976 0zM359.872 381.248c-8.192 0-10.56-5.184-5.376-11.392L500.48 193.152a11.776 11.776 0 0 1 18.752 0l145.856 176.704c5.184 6.272 2.752 11.392-5.376 11.392H359.872z"
-                                    fill="#838384"
-                                    p-id="38911"
-                                ></path>
-                                <path
-                                    d="M540.288 637.248a30.464 30.464 0 1 1-61.056 0V342.656a30.464 30.464 0 1 1 61.056 0v294.592z"
-                                    fill="#838384"
-                                    p-id="38912"
-                                ></path>
-                            </svg>
-                        </n-icon>
-                    </n-upload>
-                </div>
                 <div
                     style="
                         position: relative;
@@ -999,7 +1016,7 @@ const onSuggested = (index: number) => {
                             style="
                                 display: flex;
                                 gap: 10px;
-                                margin-left: 5px;
+                                margin-left: 5%;
                                 margin-bottom: 5px;
                             "
                         >
@@ -1211,9 +1228,12 @@ const onSuggested = (index: number) => {
                             class="textarea-resize-none text-15"
                             :style="{
                                 '--n-border-radius': '20px',
-                                '--n-padding-left': '20px',
+                                '--n-padding-left': '60px',
                                 '--n-padding-right': '20px',
-                                '--n-padding-vertical': '15px'
+                                '--n-padding-vertical': '15px',
+                                width: '90%',
+                                marginLeft: '5%',
+                                align: 'center'
                             }"
                             :placeholder="placeholder"
                             :autosize="{
@@ -1221,10 +1241,59 @@ const onSuggested = (index: number) => {
                                 maxRows: 5
                             }"
                         />
+                        <div
+                            style="
+                                transform: translateY(-50%);
+                                position: absolute;
+                                margin-left: 6%;
+                                top: 62%;
+                            "
+                        >
+                            <n-dropdown
+                                :options="options"
+                                @select="handleSelect"
+                            >
+                                <n-icon size="30">
+                                    <svg
+                                        t="1729566080604"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="38910"
+                                        width="64"
+                                        height="64"
+                                    >
+                                        <path
+                                            d="M856.448 606.72v191.744a31.552 31.552 0 0 1-31.488 31.488H194.624a31.552 31.552 0 0 1-31.488-31.488V606.72a31.488 31.488 0 1 1 62.976 0v160.256h567.36V606.72a31.488 31.488 0 1 1 62.976 0zM359.872 381.248c-8.192 0-10.56-5.184-5.376-11.392L500.48 193.152a11.776 11.776 0 0 1 18.752 0l145.856 176.704c5.184 6.272 2.752 11.392-5.376 11.392H359.872z"
+                                            fill="#838384"
+                                            p-id="38911"
+                                        ></path>
+                                        <path
+                                            d="M540.288 637.248a30.464 30.464 0 1 1-61.056 0V342.656a30.464 30.464 0 1 1 61.056 0v294.592z"
+                                            fill="#838384"
+                                            p-id="38912"
+                                        ></path>
+                                    </svg>
+                                </n-icon>
+                            </n-dropdown>
+                            <!-- 隐藏的文件上传按钮 -->
+                            <n-upload
+                                ref="uploadRef"
+                                type="button"
+                                :show-file-list="false"
+                                action="sanic/file/upload_file"
+                                accept=".xlsx,.xls,.csv"
+                                style="display: none"
+                                @finish="finish_upload"
+                            >
+                                选择文件
+                            </n-upload>
+                        </div>
                         <n-float-button
                             position="absolute"
-                            :right="22"
-                            top="62%"
+                            :right="75"
+                            top="59%"
                             :type="stylizingLoading ? 'primary' : 'default'"
                             color
                             :class="[
