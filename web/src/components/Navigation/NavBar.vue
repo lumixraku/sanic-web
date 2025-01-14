@@ -58,6 +58,7 @@ const handleToRepo = () => {
 .navigation-nav-header-container {
     --at-apply: w-full flex items-center justify-center py-10;
     height: 60px;
+    border-top-right-radius: 20px;
 
     .header-left,
     .header-right {
