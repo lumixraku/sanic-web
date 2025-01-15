@@ -17,6 +17,10 @@ const logout = () => {
 const handleClickEfficiency = () => {
     router.push('/testAssitant')
 }
+
+const handleClickChat = () => {
+    router.push('/chat')
+}
 </script>
 
 <template>
@@ -37,7 +41,7 @@ const handleClickEfficiency = () => {
                     <section
                         v-if="$slots.left"
                         flex="~ col"
-                        w-60
+                        w-70
                         h-full
                         overflow-hidden
                         style="
@@ -52,11 +56,11 @@ const handleClickEfficiency = () => {
                         <!-- 最侧边图标设置 -->
                         <div class="first-container">
                             <n-icon
-                                size="35"
+                                size="40"
                                 style="
-                                    margin: 10%;
+                                    margin: 15%;
                                     margin-top: 15px;
-                                    margin-bottom: 10px;
+                                    margin-bottom: 5px;
                                 "
                             >
                                 <svg
@@ -100,6 +104,7 @@ const handleClickEfficiency = () => {
                             <div
                                 class="icon-button selected"
                                 style="margin-bottom: 10px"
+                                @click="handleClickChat"
                             >
                                 <n-icon size="20" class="icon">
                                     <svg
@@ -217,8 +222,8 @@ const handleClickEfficiency = () => {
                                     size="35"
                                     style="
                                         position: absolute;
-                                        bottom: 15px;
-                                        margin: 15%;
+                                        bottom: 10px;
+                                        margin: 20%;
                                     "
                                 >
                                     <svg
@@ -353,17 +358,6 @@ const handleClickEfficiency = () => {
                             </template>
                         </n-tooltip>
                     </section>
-                    <!-- <n-divider vertical style="height: 100%" /> -->
-                    <!-- 
-                    <section
-                        v-if="$slots.left"
-                        flex="~ col"
-                        w-220
-                        h-full
-                        overflow-hidden
-                    >
-                        <slot name="left"></slot>
-                    </section> -->
                     <section flex="1" h-full overflow-hidden>
                         <slot name="default"></slot>
                     </section>

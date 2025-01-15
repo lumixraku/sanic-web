@@ -25,15 +25,15 @@
                 style="
                     display: flex;
                     justify-content: space-between;
-                    margin-bottom: 10`px;
+                    margin-bottom: 10px;
                 "
             ></div>
             <n-data-table
                 style="
                     height: 550px;
-                    margin-top: 10px;
+                    width: 850px;
+                    margin: 0px 10px;
                     background-color: #ffffff;
-                    overflow-x: auto;
                 "
                 :columns="columns"
                 :data="pagedTableData"
@@ -84,7 +84,7 @@ const pagination = computed(() => ({
 const scrollX = computed(() => {
     if (tableData.value.length > 0) {
         const keys = Object.keys(tableData.value[0])
-        const totalWidth = keys.length * 100 // 每列宽度100px
+        const totalWidth = keys.length * 120 // 每列宽度100px
         return totalWidth
     }
     return 0

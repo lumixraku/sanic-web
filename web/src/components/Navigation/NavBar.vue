@@ -58,7 +58,8 @@ const handleToRepo = () => {
 .navigation-nav-header-container {
     --at-apply: w-full flex items-center justify-center py-10;
     height: 60px;
-    border-top-right-radius: 20px;
+    border-top-right-radius: 10px;
+    border-bottom: 0px;
 
     .header-left,
     .header-right {
@@ -75,7 +76,8 @@ const handleToRepo = () => {
     // 添加具体的背景颜色
     &.bg-bgcolor {
         // background-color: #f0effe;
-        background: linear-gradient(to right, #f0effe, #ddeefe);
+        //background: linear-gradient(to right, #f0effe, #ddeefe);
+        background-color: #f6f7fb;
 
         // 替换为你的颜色
     }
