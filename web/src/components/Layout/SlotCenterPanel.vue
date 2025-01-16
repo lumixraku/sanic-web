@@ -14,13 +14,22 @@ const logout = () => {
         router.push('/login')
     }, 500)
 }
-const handleClickEfficiency = () => {
+const handleClickEfficiency = (index) => {
     router.push('/testAssitant')
 }
 
-const handleClickChat = () => {
+const handleClickChat = (index) => {
     router.push('/chat')
 }
+
+// 使用ref定义响应式的selectedIndex
+const selectedIndex = ref(0)
+onMounted(() => {
+    // 初始化selectedIndex为0
+    router.currentRoute.value.path === '/testAssitant'
+        ? (selectedIndex.value = 2)
+        : (selectedIndex.value = 1)
+})
 </script>
 
 <template>
@@ -102,9 +111,10 @@ const handleClickChat = () => {
 
                         <div class="chat-container">
                             <div
-                                class="icon-button selected"
+                                class="icon-button"
+                                :class="{ selected: selectedIndex === 1 }"
                                 style="margin-bottom: 10px"
-                                @click="handleClickChat"
+                                @click="handleClickChat(1)"
                             >
                                 <n-icon size="20" class="icon">
                                     <svg
@@ -142,8 +152,9 @@ const handleClickChat = () => {
                         <div class="efficiency-container">
                             <div
                                 class="icon-button"
+                                :class="{ selected: selectedIndex === 2 }"
                                 style="margin-bottom: 10px"
-                                @click="handleClickEfficiency"
+                                @click="handleClickEfficiency(2)"
                             >
                                 <n-icon size="25" class="icon">
                                     <svg

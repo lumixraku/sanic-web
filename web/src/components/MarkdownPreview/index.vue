@@ -614,6 +614,7 @@ const onChartCompletedReader = function () {
     font-family: 'PMingLiU';
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
+    color: #26244c;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
         'Helvetica Neue', Arial, sans-serif;
     h1 {

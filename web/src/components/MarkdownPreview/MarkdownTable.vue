@@ -6,7 +6,7 @@
             bordered
             :content-style="{ 'background-color': '#ffffff' }"
             :header-style="{
-                color: '#666',
+                color: '#26244c',
                 height: '10px',
                 'background-color': '#f0effe',
                 'text-align': 'left',

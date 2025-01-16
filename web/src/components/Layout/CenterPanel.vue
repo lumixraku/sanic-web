@@ -5,34 +5,11 @@ const isCollapsed = ref(false)
 
 <template>
     <LayoutSlotCenterPanel v-bind="$attrs">
-        <template #left>
-            <!-- <div
-                min-h-0
-                flex="1 ~ col"
-                :class="[
-                    'select-none',
-                    'bg-no-repeat bg-cover bg-right',
-                    'bg-bgcolor'
-                ]"
-                style="background-color: #ffffff"
-            > -->
-            <!-- <div v-if="$slots['sidebar-header']" py="2px">
-                    <slot name="sidebar-header"></slot>
-                </div>
-                <div
-                    class="scrollable-sidebar"
-                    flex="1"
-                    p="5px"
-                    overflow-y-auto
-                >
-                    <slot name="sidebar"></slot>
-                </div>
-                <div py="14px" px="20px">
-                    <slot name="sidebar-action"></slot>
-                </div> -->
-            <!-- </div> -->
-        </template>
-        <div h-full bg="#fefbff">
+        <template #left> </template>
+        <div
+            h-full
+            style="background: linear-gradient(to bottom, #8874f1, #588af9)"
+        >
             <slot name="default"></slot>
         </div>
     </LayoutSlotCenterPanel>

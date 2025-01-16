@@ -684,16 +684,14 @@ const hideScrollbar = () => {
                             @click="newChat"
                             strong
                             style="
-                                width: 180px;
-                                height: 38px;
+                                width: 168px;
+                                height: 36px;
                                 margin-top: 20px;
-                                margin-left: 15px;
+                                margin-left: 20px;
                                 margin-right: 10px;
-                                margin-bottom: 15px;
+                                margin-bottom: 20px;
                                 text-align: center;
-                                font-family: -apple-system, BlinkMacSystemFont,
-                                    'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-                                    sans-serif;
+                                font-family: Arial;
                                 font-weight: bold;
                                 font-size: 14px;
                                 border-radius: 20px;
@@ -725,6 +723,7 @@ const hideScrollbar = () => {
                             size="small"
                             :bordered="false"
                             :bottom-bordered="false"
+                            :single-line="false"
                             :columns="[
                                 {
                                     key: 'key',
@@ -736,9 +735,9 @@ const hideScrollbar = () => {
                             ref="tableRef"
                             :row-props="rowProps"
                         >
-                            <template #empty>
+                            <!-- <template #empty>
                                 <div></div>
-                            </template>
+                            </template> -->
                         </n-data-table>
                     </n-layout-content>
                 </n-layout>
@@ -1326,14 +1325,14 @@ const hideScrollbar = () => {
                                 v-model:value="inputTextString"
                                 type="textarea"
                                 autofocus
-                                h-full
+                                h-60
                                 class="textarea-resize-none text-15"
                                 :style="{
-                                    '--n-border-radius': '20px',
+                                    '--n-border-radius': '15px',
                                     '--n-padding-left': '60px',
                                     '--n-padding-right': '20px',
-                                    '--n-padding-vertical': '15px',
-                                    width: '79%',
+                                    '--n-padding-vertical': '18px',
+                                    width: '80%',
                                     marginLeft: '10%',
                                     align: 'center'
                                 }"
@@ -1394,7 +1393,7 @@ const hideScrollbar = () => {
                             </div>
                             <n-float-button
                                 position="absolute"
-                                :right="150"
+                                :right="140"
                                 top="59%"
                                 :type="stylizingLoading ? 'primary' : 'default'"
                                 color
@@ -1458,6 +1457,14 @@ const hideScrollbar = () => {
 :deep(.custom-table .n-data-table-thead) {
     display: none;
 }
+:deep(.custom-table td) {
+    color: #26244c;
+    font-size: 14px;
+    // border: 0px;
+    padding: 10px 6px;
+    margin: 0px 0px 12px;
+}
+
 .default-page {
     display: flex;
     justify-content: center;
@@ -1515,8 +1522,8 @@ const hideScrollbar = () => {
     overflow: hidden;
     /* 滚动条整体部分 */
     &::-webkit-scrollbar {
-        width: 4px; /* 竖向滚动条宽度 */
-        height: 4px; /* 横向滚动条高度 */
+        width: 6px; /* 竖向滚动条宽度 */
+        height: 2px; /* 横向滚动条高度 */
         opacity: 0; /* 初始时隐藏滚动条 */
         transition: opacity 0.3s; /* 添加过渡效果 */
     }
@@ -1528,7 +1535,7 @@ const hideScrollbar = () => {
 
     /* 滚动条的滑块 */
     &::-webkit-scrollbar-thumb {
-        background: #cac9f9 !important; /* 滑块颜色 */
+        background: #dee2ea !important; /* 滑块颜色 */
         border-radius: 10px; /* 滑块圆角 */
     }
 
@@ -1539,7 +1546,7 @@ const hideScrollbar = () => {
 
     /* 滚动条的滑块在悬停状态下的样式 */
     &::-webkit-scrollbar-thumb:hover {
-        background: #cac9f9 !important; /* 悬停时滑块颜色 */
+        background: #a48ef4 !important; /* 悬停时滑块颜色 */
     }
 }
 
@@ -1547,7 +1554,6 @@ const hideScrollbar = () => {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 5px;
     width: 38px; /* 可根据需要调整 */
     height: 38px; /* 与宽度相同，形成圆形 */
     border-radius: 100%; /* 圆形 */
