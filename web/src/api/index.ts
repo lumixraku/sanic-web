@@ -158,3 +158,21 @@ export async function dify_suggested(chat_id) {
     })
     return fetch(req)
 }
+
+export async function word_to_md(file_key) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/ta/word_to_md`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            file_key
+        })
+    })
+    return fetch(req)
+}

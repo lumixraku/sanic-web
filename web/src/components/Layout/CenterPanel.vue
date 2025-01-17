@@ -1,8 +1,3 @@
-<script lang="ts" setup>
-import { systemTitle } from '@/base'
-const isCollapsed = ref(false)
-</script>
-
 <template>
     <LayoutSlotCenterPanel v-bind="$attrs">
         <template #left> </template>

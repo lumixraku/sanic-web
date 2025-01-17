@@ -11,7 +11,6 @@ const route = useRoute()
 const router = useRouter()
 const message = useMessage()
 import * as GlobalAPI from '@/api'
-import { size } from 'lodash-es'
 
 // 显示默认页面
 const showDefaultPage = ref(true)
