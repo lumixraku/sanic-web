@@ -13,5 +13,8 @@ web/.vscode/
 
 .DS_Store
 .idea/
-
+.venv/
 logs/
+# 环境变量文件
+.env.*
+
