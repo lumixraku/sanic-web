@@ -1,4 +1,4 @@
-<script setup>
+<script lang="tsx" setup>
 import { ref, onMounted } from 'vue'
 import { Transformer } from 'markmap-lib'
 import { Markmap } from 'markmap-view'
@@ -18,6 +18,8 @@ const update = () => {
 }
 const container = ref()
 onMounted(() => {
+    query_test_assistant_records()
+
     // 创建 Markmap 实例并传入 opts 参数
     mm.value = Markmap.create(svgRef.value, {
         autoFit: true, // 布尔值，如果为true，则自动调整视图以适应容器大小
@@ -60,6 +62,14 @@ onMounted(() => {
     // }
 })
 
+const query_test_assistant_records = async () => {
+    const res = await GlobalAPI.query_test_assistant_records(1, 999999)
+    const json = await res.json()
+    if (json?.data !== undefined) {
+        tableData.value = json.data.records
+    }
+}
+
 onBeforeUnmount(() => {
     if (mm.value && typeof mm.value.destroy === 'function') {
         mm.value.destroy() // 确保Markmap实例被正确销毁
@@ -69,6 +79,7 @@ onBeforeUnmount(() => {
 const collapsed = ref(false)
 const toggleCollapsed = () => {
     collapsed.value = !collapsed.value
+    query_test_assistant_records()
 }
 
 const loading = ref(false)
@@ -114,6 +125,20 @@ function handleDocClick() {
         }
     })
 }
+
+// 侧边栏对话历史
+interface TableItem {
+    id: number
+    file_key: string
+}
+const tableData = ref<TableItem[]>([])
+const tableRef = ref(null)
+// 表格行点击事件
+const rowProps = (row: any) => {
+    return {
+        onClick: () => {}
+    }
+}
 </script>
 
 <template>
@@ -126,7 +151,7 @@ function handleDocClick() {
                 <n-layout-sider
                     collapse-mode="width"
                     :collapsed-width="0"
-                    :width="240"
+                    :width="260"
                     :collapsed="collapsed"
                     show-trigger="arrow-circle"
                     content-style="padding: 24px;"
@@ -155,9 +180,8 @@ function handleDocClick() {
                             style="
                                 width: 140px;
                                 height: 36px;
-                                margin-top: 10px;
                                 margin-right: 10px;
-                                margin-bottom: 20px;
+                                margin-bottom: 10px;
                                 text-align: center;
                                 font-family: Arial;
                                 font-weight: bold;
@@ -234,6 +258,33 @@ function handleDocClick() {
                             </n-icon>
                         </div>
                     </n-layout-header>
+                    <n-layout-content class="content">
+                        <n-data-table
+                            class="custom-table"
+                            style="
+                                font-size: 14px;
+                                --n-td-color-hover: #d5dcff;
+                                font-family: -apple-system, BlinkMacSystemFont,
+                                    'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+                                    sans-serif;
+                            "
+                            size="small"
+                            :bordered="false"
+                            :bottom-bordered="false"
+                            :single-line="false"
+                            :columns="[
+                                {
+                                    key: 'file_key',
+                                    align: 'left',
+                                    ellipsis: { tooltip: false }
+                                }
+                            ]"
+                            :data="tableData"
+                            ref="tableRef"
+                            :row-props="rowProps"
+                        >
+                        </n-data-table>
+                    </n-layout-content>
                 </n-layout-sider>
                 <n-layout-content>
                     <n-spin
@@ -289,9 +340,9 @@ function handleDocClick() {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 10px;
     width: 38px; /* 可根据需要调整 */
     height: 38px; /* 与宽度相同，形成圆形 */
-    margin-bottom: 10px;
     border-radius: 100%; /* 圆形 */
     border: 1px solid #e8eaf3;
     background-color: #ffffff; /* 按钮背景颜色 */
@@ -317,5 +368,14 @@ function handleDocClick() {
 
 :deep(.mm-toolbar-item:active) {
     background-color: #e0e0e0;
+}
+:deep(.custom-table .n-data-table-thead) {
+    display: none;
+}
+:deep(.custom-table td) {
+    color: #26244c;
+    font-size: 14px;
+    padding: 10px 6px;
+    margin: 0px 0px 12px;
 }
 </style>

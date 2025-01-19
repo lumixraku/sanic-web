@@ -181,6 +181,16 @@ CREATE TABLE `t_user_qa_record` (
   UNIQUE KEY `t_user_qa_record_UN` (`user_id`,`chat_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=292 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='问答记录表';
 
+drop table if exists t_test_assistant;
+CREATE TABLE `t_test_assistant` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL COMMENT '用户id',
+  `file_key` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件minio key',
+  `markdown` text COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文档转换的markdown原文',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='测试助手文件记录表';
 
 -- chat_db.t_report_info definition
 drop table if exists t_report_info;
