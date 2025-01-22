@@ -13,6 +13,7 @@ from docx import Document
 from common.exception import MyException
 from common.minio_util import MinioUtils
 from common.mysql_util import MysqlUtil
+from common.pdf_util import PdfUtil
 from constants.code_enum import SysCodeEnum
 
 logger = logging.getLogger(__name__)
@@ -101,25 +102,31 @@ async def extract_toc_to_markdown(user_id, file_key):
             toc_md.append(markdown_heading)
 
     md = "\n".join(toc_md)
-    insert_markdown_to_db(user_id=user_id, file_key=file_key, markdown=md)
+
+    # 转换word to pdf 并上传至minio
+    file_key = PdfUtil().convert_document_to_pdf_from_minio(file_key)
+    file_url = MinioUtils().get_file_url_by_key(object_key=file_key)
+    insert_markdown_to_db(user_id=user_id, file_key=file_key, file_url=file_url, markdown=md)
+
     return md
 
 
 mysql_client = MysqlUtil()
 
 
-def insert_markdown_to_db(user_id, file_key, markdown):
+def insert_markdown_to_db(user_id, file_key, file_url, markdown):
     """
     将Markdown内容插入到数据库表t_test_assistant中。
     :param user_id
     :param file_key: 文件的MinIO key
+    :param file_url: 文件的URL
     :param markdown: Markdown格式的文本
     """
     try:
         # 插入数据
-        sql = "INSERT INTO t_test_assistant (user_id,file_key, markdown, create_time, update_time) VALUES (%s,%s, %s, %s, %s)"
+        sql = "INSERT INTO t_test_assistant (user_id,file_key,file_url, markdown, create_time, update_time) " "VALUES (%s,%s,%s, %s, %s, %s)"
         current_time = datetime.now()
-        data = (user_id, file_key, markdown, current_time, current_time)
+        data = (user_id, file_key, file_url, markdown, current_time, current_time)
 
         mysql_client.insert(sql, data)
 
