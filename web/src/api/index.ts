@@ -159,6 +159,11 @@ export async function dify_suggested(chat_id) {
     return fetch(req)
 }
 
+/**
+ * word 转 md
+ * @param file_key
+ * @returns
+ */
 export async function word_to_md(file_key) {
     const userStore = useUserStore()
     const token = userStore.getUserToken()
@@ -178,17 +183,15 @@ export async function word_to_md(file_key) {
 }
 
 /**
- * 查询测试助手记录
+ * 查询项目列表
  * @param page
  * @param limit
  * @returns
  */
-export async function query_test_assistant_records(page, limit) {
+export async function query_demand_records(page, limit) {
     const userStore = useUserStore()
     const token = userStore.getUserToken()
-    const url = new URL(
-        `${location.origin}/sanic/ta/query_test_assistant_records`
-    )
+    const url = new URL(`${location.origin}/sanic/ta/query_demand_records`)
     const req = new Request(url, {
         mode: 'cors',
         method: 'post',
@@ -199,6 +202,52 @@ export async function query_test_assistant_records(page, limit) {
         body: JSON.stringify({
             page,
             limit
+        })
+    })
+    return fetch(req)
+}
+
+/**
+ * 保存项目信息
+ * @param project_data b
+ * @returns
+ */
+export async function insert_demand_manager(project_data) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/ta/insert_demand_manager`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            project_data
+        })
+    })
+    return fetch(req)
+}
+
+/**
+ * 删除项目信息
+ * @param id
+ * @returns
+ */
+export async function delete_demand_records(id) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/ta/delete_demand_records`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            id
         })
     })
     return fetch(req)
