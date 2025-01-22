@@ -59,6 +59,7 @@ const handleToRepo = () => {
     --at-apply: w-full flex items-center justify-center py-10;
     height: 60px;
     border-top-right-radius: 10px;
+    margin-right: 5px;
     border-bottom: 0px;
 
     .header-left,
