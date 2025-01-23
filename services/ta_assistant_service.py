@@ -1,4 +1,5 @@
 import base64
+import json
 import logging
 import os
 import traceback
@@ -15,6 +16,7 @@ from common.exception import MyException
 from common.minio_util import MinioUtils
 from common.mysql_util import MysqlUtil
 from common.pdf_util import PdfUtil
+from common.word_util import WordUtil
 from constants.code_enum import SysCodeEnum
 
 logger = logging.getLogger(__name__)
@@ -127,15 +129,42 @@ async def insert_demand_manager_to_db(user_id, doc_name, doc_desc, file_key) -> 
         sql = "INSERT INTO t_demand_manager (user_id,doc_name,doc_desc,file_key,create_time, update_time) VALUES (%s,%s,%s, %s, %s, %s)"
         current_time = datetime.now()
         data = (user_id, doc_name, doc_desc, file_key, current_time, current_time)
+        record_id = mysql_client.insert(sql, data)
 
-        mysql_client.insert(sql, data)
+        # 保存文档元信息
+        await insert_demand_doc_meta(user_id, record_id, file_key)
 
         return True
-
     except Exception as e:
         traceback.print_exception(e)
         logger.error(f"保存测试助手记录失败: {e}")
         return False
+
+
+async def insert_demand_doc_meta(user_id, demand_id, file_key) -> bool:
+    """
+        保存文档元信息
+    :param user_id:
+    :param demand_id:
+    :param file_key:
+    :return:
+    """
+    try:
+        outline_with_content = WordUtil().read_target_content(file_key)
+        outline_dict_list = [{"功能模块": heading, "功能点详息说明": [f"  {line}" for line in content]} for heading, content in outline_with_content]
+
+        for outline_dict in outline_dict_list:
+            page_title = outline_dict["功能模块"]
+            page_content = json.dumps(outline_dict["功能点详息说明"])
+            sql = "INSERT INTO t_demand_doc_meta (user_id,demand_id,page_title,page_content,create_time, update_time) VALUES (%s,%s,%s,%s, %s, %s)"
+            current_time = datetime.now()
+            data = (user_id, demand_id, page_title, page_content, current_time, current_time)
+            mysql_client.insert(sql, data)
+
+    except Exception as e:
+        traceback.print_exception(e)
+        logger.error(f"保存文档元信息失败: {e}")
+        raise Exception(f"保存文档元信息失败: {e}")
 
 
 async def query_demand_records(user_id, file_key=None, page=1, limit=10):
@@ -183,4 +212,7 @@ async def delete_demand_records(record_id):
     """
     # 构建SQL删除语句
     delete_sql = f"DELETE FROM t_demand_manager WHERE id={record_id}"
+    mysql_client.execute_mysql(delete_sql)
+
+    delete_sql = f"DELETE FROM t_demand_doc_meta WHERE demand_id={record_id}"
     mysql_client.execute_mysql(delete_sql)

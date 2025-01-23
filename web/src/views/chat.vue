@@ -1389,7 +1389,7 @@ const hideScrollbar = () => {
                             </div>
                             <n-float-button
                                 position="absolute"
-                                top="59%"
+                                top="58%"
                                 right="11.5%"
                                 :type="stylizingLoading ? 'primary' : 'default'"
                                 color
