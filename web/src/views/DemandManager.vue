@@ -1,6 +1,13 @@
 <template>
     <LayoutCenterPanel :loading="loading">
-        <n-layout style="height: 99%; border-radius: 10px; margin-bottom: 10px">
+        <n-layout
+            style="
+                height: 99%;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                margin-right: 2px;
+            "
+        >
             <n-layout-header class="header">
                 <div class="header-content">
                     <!-- 这里可以放置一些顶部的内容或导航 -->
