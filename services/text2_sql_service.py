@@ -1,6 +1,7 @@
 import io
 import json
 import logging
+import re
 
 import duckdb
 import pandas as pd
@@ -25,7 +26,9 @@ async def exe_sql_query(model_out_str):
 
     if model_out_str:
         try:
-            model_out_json = json.loads(model_out_str)
+            # 尝试按'\n\n'分割，如果没有'\n\n'则直接使用原始字符串
+            model_out_json = model_out_str.split("\n\n")[-1] if "\n\n" in model_out_str else model_out_str
+            model_out_json = model_out_json.strip("```json\n").strip("\n```")
             if not isinstance(model_out_json, dict):
                 model_out_json = json.loads(model_out_json)
             sql = model_out_json["sql"]
@@ -44,6 +47,26 @@ async def exe_sql_query(model_out_str):
     else:
         logger.error("数据应答大模型返回结果为空")
         raise MyException(SysCode.c_9999)
+
+
+if __name__ == "__main__":
+    # json_str = """
+    # ```json
+    #     {
+    #       "thoughts": "用户需要查询诈骗金额最高的前十条数据。通过对'涉案资金'字段进行排序和取前十名，可以满足需求。",
+    #       "sql": "SELECT TOP 10 ROUND(CAST(`涉案资金` AS INT), 0) AS 诈骗金额, `报警人姓名`, `性别`, `年龄`, `文化程度`, `受害人职业`, `手机品牌` FROM view_alarm_detail ORDER BY `涉案资金` DESC",
+    #       "type": "response_table",
+    #       "status": "0"
+    #     }
+    # ```
+    # """
+    json_str = '```json\n{"name": "John", "age": 30, "city": "New York"}\n```'
+
+    # 去掉 ```json 前缀和后缀
+    json_str_cleaned = json_str.strip("```json\n").strip("\n```")
+
+    # 解析 JSON 字符串
+    data = json.loads(json_str_cleaned)
 
 
 async def exe_file_sql_query(file_key, model_out_str):

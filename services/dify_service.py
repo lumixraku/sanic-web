@@ -115,6 +115,7 @@ class DiFyRequest:
                                                 await self.send_message(
                                                     res,
                                                     qa_context,
+                                                    answer,
                                                     {"data": {"messageType": "begin"}, "dataType": data_type},
                                                     qa_type,
                                                     conversation_id,
@@ -128,6 +129,7 @@ class DiFyRequest:
                                                 await self.send_message(
                                                     res,
                                                     qa_context,
+                                                    answer,
                                                     {"data": {"messageType": "end"}, "dataType": data_type},
                                                     qa_type,
                                                     conversation_id,
@@ -142,6 +144,7 @@ class DiFyRequest:
                                                 await self.send_message(
                                                     res,
                                                     qa_context,
+                                                    answer,
                                                     {"data": res_data, "dataType": data_type},
                                                     qa_type,
                                                     conversation_id,
@@ -157,6 +160,7 @@ class DiFyRequest:
                                             await self.send_message(
                                                 res,
                                                 qa_context,
+                                                answer,
                                                 {"data": {"messageType": "continue", "content": answer}, "dataType": data_type},
                                                 qa_type,
                                                 conversation_id,
@@ -191,21 +195,27 @@ class DiFyRequest:
         finally:
             await self.res_end(res)
 
-    @staticmethod
-    async def send_message(response, qa_context, message, qa_type, conversation_id, message_id, task_id):
+    async def handle_think_tag(self, answer):
+        """处理<think>标签内的内容
+        :param answer
         """
-            SSE 格式发送数据，每一行以 data: 开头
+        think_content = re.search(r"<think>(.*?)</think>", answer, re.DOTALL).group(1)
+        remaining_content = re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL).strip()
+
+        return think_content, remaining_content
+
+    async def save_message(self, response, message, qa_context, conversation_id, message_id, task_id, qa_type):
+        """
+            保存消息记录并发送SSE数据
         :param response:
-        :param qa_context
         :param message:
-        :param qa_type
-        :param conversation_id
-        :param message_id
-        :param task_id
+        :param qa_context:
+        :param conversation_id:
+        :param message_id:
+        :param task_id:
+        :param qa_type:
         :return:
         """
-        await response.write("data:" + json.dumps(message, ensure_ascii=False) + "\n\n")
-
         # 保存用户问答记录 1.保存用户问题 2.保存用户答案 t02 和 t04
         if "content" in message["data"]:
             await add_question_record(
@@ -215,6 +225,25 @@ class DiFyRequest:
             await add_question_record(
                 qa_context.token, conversation_id, message_id, task_id, qa_context.chat_id, qa_context.question, "", message, qa_type
             )
+        await response.write("data:" + json.dumps(message, ensure_ascii=False) + "\n\n")
+
+    async def send_message(self, response, qa_context, answer, message, qa_type, conversation_id, message_id, task_id):
+        """
+        SSE 格式发送数据，每一行以 data: 开头
+        """
+        if answer.lstrip().startswith("<think>"):
+            # 处理deepseek模型思考过程样式
+            think_content, remaining_content = await self.handle_think_tag(answer)
+
+            # 发送<think>标签内的内容
+            message = {
+                "data": {"messageType": "continue", "content": "> " + think_content.replace("\n", "") + "\n\n" + remaining_content},
+                "dataType": "t02",
+            }
+            await self.save_message(response, message, qa_context, conversation_id, message_id, task_id, qa_type)
+
+        else:
+            await self.save_message(response, message, qa_context, conversation_id, message_id, task_id, qa_type)
 
     @staticmethod
     async def res_begin(res, chat_id):
