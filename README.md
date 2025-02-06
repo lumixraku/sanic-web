@@ -48,7 +48,8 @@
 
 ## 📚 **大模型部署**
 - [参考Ollama部署](https://qwen.readthedocs.io/zh-cn/latest/run_locally/ollama.html)
-- 模型: Qwen2.5
+- 模型: Qwen2.5 7B 模型
+- 模型: DeepSeek R1 7B 模型
 
 ## ⚙️ **Dify环境配置**
 1. **安装Dify**
@@ -61,17 +62,18 @@
    docker-compose up -d
    
 2. **Dify配置**
-   - 添加Dify大模型提供商Ollama,配置Qwen2.5模型
-   - 导入项目根目录下的**docker/dify/数据问答_v1.1.0.yml画布**至Dify并获取对应的api-key
+   - 添加Dify大模型提供商Ollama,配置Qwen2.5模型和DeepSeek R1模型
+   - 导入项目根目录下的**docker/dify/数据问答_v1.1.1_deepseek.yml画布**至Dify并获取对应的api-key
 
 ![image](./images/llm-setting.png)
+![image](./images/llm-setting-deepseek.png)
 ![image](./images/import-convas.png)
 ![image](./images/convas-api-key.png)
    
 ## 🚀 **快速体验**
    - 具体步骤如下：
    - 第一步克隆代码到本地
-   - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
+   - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型和DeepSeek R1模型
    - 第三步Dify环境配置直接参考上面**Dify环境配置** **这步很重要!!!!**
    - 第四步启动服务具体步骤如下:
 
@@ -114,7 +116,7 @@
 
 ## 🛠️ **本地开发**
 - 第一步克隆代码到本地
-- 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型
+- 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型和DeepSeek R1模型
 - 第三步本地开发环境Dify配置，参考上面**Dify环境配置** **同时修改.env.dev文件里面的DIFY_DATABASE_QA_API_KEY**
 - 第四步本地开发环境Minio配置,修改env.dev文件里面的Minio相关密钥信息
 - 第五步安装前后端项目依赖并启动前后端服务具体步骤如下:

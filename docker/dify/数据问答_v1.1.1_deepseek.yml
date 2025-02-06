@@ -1,0 +1,2142 @@
+app:
+  description: 数据问答|通用问答|表格问答|报告问答
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: advanced-chat
+  name: 数据问答-deepseek
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.5
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: true
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: tool
+      id: 1721978213302-source-1721978268262-target
+      selected: false
+      source: '1721978213302'
+      sourceHandle: source
+      target: '1721978268262'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: code
+      id: 1721978268262-source-1721978276391-target
+      selected: false
+      source: '1721978268262'
+      sourceHandle: source
+      target: '1721978276391'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: code
+      id: 1721978276391-source-1721978435688-target
+      selected: false
+      source: '1721978276391'
+      sourceHandle: source
+      target: '1721978435688'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      id: 1721978435688-source-1721978465891-target
+      selected: false
+      source: '1721978435688'
+      sourceHandle: source
+      target: '1721978465891'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: answer
+      id: 1721978465891-true-1721978416917-target
+      selected: false
+      source: '1721978465891'
+      sourceHandle: 'true'
+      target: '1721978416917'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 1724295046398-source-1724295169935-target
+      selected: false
+      source: '1724295046398'
+      sourceHandle: source
+      target: '1724295169935'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      id: 1724295169935-source-1724295615269-target
+      selected: false
+      source: '1724295169935'
+      sourceHandle: source
+      target: '1724295615269'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: answer
+      id: 1724295615269-false-1724295640306-target
+      selected: false
+      source: '1724295615269'
+      sourceHandle: 'false'
+      target: '1724295640306'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1724295615269-true-1724295728093-target
+      selected: false
+      source: '1724295615269'
+      sourceHandle: 'true'
+      target: '1724295728093'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1724295728093-source-1724295911042-target
+      selected: false
+      source: '1724295728093'
+      sourceHandle: source
+      target: '1724295911042'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: answer
+      id: 1724295911042-source-1724296111387-target
+      selected: false
+      source: '1724295911042'
+      sourceHandle: source
+      target: '1724296111387'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1730192352305-source-17301926909140-target
+      selected: false
+      source: '1730192352305'
+      sourceHandle: source
+      target: '17301926909140'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: answer
+      id: 17301926909140-source-17301913471500-target
+      selected: false
+      source: '17301926909140'
+      sourceHandle: source
+      target: '17301913471500'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 1730357094740-source-1730191229734-target
+      selected: false
+      source: '1730357094740'
+      sourceHandle: source
+      target: '1730191229734'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 1730887499318-source-1730887562850-target
+      selected: false
+      source: '1730887499318'
+      sourceHandle: source
+      target: '1730887562850'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      id: 1730887562850-source-1730887626621-target
+      selected: false
+      source: '1730887562850'
+      sourceHandle: source
+      target: '1730887626621'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: answer
+      id: 1730887626621-true-1730887662105-target
+      selected: false
+      source: '1730887626621'
+      sourceHandle: 'true'
+      target: '1730887662105'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      id: 1730191229734-source-17310323739450-target
+      selected: false
+      source: '1730191229734'
+      sourceHandle: source
+      target: '17310323739450'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: answer
+      id: 17310323739450-false-17310324005060-target
+      selected: false
+      source: '17310323739450'
+      sourceHandle: 'false'
+      target: '17310324005060'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1732517672259-d7c25be0-954f-4965-a2f1-20d29f530704-1721978504647-target
+      source: '1732517672259'
+      sourceHandle: d7c25be0-954f-4965-a2f1-20d29f530704
+      target: '1721978504647'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1732517672259-true-1730357094740-target
+      source: '1732517672259'
+      sourceHandle: 'true'
+      target: '1730357094740'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 1732520123593-source-1732520201744-target
+      source: '1732520123593'
+      sourceHandle: source
+      target: '1732520201744'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 1732520201744-source-1732520268554-target
+      source: '1732520201744'
+      sourceHandle: source
+      target: '1732520268554'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1732520268554-source-1732520761704-target
+      source: '1732520268554'
+      sourceHandle: source
+      target: '1732520761704'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: answer
+      id: 1732520761704-source-1732520428762-target
+      source: '1732520761704'
+      sourceHandle: source
+      target: '1732520428762'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1732517672259-c1319e61-38af-4482-979b-3a2e2c4e6026-1730887499318-target
+      source: '1732517672259'
+      sourceHandle: c1319e61-38af-4482-979b-3a2e2c4e6026
+      target: '1730887499318'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: if-else
+      id: 1721978465891-false-1732517672259-target
+      source: '1721978465891'
+      sourceHandle: 'false'
+      target: '1732517672259'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: code
+      id: 1732517672259-68588ce1-7f5d-4af9-8191-4320e927e7fd-1734683532736-target
+      source: '1732517672259'
+      sourceHandle: 68588ce1-7f5d-4af9-8191-4320e927e7fd
+      target: '1734683532736'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      id: 1734683532736-source-1734683610947-target
+      source: '1734683532736'
+      sourceHandle: source
+      target: '1734683610947'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1734683610947-true-1732520123593-target
+      source: '1734683610947'
+      sourceHandle: 'true'
+      target: '1732520123593'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: http-request
+      id: 1734683610947-false-17355251156380-target
+      source: '1734683610947'
+      sourceHandle: 'false'
+      target: '17355251156380'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 17355251156380-source-1735525806917-target
+      source: '17355251156380'
+      sourceHandle: source
+      target: '1735525806917'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: llm
+      id: 1735525806917-source-1735526005555-target
+      source: '1735525806917'
+      sourceHandle: source
+      target: '1735526005555'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: 1735526005555-source-17355298585890-target
+      source: '1735526005555'
+      sourceHandle: source
+      target: '17355298585890'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 17355298585890-source-1735530100215-target
+      source: '17355298585890'
+      sourceHandle: source
+      target: '1735530100215'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: if-else
+      id: 1735530100215-source-1735530110523-target
+      source: '1735530100215'
+      sourceHandle: source
+      target: '1735530110523'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: answer
+      id: 1735530110523-true-1735530121003-target
+      source: '1735530110523'
+      sourceHandle: 'true'
+      target: '1735530121003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1735530110523-false-17355423844960-target
+      source: '1735530110523'
+      sourceHandle: 'false'
+      target: '17355423844960'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 17355423844960-source-17355424274730-target
+      source: '17355423844960'
+      sourceHandle: source
+      target: '17355424274730'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: answer
+      id: 17355424274730-source-1735530155560-target
+      source: '17355424274730'
+      sourceHandle: source
+      target: '1735530155560'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: http-request
+      id: 1721978504647-source-1724295046398-target
+      source: '1721978504647'
+      sourceHandle: source
+      target: '1724295046398'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: if-else
+        targetType: tool
+      id: 17310323739450-true-1738746456827-target
+      source: '17310323739450'
+      sourceHandle: 'true'
+      target: '1738746456827'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: tool
+        targetType: llm
+      id: 1738746456827-source-1730192352305-target
+      source: '1738746456827'
+      sourceHandle: source
+      target: '1730192352305'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: qa_type
+          max_length: 100
+          options: []
+          required: true
+          type: text-input
+          variable: qa_type
+      height: 90
+      id: '1721978213302'
+      position:
+        x: 30
+        y: 270.5
+      positionAbsolute:
+        x: 30
+        y: 270.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: time
+        provider_name: time
+        provider_type: builtin
+        selected: false
+        title: 获取当前时间
+        tool_configurations:
+          format: '%Y-%m-%d %H:%M:%S'
+          timezone: Asia/Shanghai
+        tool_label: 获取当前时间
+        tool_name: current_time
+        tool_parameters: {}
+        type: tool
+      height: 116
+      id: '1721978268262'
+      position:
+        x: 334
+        y: 270.5
+      positionAbsolute:
+        x: 334
+        y: 270.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "def main(question:str) -> dict:\n    return {\n        \"dify_0_t02\"\
+          : \"dify_0_t02\",\n        \"dify_1_t02\": \"dify_1_t02\",\n        \"dify_0_t04\"\
+          : \"dify_0_t04\",\n        \"dify_1_t04\": \"dify_1_t04\",\n        \"dify_0_t07\"\
+          : \"dify_0_t07\",\n        \"dify_1_t07\": \"dify_1_t07\",\n        \"top_k\"\
+          : 50,\n        \"query_database\":\"chat_db\",\n        \"nl2sql_table_info\"\
+          : \"\"\" [('view_alarm_detail(案发地点,所属分局,来电类别,报警人姓名,性别,年龄,文化程度,受害人职业,手机品牌,涉案资金,是否电诈,诈骗类型,引流方式,引流地址,引流联系时间,是否看过反诈宣传,登记时间)')]\"\
+          \"\",\n        \"nl2sql_display_type\": \"\"\"\n            response_line_chart:used\
+          \ to display comparative trend analysis data.\n            response_pie_chart:suitable\
+          \ for scenarios such as proportion and distribution statistics.\n      \
+          \      response_table:suitable for display with many display columns or\
+          \ non-numeric columns.\n            response_bar_chart: displays comparative\
+          \ data, volumes across varied groups. Ideal for discrete values, lengths\
+          \ signify item magnitude. Each bar, a category, aids quick comparison.\"\
+          \"\",\n        \"nl2sql_response\": \"\"\"{\"thoughts\":\"thoughts summary\
+          \ to say to user\",\"sql\":\"SQL Query to run\",\"type\":\"Data display\
+          \ method\",\"status\":\"0\"}\"\"\",\n        \"data_reveal\":\"根据您的问题，数据问答小助手没有查询到相关结果，请换个问题试试\"\
+          ,\n        \"who_are_you\":'您好，我是数据问答小助手。你可以向我提问，我会根据你的问题回答，快来试试吧。'\n  \
+          \  }"
+        code_language: python3
+        desc: ''
+        outputs:
+          data_reveal:
+            children: null
+            type: string
+          dify_0_t02:
+            children: null
+            type: string
+          dify_0_t04:
+            children: null
+            type: string
+          dify_0_t07:
+            children: null
+            type: string
+          dify_1_t02:
+            children: null
+            type: string
+          dify_1_t04:
+            children: null
+            type: string
+          dify_1_t07:
+            children: null
+            type: string
+          nl2sql_display_type:
+            children: null
+            type: string
+          nl2sql_response:
+            children: null
+            type: string
+          nl2sql_table_info:
+            children: null
+            type: string
+          query_database:
+            children: null
+            type: string
+          top_k:
+            children: null
+            type: number
+          who_are_you:
+            children: null
+            type: string
+        selected: false
+        title: 定义全局变量
+        type: code
+        variables:
+        - value_selector:
+          - sys
+          - query
+          variable: question
+      height: 54
+      id: '1721978276391'
+      position:
+        x: 638
+        y: 270.5
+      positionAbsolute:
+        x: 638
+        y: 270.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1721978276391.who_are_you#}}{{#1721978276391.dify_1_t02#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 141
+      id: '1721978416917'
+      position:
+        x: 1550
+        y: 270.5
+      positionAbsolute:
+        x: 1550
+        y: 270.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "def main(query) -> dict:\n\n    question_pool = ['你是谁？','你是谁啊？','你的身份是什么？','你是什么模型？','你是什么模型啊？','你是什么大模型？','你是什么大模型啊？','你用的什么大模型？','你用的什么大模型啊？','你是哪个模型？','你是哪个模型啊？','你用的哪个模型？','你用的哪个模型啊？','你是什么类型的AI？','你是基于什么技术的？','你用的什么技术？','你是哪个AI？','你是什么AI系统？','你是用什么技术开发的？','你是怎么工作的？','你的工作原理是什么？','你是用什么模型训练的？','你背后是什么算法？','你是哪种AI？','你是哪个公司的AI？','你的开发公司是谁？','你是由谁设计的？','你的设计者是谁？','你的开发者是谁？','你属于哪个团队？','你的技术基础是什么？','你的算法是什么？','你是哪一类AI？','你是由什么算法支持的？','你是哪个版本的AI？','你的版本号是多少？','你是基于哪个平台的？','你是基于什么平台？','你由谁制造？','你的制造商是谁？','你是哪个架构？','你的架构是什么？','你是哪家公司开发的？','你由什么技术支撑？','你由什么驱动？','你的工作机制是什么？','你使用了哪些技术？','你是如何被训练的？','你用什么数据训练的？','你的训练数据是什么？','你是谁','你是谁啊','你的身份是什么','你是什么模型','你是什么模型啊','你是什么大模型','你是什么大模型啊','你用的什么大模型','你用的什么大模型啊','你是哪个模型','你是哪个模型啊','你用的哪个模型','你用的哪个模型啊','你是什么类型的AI','你是基于什么技术的','你用的什么技术','你是哪个AI','你是什么AI系统','你是用什么技术开发的','你是怎么工作的','你的工作原理是什么','你是用什么模型训练的','你背后是什么算法','你是哪种AI','你是哪个公司的AI','你的开发公司是谁','你是由谁设计的','你的设计者是谁','你的开发者是谁','你属于哪个团队','你的技术基础是什么','你的算法是什么','你是哪一类AI','你是由什么算法支持的','你是哪个版本的AI','你的版本号是多少','你是基于哪个平台的','你是基于什么平台','你由谁制造','你的制造商是谁','你是哪个架构','你的架构是什么','你是哪家公司开发的','你由什么技术支撑','你由什么驱动','你的工作机制是什么','你使用了哪些技术','你是如何被训练的','你用什么数据训练的','你的训练数据是什么',\
+          \ \"你好啊\", \"你好\", \"您好啊\", \"您好\"]\n    for keywords in question_pool:\n\
+          \        if keywords in query:\n            return {\"result\": 1}\n   \
+          \ else:\n        return {\"result\": 2}"
+        code_language: python3
+        desc: 身份判断
+        outputs:
+          result:
+            children: null
+            type: number
+        selected: false
+        title: 代码执行
+        type: code
+        variables:
+        - value_selector:
+          - sys
+          - query
+          variable: query
+      height: 82
+      id: '1721978435688'
+      position:
+        x: 942
+        y: 270.5
+      positionAbsolute:
+        x: 942
+        y: 270.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: 924a6c79-d3b4-4918-8dc6-9af27df89692
+            numberVarType: constant
+            value: '1'
+            varType: number
+            variable_selector:
+            - '1721978435688'
+            - result
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 条件分支
+        type: if-else
+      height: 126
+      id: '1721978465891'
+      position:
+        x: 1246
+        y: 270.5
+      positionAbsolute:
+        x: 1246
+        y: 270.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成SQL语句
+        model:
+          completion_params:
+            num_thread: 4
+            temperature: 0.5
+          mode: chat
+          name: qwen2.5
+          provider: ollama
+        prompt_template:
+        - id: 857c0bfd-73a8-47b2-b6fe-b7e738894b8d
+          role: system
+          text: '# 你是一个DBA，擅长编写复杂且标准的SQL语句
+
+
+            # 你的任务是：
+
+            根据用户选择的MYSQL数据库和提供的表结构定义，回答用户问题并生成正确的SQL查询。
+
+
+            # 表结构定义：{{#1721978276391.nl2sql_table_info#}}'
+        - id: 0305276b-e6f7-4897-a90d-c39dcaf8c02b
+          role: user
+          text: 'human: {{#sys.query#}}查询
+
+
+            # 约束:
+
+            - 请根据用户问题理解用户意图，使用给出表结构定义创建一个语法正确的 mysql sql，如果不需要sql，则直接回答用户问题。 
+
+
+            - 只能使用表结构信息中提供的表来生成 sql，如果无法根据提供的表结构中生成 sql ，请说：''提供的表结构信息不足以生成 sql 查询。''禁止随意捏造信息。 
+
+
+            - 请注意生成SQL时不要弄错表和列的关系 
+
+
+            - 请检查SQL的正确性，并保证正确的情况下优化查询性能 
+
+
+            - 所有查询的值都必须有别名，比如从表中选择 select 所属分局, COUNT(*)as 总数,SUM(涉案资金) as 涉案资金 from
+            view_alarm_detail group by 所属分局
+
+
+            - thoughts尽量用中文回答不要输出`字符
+
+
+            - 用户在问题中指定了他希望获得的具体数据行数，如果大于50则始终将查询限制为最多 
+
+            {{#1721978276391.top_k#}}个结果。
+
+
+            - 当问题中出现像时间，日期，月份，年，小时，季度，天等表示时间的关键字，必须使用view_alarm_detail表的''登记日期''字段进行查询统计
+
+
+            - 当问题中出现像电话报警，自报警的关键字必须使用view_alarm_detail表的来电类别字段进行查询统计
+
+
+            - 当使用view_alarm_detail表的案发地点,管辖单位,联系地址,所在单位,诈骗类型字段必须使用模糊查询统计
+
+
+            - 当前日期,今年使用 {{#1721978268262.text#}}
+
+
+            -  请从如下给出的展示方式种选择最形象的一种用以进行数据渲染，将类型名称放入返回要求格式的name参数值中，如果找不到最合适的则使用Table作为展示方式，数据展示方式如下: 
+            {{#1721978276391.nl2sql_display_type#}}
+
+
+            # 返回格式 
+
+            请一步步思考并按照以下JSON格式回复： {{#1721978276391.nl2sql_response#}}
+
+            确保返回正确的json并且可以被Python json.loads方法解析.'
+        selected: false
+        title: 数据库问答
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 126
+      id: '1721978504647'
+      position:
+        x: 1854
+        y: 516
+      positionAbsolute:
+        x: 1854
+        y: 516
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: key-value-115
+            key: llm_text
+            type: text
+            value: '{{#1721978504647.text#}}'
+          type: x-www-form-urlencoded
+        desc: 执行SQL语句封装结果集
+        headers: ''
+        method: post
+        params: question:{{#sys.query#}}
+        retry_config:
+          max_retries: 1
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 获取数据库结果
+        type: http-request
+        url: http://host.docker.internal:8088/llm/process_llm_out
+        variables: []
+      height: 164
+      id: '1724295046398'
+      position:
+        x: 2158
+        y: 516
+      positionAbsolute:
+        x: 2158
+        y: 516
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import json\n\ndef main( db_result: str):\n    try:\n        db_result_json\
+          \ = json.loads(db_result)\n        \n        db_data = json.loads(db_result_json['data'])\n\
+          \n        return {\n            \"res_code\": str(db_result_json['code']),\n\
+          \            \"res_data\": str(db_data['data'])\n        }\n    except Exception\
+          \ as e :\n        return {\"res_code\": \"9999\",\"outline\": f\"{e}\"}"
+        code_language: python3
+        dependencies:
+        - name: ''
+          version: ''
+        desc: ''
+        outputs:
+          res_code:
+            children: null
+            type: string
+          res_data:
+            children: null
+            type: string
+        selected: false
+        title: 解析返回结果
+        type: code
+        variables:
+        - value_selector:
+          - '1724295046398'
+          - body
+          variable: db_result
+      height: 54
+      id: '1724295169935'
+      position:
+        x: 2462
+        y: 516
+      positionAbsolute:
+        x: 2462
+        y: 516
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: ebd67bc7-0abf-40b5-b8f0-a253a87d704d
+            value: '200'
+            varType: string
+            variable_selector:
+            - '1724295169935'
+            - res_code
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 判断状态
+        type: if-else
+      height: 126
+      id: '1724295615269'
+      position:
+        x: 2766
+        y: 516
+      positionAbsolute:
+        x: 2766
+        y: 516
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1721978276391.data_reveal#}}{{#1721978276391.dify_1_t02#}}'
+        desc: ''
+        selected: false
+        title: 返回失败
+        type: answer
+        variables: []
+      height: 141
+      id: '1724295640306'
+      position:
+        x: 3070
+        y: 516
+      positionAbsolute:
+        x: 3070
+        y: 516
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成总结信息
+        model:
+          completion_params:
+            num_ctx: 20480
+            num_thread: 4
+            temperature: 0.5
+          mode: chat
+          name: deepseek-r1:7b
+          provider: ollama
+        prompt_template:
+        - id: 48d8610a-aab1-4e2e-8fd1-3111b94de508
+          role: system
+          text: '# 你是一个诈骗数据分析专家,精通从诈骗数据总结分析能力
+
+            '
+        - id: d424dafa-ebed-4271-90e5-4bafff0ca243
+          role: user
+          text: "# 任务: 请从以下诈骗数据中,总结分析出数据趋势\n\n----\n# 诈骗数据内容:  {{#1724295169935.res_data#}}\n\
+            \n----\n# 约束:\n - 输出结果不能出现英文和繁体字\n - 严格依据数据集回答不要虚构\n - 数据集为空时返回空\n - 不要输出思考过程\n\
+            \ - 诈骗案件数量从result字段中统计\n - 字数限制在150字以内\n - 请一步一步思考并按照以下格式输出\n\n# 输出格式:\
+            \  文本格式"
+        selected: false
+        title: 分析总结结果
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 126
+      id: '1724295728093'
+      position:
+        x: 2755.873800979384
+        y: 676.3338026960121
+      positionAbsolute:
+        x: 2755.873800979384
+        y: 676.3338026960121
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"llm_out_wrapper\"\
+          : llm_out+\"详情如下图:\"\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          llm_out_wrapper:
+            children: null
+            type: string
+        selected: false
+        title: 提取大模型文本
+        type: code
+        variables:
+        - value_selector:
+          - '1724295728093'
+          - text
+          variable: llm_out
+      height: 54
+      id: '1724295911042'
+      position:
+        x: 3374
+        y: 689.5
+      positionAbsolute:
+        x: 3374
+        y: 689.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1724295911042.llm_out_wrapper#}}{{#1721978276391.dify_1_t02#}}
+
+          {{#1721978276391.dify_0_t04#}}{{#1724295046398.body#}}{{#1721978276391.dify_1_t04#}}'
+        desc: ''
+        selected: false
+        title: 响应结果集
+        type: answer
+        variables: []
+      height: 198
+      id: '1724296111387'
+      position:
+        x: 3678
+        y: 689.5
+      positionAbsolute:
+        x: 3678
+        y: 689.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import json\n\ndef main(body: dict) -> dict:\n    message = json.loads(body)\n\
+          \    return {\n        \"url\": message.get('data', ''), \n        \"res_code\"\
+          : str(message.get('code', ''))\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          res_code:
+            children: null
+            type: string
+          url:
+            children: null
+            type: string
+        selected: false
+        title: 解析搜索的结果
+        type: code
+        variables:
+        - value_selector:
+          - '1730357094740'
+          - body
+          variable: body
+      height: 54
+      id: '1730191229734'
+      position:
+        x: 2158
+        y: 953.5
+      positionAbsolute:
+        x: 2158
+        y: 953.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#17301926909140.llm_out#}}{{#1721978276391.dify_1_t02#}}'
+        desc: ''
+        selected: false
+        title: 返回搜索信息
+        type: answer
+        variables: []
+      height: 141
+      id: '17301913471500'
+      position:
+        x: 3978
+        y: 927.5
+      positionAbsolute:
+        x: 3978
+        y: 927.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            num_thread: 4
+            temperature: 0
+          mode: chat
+          name: deepseek-r1:7b
+          provider: ollama
+        prompt_template:
+        - id: 7e2bdc70-acec-4d79-a49f-deb78156dbe4
+          role: system
+          text: '# 对用户问题分析思考后回答用户'
+        - id: adcc500b-a842-4e48-b825-379f0b6e3af6
+          role: user
+          text: '# 用户问题: {{#sys.query#}}
+
+
+            # 你的任务是从爬虫爬取的网页内容总后回答用户问题
+
+
+            -----
+
+            # 爬虫爬取的网页内容:  {{#1738746456827.text#}}
+
+
+            # 约束
+
+            - 如果网页内容不为则要严格根据网页内容不能捏造事实
+
+            - 如网页内容为空则根据模型本身知识进行回答
+
+
+            # 输出格式
+
+            - 以合适的形式进行输出
+
+
+            '
+        retry_config:
+          max_retries: 3
+          retry_enabled: false
+          retry_interval: 1000
+        selected: true
+        title: 总结提取网页内容
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1730192352305'
+      position:
+        x: 3110.5758782788134
+        y: 886.5
+      positionAbsolute:
+        x: 3110.5758782788134
+        y: 886.5
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"llm_out\"\
+          : llm_out\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          llm_out:
+            children: null
+            type: string
+        selected: false
+        title: 提取总结信息
+        type: code
+        variables:
+        - value_selector:
+          - '1730192352305'
+          - text
+          variable: llm_out
+      height: 54
+      id: '17301926909140'
+      position:
+        x: 3674
+        y: 899
+      positionAbsolute:
+        x: 3674
+        y: 899
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        desc: ''
+        headers: ''
+        method: post
+        params: query_str:{{#sys.query#}}
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 通用问答
+        type: http-request
+        url: http://host.docker.internal:8088/common/get_search_url
+        variables: []
+      height: 152
+      id: '1730357094740'
+      position:
+        x: 1854
+        y: 886.5
+      positionAbsolute:
+        x: 1854
+        y: 886.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: ''
+          type: none
+        desc: ''
+        headers: ''
+        method: get
+        params: query_str:{{#sys.query#}}
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 报告问答
+        type: http-request
+        url: http://host.docker.internal:8088/llm/query_guided_report
+        variables: []
+      height: 136
+      id: '1730887499318'
+      position:
+        x: 1854
+        y: 1244
+      positionAbsolute:
+        x: 1854
+        y: 1244
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import json\n\n\ndef main(query_result: str):\n    try:\n        parsed_json\
+          \ = json.loads(query_result)\n        if not isinstance(parsed_json, dict):\n\
+          \            parsed_json = json.loads(parsed_json)\n\n        return {\n\
+          \            \"res_code\": str(parsed_json['code']),\n            \"mark_down\"\
+          : parsed_json['data']\n        }\n    except Exception as e :\n        return\
+          \ {\"res_code\": \"9999\",\"outline\": f\"{e}\"}"
+        code_language: python3
+        desc: ''
+        outputs:
+          mark_down:
+            children: null
+            type: string
+          res_code:
+            children: null
+            type: string
+        selected: false
+        title: 解析返回结果
+        type: code
+        variables:
+        - value_selector:
+          - '1730887499318'
+          - body
+          variable: query_result
+      height: 54
+      id: '1730887562850'
+      position:
+        x: 2158
+        y: 1303
+      positionAbsolute:
+        x: 2158
+        y: 1303
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: 066e4a01-43dc-4ce2-be97-243fb65e7208
+            value: '200'
+            varType: string
+            variable_selector:
+            - '1730887562850'
+            - res_code
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 判断状态
+        type: if-else
+      height: 126
+      id: '1730887626621'
+      position:
+        x: 2462
+        y: 1212.5
+      positionAbsolute:
+        x: 2462
+        y: 1212.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1730887562850.mark_down#}}{{#1721978276391.dify_1_t02#}}'
+        desc: ''
+        selected: false
+        title: 返回结果
+        type: answer
+        variables: []
+      height: 141
+      id: '1730887662105'
+      position:
+        x: 2766
+        y: 1241
+      positionAbsolute:
+        x: 2766
+        y: 1241
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: 7098a09d-4507-433d-a68b-984ae872a6f6
+            value: '200'
+            varType: string
+            variable_selector:
+            - '1730191229734'
+            - res_code
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 判断状态
+        type: if-else
+      height: 126
+      id: '17310323739450'
+      position:
+        x: 2462
+        y: 863
+      positionAbsolute:
+        x: 2462
+        y: 863
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1721978276391.data_reveal#}}{{#1721978276391.dify_1_t02#}}'
+        desc: ''
+        selected: false
+        title: 返回失败
+        type: answer
+        variables: []
+      height: 141
+      id: '17310324005060'
+      position:
+        x: 2766
+        y: 1060
+      positionAbsolute:
+        x: 2766
+        y: 1060
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: 3bcc3968-d3ab-4c01-9149-40cb943e491f
+            value: COMMON_QA
+            varType: string
+            variable_selector:
+            - '1721978213302'
+            - qa_type
+          id: 'true'
+          logical_operator: and
+        - case_id: d7c25be0-954f-4965-a2f1-20d29f530704
+          conditions:
+          - comparison_operator: contains
+            id: 6a4c44d6-d442-4628-8faf-42c7d10c5711
+            value: DATABASE_QA
+            varType: string
+            variable_selector:
+            - '1721978213302'
+            - qa_type
+          id: d7c25be0-954f-4965-a2f1-20d29f530704
+          logical_operator: and
+        - case_id: 68588ce1-7f5d-4af9-8191-4320e927e7fd
+          conditions:
+          - comparison_operator: contains
+            id: be63fafa-e43f-4448-bcce-227ddda1f6d7
+            value: FILEDATA_QA
+            varType: string
+            variable_selector:
+            - '1721978213302'
+            - qa_type
+          id: 68588ce1-7f5d-4af9-8191-4320e927e7fd
+          logical_operator: and
+        - case_id: c1319e61-38af-4482-979b-3a2e2c4e6026
+          conditions:
+          - comparison_operator: contains
+            id: 3d96735d-1e97-43e3-95b1-3bcf398889db
+            value: REPORT_QA
+            varType: string
+            variable_selector:
+            - '1721978213302'
+            - qa_type
+          id: c1319e61-38af-4482-979b-3a2e2c4e6026
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 意图分类
+        type: if-else
+      height: 270
+      id: '1732517672259'
+      position:
+        x: 1550
+        y: 451.5
+      positionAbsolute:
+        x: 1550
+        y: 451.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        desc: ''
+        headers: ''
+        method: post
+        params: file_qa_str:{{#sys.query#}}
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 表格总结
+        type: http-request
+        url: http://host.docker.internal:8088/file/read_file
+        variables: []
+      height: 136
+      id: '1732520123593'
+      position:
+        x: 2462
+        y: 1378.5
+      positionAbsolute:
+        x: 2462
+        y: 1378.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import json\n\ndef main(file_datas: str):\n    try:\n        file_data_json\
+          \ = json.loads(file_datas)\n        db_data = json.loads(file_data_json['data'])\n\
+          \        return {\n            \"file_res_code\": str(file_data_json['code']),\n\
+          \            \"file_res_data\": str(db_data)\n        }\n    except Exception\
+          \ as e :\n        return {\"file_res_code\": \"9999\",\"file_res_data\"\
+          :f\"{e}\"}"
+        code_language: python3
+        desc: ''
+        outputs:
+          file_res_code:
+            children: null
+            type: string
+          file_res_data:
+            children: null
+            type: string
+        selected: false
+        title: 获取文件内容
+        type: code
+        variables:
+        - value_selector:
+          - '1732520123593'
+          - body
+          variable: file_datas
+      height: 54
+      id: '1732520201744'
+      position:
+        x: 2766
+        y: 1455
+      positionAbsolute:
+        x: 2766
+        y: 1455
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-r1:7b
+          provider: ollama
+        prompt_template:
+        - id: d8002acb-7dd8-4675-8db6-df76a44094de
+          role: system
+          text: '# 你是一个数据分析专家
+
+
+            #你的任务是:
+
+            下面是用户Excel''文件部分数据''，请学习理解该数据的结构和内容，简单总结文件内容并针对数据从不同维度提供一些有用的分析思路给用户
+
+
+            # 文件部分数据:
+
+            ---
+
+            : {{#1732520201744.file_res_data#}}
+
+            ---'
+        - id: 0eeaab3f-73da-4dac-beb0-b7b5f225bd75
+          role: user
+          text: "# human:  {{#sys.query#}}\n\n# 约束: \n- 输出字数在200字以内\n- 严格参考文件数据不要虚构信息\n\
+            - 多个sheet需要分开分析并进行单独返回\n请一步一步思考\n\n# 输出格式: \n- markdow文本形式输出"
+        selected: false
+        title: 总结文件内容
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1732520268554'
+      position:
+        x: 3070
+        y: 1440.5
+      positionAbsolute:
+        x: 3070
+        y: 1440.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1732520761704.result#}}{{#1721978276391.dify_1_t02#}}'
+        desc: ''
+        selected: false
+        title: 文件内容总结
+        type: answer
+        variables: []
+      height: 141
+      id: '1732520428762'
+      position:
+        x: 3678
+        y: 1447.5
+      positionAbsolute:
+        x: 3678
+        y: 1447.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"result\"\
+          : llm_out\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 提取大模型文本
+        type: code
+        variables:
+        - value_selector:
+          - '1732520268554'
+          - text
+          variable: llm_out
+      height: 54
+      id: '1732520761704'
+      position:
+        x: 3374
+        y: 1419
+      positionAbsolute:
+        x: 3374
+        y: 1419
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(query_str: str) -> dict:\n    # 使用指定的分隔符分割字符串，默认分隔符为'|'\n\
+          \    parts = query_str.split('|')\n    \n    # 检查分隔后的列表长度是否大于1，以确保存在第二个部分\n\
+          \    if len(parts) > 1:\n        # 检查第二个部分是否等于特定字符串\n        if parts[1].strip()\
+          \ == '总结归纳文档的关键信息':\n            flag=1\n        else:\n            flag=2\n\
+          \    else:\n        # 如果没有足够的部分，则返回2\n        flag=2\n    return {\n   \
+          \     \"flag\": flag,\n        \"file_key\": parts[0],\n        \"question_str\"\
+          : parts[1]\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          file_key:
+            children: null
+            type: string
+          flag:
+            children: null
+            type: number
+          question_str:
+            children: null
+            type: string
+        selected: false
+        title: 分隔文件对话问题
+        type: code
+        variables:
+        - value_selector:
+          - sys
+          - query
+          variable: query_str
+      height: 54
+      id: '1734683532736'
+      position:
+        x: 1854
+        y: 1455
+      positionAbsolute:
+        x: 1854
+        y: 1455
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: fd0fa633-bb56-4c11-b08f-7bde5b9ecd50
+            value: '1'
+            varType: number
+            variable_selector:
+            - '1734683532736'
+            - flag
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 文件问答意图分类
+        type: if-else
+      height: 126
+      id: '1734683610947'
+      position:
+        x: 2158
+        y: 1437.5
+      positionAbsolute:
+        x: 2158
+        y: 1437.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data: []
+          type: none
+        desc: ''
+        headers: ''
+        method: post
+        params: file_qa_str:{{#sys.query#}}
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 读取表格列
+        type: http-request
+        url: http://host.docker.internal:8088/file/read_file_column
+        variables: []
+      height: 136
+      id: '17355251156380'
+      position:
+        x: 2462
+        y: 1553.5
+      positionAbsolute:
+        x: 2462
+        y: 1553.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import json\n\ndef main(res_datas: str):\n    try:\n        column_data_json\
+          \ = json.loads(res_datas)\n        column_data = json.loads(column_data_json['data'])\n\
+          \        return {\n            \"res_code\": str(column_data_json['code']),\n\
+          \            \"column_data\": 'excel_table:'+str(column_data)\n        }\n\
+          \    except Exception as e :\n        return {\"res_code\": \"9999\",\"\
+          res_data\":f\"{e}\"}"
+        code_language: python3
+        desc: ''
+        outputs:
+          column_data:
+            children: null
+            type: string
+          res_code:
+            children: null
+            type: string
+        selected: false
+        title: 获取文件列名
+        type: code
+        variables:
+        - value_selector:
+          - '17355251156380'
+          - body
+          variable: res_datas
+      height: 54
+      id: '1735525806917'
+      position:
+        x: 2766
+        y: 1630
+      positionAbsolute:
+        x: 2766
+        y: 1630
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.5
+          mode: chat
+          name: qwen2.5
+          provider: ollama
+        prompt_template:
+        - id: ea976c24-3e29-4aeb-9c63-195bf30d4790
+          role: system
+          text: '# 你是一个DBA擅长编写复杂的 duckdb SQL语句
+
+
+            # 你的任务是: 请根据用户选择的数据库和该库的部分可用表结构定义在满足下面约束条件下通过duckdb sql数据分析回答用户的问题.
+
+
+            # 表结构定义:  {{#1735525806917.column_data#}}
+
+            '
+        - id: abb84ba3-0155-46be-9b34-c250dcb23474
+          role: user
+          text: "human: {{#1734683532736.question_str#}}\n\n# 约束:\n- 请注意生成SQL时不要弄错表和列的关系。\n\
+            - 请检查SQL的正确性，并保证正确的情况下优化查询性能。\n- SQL中需要使用的表名是: excel_table,请检查你生成的sql，不要使用没在数据结构中的列名。\n\
+            - 优先使用数据分析的方式回答，如果用户问题不涉及数据分析内容，你可以按你的理解进行回答。\n- 用户在问题中指定了他希望获得的具体数据行数，如果大于50则始终将查询限制为最多50个结果\n\
+            - 请根据用户问题理解用户意图，使用给出表结构定义创建一个语法正确的 duckdb sql，如果不需要sql，则直接回答用户问题。\n- 所有查询的值都必须有别名，比如从表中选择\
+            \ SELECT 产地, COUNT(*) as 商品数量 FROM excel_table GROUP BY 产地\n- 只能使用表结构信息中提供的表来生成\
+            \ sql，如果无法根据提供的表结构中生成 sql ，请说：'提供的表结构信息不足以生成 sql 查询。'禁止随意捏造信息。\n- 请从如下给出的展示方式种选择最形象的一种用以进行数据渲染，将类型名称放入返回要求格式的name参数值中，如果找不到最合适的则使用'Table'作为展示方式，数据展示方式如下:\n\
+            \ {{#1721978276391.nl2sql_display_type#}}\n# 返回格式:\n 请一步步思考并按照以下JSON格式回复：{{#1721978276391.nl2sql_response#}}\n\
+            \ 确保返回正确的json并且可以被Python json.loads方法解析."
+        selected: false
+        title: 文件问答
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 98
+      id: '1735526005555'
+      position:
+        x: 3070
+        y: 1615.5
+      positionAbsolute:
+        x: 3070
+        y: 1615.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: key-value-1
+            key: ''
+            type: text
+            value: '{{#1735526005555.text#}}'
+          type: json
+        desc: 执行SQL语句封装结果集
+        headers: ''
+        method: post
+        params: file_key:{{#1734683532736.file_key#}}
+        retry_config:
+          max_retries: 3
+          retry_enabled: true
+          retry_interval: 100
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 获取数据集
+        type: http-request
+        url: http://host.docker.internal:8088/file/process_file_llm_out
+        variables: []
+      height: 180
+      id: '17355298585890'
+      position:
+        x: 3374
+        y: 1531.5
+      positionAbsolute:
+        x: 3374
+        y: 1531.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "import json\n\ndef main(db_result: str):\n    try:\n        db_result_json\
+          \ = json.loads(db_result)\n        db_data = json.loads(db_result_json['data'])\n\
+          \n        return {\n            \"res_code\": str(db_result_json['code']),\n\
+          \            \"res_data\": str(db_data['data'])\n        }\n    except Exception\
+          \ as e :\n        return {\"res_code\": \"9999\"}"
+        code_language: python3
+        desc: ''
+        outputs:
+          res_code:
+            children: null
+            type: string
+          res_data:
+            children: null
+            type: string
+        selected: false
+        title: 解析返回结果
+        type: code
+        variables:
+        - value_selector:
+          - '17355298585890'
+          - body
+          variable: db_result
+      height: 54
+      id: '1735530100215'
+      position:
+        x: 3678
+        y: 1666
+      positionAbsolute:
+        x: 3678
+        y: 1666
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is not
+            id: b544b6b3-d1be-4047-bb52-8117e61b5c91
+            value: '200'
+            varType: string
+            variable_selector:
+            - '1735530100215'
+            - res_code
+          id: 'true'
+          logical_operator: and
+        desc: ''
+        selected: false
+        title: 判断状态
+        type: if-else
+      height: 126
+      id: '1735530110523'
+      position:
+        x: 3982
+        y: 1594
+      positionAbsolute:
+        x: 3982
+        y: 1594
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1721978276391.data_reveal#}}{{#1721978276391.dify_1_t02#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 141
+      id: '1735530121003'
+      position:
+        x: 4286
+        y: 1594
+      positionAbsolute:
+        x: 4286
+        y: 1594
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        answer: '{{#1721978276391.dify_0_t02#}}{{#17355424274730.llm_out_wrapper#}}{{#1721978276391.dify_1_t02#}}
+
+          {{#1721978276391.dify_0_t04#}}{{#17355298585890.body#}}{{#1721978276391.dify_1_t04#}}'
+        desc: ''
+        selected: false
+        title: 直接回复
+        type: answer
+        variables: []
+      height: 198
+      id: '1735530155560'
+      position:
+        x: 4894
+        y: 1767.5
+      positionAbsolute:
+        x: 4894
+        y: 1767.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 生成总结信息
+        model:
+          completion_params:
+            num_ctx: 20480
+            num_thread: 4
+            temperature: 0.5
+          mode: chat
+          name: deepseek-r1:7b
+          provider: ollama
+        prompt_template:
+        - id: 48d8610a-aab1-4e2e-8fd1-3111b94de508
+          role: system
+          text: '# 你是一个数据分析专家,精通从结构化数据总结分析
+
+            '
+        - id: d424dafa-ebed-4271-90e5-4bafff0ca243
+          role: user
+          text: "# 任务: 请从以下结构化数据中,总结分析出数据趋势\n\n----\n# 结构化数据内容:  {{#1735530100215.res_data#}}\n\
+            # 结构化数据格式说明: \n- column 字段代表格列定义\n- result代表数据明细\n\n----\n# 约束:\n - 输出结果不能出现英文和繁体字\n\
+            \ - 严格依据数据集回答不要虚构\n - 数据集为空时返回空\n - 不要输出思考过程\n - 诈骗案件数量从result字段中统计\n\
+            \ - 字数限制在150字以内\n - 请一步一步思考并按照以下格式输出\n\n# 输出格式:  文本"
+        selected: false
+        title: 分析数据
+        type: llm
+        variables: []
+        vision:
+          enabled: false
+      height: 126
+      id: '17355423844960'
+      position:
+        x: 4286
+        y: 1775
+      positionAbsolute:
+        x: 4286
+        y: 1775
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"llm_out_wrapper\"\
+          : llm_out+\"详情如下图:\"\n    }\n"
+        code_language: python3
+        desc: ''
+        outputs:
+          llm_out_wrapper:
+            children: null
+            type: string
+        selected: false
+        title: 提取大模型文本
+        type: code
+        variables:
+        - value_selector:
+          - '17355423844960'
+          - text
+          variable: llm_out
+      height: 54
+      id: '17355424274730'
+      position:
+        x: 4590
+        y: 1767.5
+      positionAbsolute:
+        x: 4590
+        y: 1767.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        provider_id: webscraper
+        provider_name: webscraper
+        provider_type: builtin
+        selected: false
+        title: 网页爬虫
+        tool_configurations:
+          generate_summary: null
+          user_agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+            (KHTML, like Gecko) Chrome/100.0.1000.0 Safari/537.36
+        tool_label: 网页爬虫
+        tool_name: webscraper
+        tool_parameters:
+          url:
+            type: mixed
+            value: '{{#1730191229734.url#}}'
+        type: tool
+      height: 116
+      id: '1738746456827'
+      position:
+        x: 2810.5758782788134
+        y: 886.5
+      positionAbsolute:
+        x: 2810.5758782788134
+        y: 886.5
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -2943.6819549522693
+      y: -764.8934491411842
+      zoom: 1.1833903415116684
