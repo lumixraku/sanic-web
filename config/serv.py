@@ -1,6 +1,6 @@
 # server
 host = "0.0.0.0"
-workers = 4
+workers = 2
 port = 8088
 
 # Redis Config

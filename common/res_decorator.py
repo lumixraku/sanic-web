@@ -49,7 +49,8 @@ def async_json_resp(func):
         path = request.path
         params = request.args
         content_type = request.content_type
-        if "multipart/form-data" not in content_type:
+        content_types = ["application/json"]
+        if content_type in content_types:
             json_body = request.json if request.json else {}
         else:
             json_body = ""

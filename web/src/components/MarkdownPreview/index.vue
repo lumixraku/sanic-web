@@ -174,6 +174,7 @@ const readTextStream = async () => {
 
                 break
             }
+
             //每条消息换行显示
             textBuffer.value += stream.content + '\n'
 
@@ -610,10 +611,11 @@ const onChartCompletedReader = function () {
     margin-right: 10%;
     background-color: #ffffff;
     // background: linear-gradient(to right, #f0effe, #d4eefc);
-    padding: 2px 18px;
+    padding: 4px 18px;
     font-family: 'PMingLiU';
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
+    color: #26244c;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
         'Helvetica Neue', Arial, sans-serif;
     h1 {
@@ -743,5 +745,8 @@ const onChartCompletedReader = function () {
         border-color: #635eed;
         color: #635eed;
     }
+    // think {
+    //     color: #635eed;
+    // }
 }
 </style>

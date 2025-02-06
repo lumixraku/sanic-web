@@ -181,6 +181,31 @@ CREATE TABLE `t_user_qa_record` (
   UNIQUE KEY `t_user_qa_record_UN` (`user_id`,`chat_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=292 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='问答记录表';
 
+DROP TABLE IF EXISTS  t_demand_doc_meta;
+CREATE TABLE `t_demand_doc_meta` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL COMMENT '用户id',
+  `demand_id` int DEFAULT NULL COMMENT '项目id',
+  `page_title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '文档段落标题名称',
+  `page_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '文档段落内容',
+  `create_time` timestamp NULL DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='需求文档元信息';
+
+-- chat_db.t_demand_manager definition
+DROP TABLE IF EXISTS  t_demand_manager;
+CREATE TABLE `t_demand_manager` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL COMMENT '用户id',
+  `doc_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目名称',
+  `doc_desc` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '项目简介',
+  `file_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件minio key',
+  `fun_num` int DEFAULT '0' COMMENT '功能数',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='测试助手-需求文档管理';
 
 -- chat_db.t_report_info definition
 drop table if exists t_report_info;

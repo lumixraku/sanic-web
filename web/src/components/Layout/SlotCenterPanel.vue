@@ -14,6 +14,22 @@ const logout = () => {
         router.push('/login')
     }, 500)
 }
+const handleClickEfficiency = (index) => {
+    router.push('/testAssitant')
+}
+
+const handleClickChat = (index) => {
+    router.push('/chat')
+}
+
+// 使用ref定义响应式的selectedIndex
+const selectedIndex = ref(0)
+onMounted(() => {
+    // 初始化selectedIndex为0
+    router.currentRoute.value.path === '/testAssitant'
+        ? (selectedIndex.value = 2)
+        : (selectedIndex.value = 1)
+})
 </script>
 
 <template>
@@ -34,14 +50,14 @@ const logout = () => {
                     <section
                         v-if="$slots.left"
                         flex="~ col"
-                        w-60
+                        w-70
                         h-full
                         overflow-hidden
                         style="
                             background: linear-gradient(
                                 to bottom,
-                                #5e58e7,
-                                white
+                                #8874f1,
+                                #588af9
                             );
                             position: relative;
                         "
@@ -49,11 +65,11 @@ const logout = () => {
                         <!-- 最侧边图标设置 -->
                         <div class="first-container">
                             <n-icon
-                                size="35"
+                                size="40"
                                 style="
-                                    margin: 10%;
+                                    margin: 15%;
                                     margin-top: 15px;
-                                    margin-bottom: 10px;
+                                    margin-bottom: 5px;
                                 "
                             >
                                 <svg
@@ -95,8 +111,10 @@ const logout = () => {
 
                         <div class="chat-container">
                             <div
-                                class="icon-button selected"
+                                class="icon-button"
+                                :class="{ selected: selectedIndex === 1 }"
                                 style="margin-bottom: 10px"
+                                @click="handleClickChat(1)"
                             >
                                 <n-icon size="20" class="icon">
                                     <svg
@@ -134,7 +152,9 @@ const logout = () => {
                         <div class="efficiency-container">
                             <div
                                 class="icon-button"
+                                :class="{ selected: selectedIndex === 2 }"
                                 style="margin-bottom: 10px"
+                                @click="handleClickEfficiency(2)"
                             >
                                 <n-icon size="25" class="icon">
                                     <svg
@@ -213,8 +233,8 @@ const logout = () => {
                                     size="35"
                                     style="
                                         position: absolute;
-                                        bottom: 15px;
-                                        margin: 15%;
+                                        bottom: 10px;
+                                        margin: 20%;
                                     "
                                 >
                                     <svg
@@ -348,16 +368,6 @@ const logout = () => {
                                 </n-button>
                             </template>
                         </n-tooltip>
-                    </section>
-                    <!-- <n-divider vertical style="height: 100%" /> -->
-                    <section
-                        v-if="$slots.left"
-                        flex="~ col"
-                        w-220
-                        h-full
-                        overflow-hidden
-                    >
-                        <slot name="left"></slot>
                     </section>
                     <section flex="1" h-full overflow-hidden>
                         <slot name="default"></slot>

@@ -1,6 +1,6 @@
-import { mockEventStreamText } from '@/data'
-import { currentHost } from '@/utils/location'
-import request from '@/utils/request'
+// import { mockEventStreamText } from '@/data'
+// import { currentHost } from '@/utils/location'
+// import request from '@/utils/request'
 
 /**
  * Event Stream 调用大模型接口 Ollama3 (Fetch 调用)
@@ -154,6 +154,100 @@ export async function dify_suggested(chat_id) {
         },
         body: JSON.stringify({
             chat_id
+        })
+    })
+    return fetch(req)
+}
+
+/**
+ * word 转 md
+ * @param file_key
+ * @returns
+ */
+export async function word_to_md(file_key) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/ta/word_to_md`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            file_key
+        })
+    })
+    return fetch(req)
+}
+
+/**
+ * 查询项目列表
+ * @param page
+ * @param limit
+ * @returns
+ */
+export async function query_demand_records(page, limit) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/ta/query_demand_records`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            page,
+            limit
+        })
+    })
+    return fetch(req)
+}
+
+/**
+ * 保存项目信息
+ * @param project_data b
+ * @returns
+ */
+export async function insert_demand_manager(project_data) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/ta/insert_demand_manager`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            project_data
+        })
+    })
+    return fetch(req)
+}
+
+/**
+ * 删除项目信息
+ * @param id
+ * @returns
+ */
+export async function delete_demand_records(id) {
+    const userStore = useUserStore()
+    const token = userStore.getUserToken()
+    const url = new URL(`${location.origin}/sanic/ta/delete_demand_records`)
+    const req = new Request(url, {
+        mode: 'cors',
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}` // 添加 token 到头部
+        },
+        body: JSON.stringify({
+            id
         })
     })
     return fetch(req)

@@ -1,5 +1,4 @@
 import childRoutes from '@/router/child-routes'
-import Login from '../views/Login.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -19,7 +18,13 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/login',
         name: 'Login',
-        component: Login
+        component: () => import('@/views/Login.vue')
+    },
+    {
+        path: '/testAssitant',
+        name: 'TestAssitant',
+        component: () => import('@/views/DemandManager.vue'),
+        meta: { requiresAuth: true } // 标记需要认证
     }
 ]
 
