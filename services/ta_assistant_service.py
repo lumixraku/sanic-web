@@ -1,7 +1,9 @@
+import asyncio
 import base64
 import json
 import logging
 import os
+import re
 import traceback
 from datetime import datetime
 from io import BytesIO
@@ -116,7 +118,7 @@ async def extract_toc_to_markdown(user_id, file_key):
 mysql_client = MysqlUtil()
 
 
-async def insert_demand_manager_to_db(user_id, doc_name, doc_desc, file_key) -> bool:
+async def insert_demand_manager_to_db(user_id, doc_name, doc_desc, file_key) -> int:
     """
     将Markdown内容插入到数据库表t_test_assistant中。
     :param user_id
@@ -134,7 +136,7 @@ async def insert_demand_manager_to_db(user_id, doc_name, doc_desc, file_key) -> 
         # 保存文档元信息
         await insert_demand_doc_meta(user_id, record_id, file_key)
 
-        return True
+        return record_id
     except Exception as e:
         traceback.print_exception(e)
         logger.error(f"保存测试助手记录失败: {e}")
@@ -216,3 +218,117 @@ async def delete_demand_records(record_id):
 
     delete_sql = f"DELETE FROM t_demand_doc_meta WHERE demand_id={record_id}"
     mysql_client.execute_mysql(delete_sql)
+
+
+import traceback
+from concurrent.futures import ThreadPoolExecutor
+
+executor = ThreadPoolExecutor()
+
+
+async def abstract_doc_func(response, doc_id):
+    """
+    抽取功能点信息
+    :param response
+    :param doc_id
+    :return:
+    """
+    try:
+        logging.info(f"query param: {doc_id}")
+
+        sql = f"select * from t_demand_doc_meta where demand_id='{doc_id}'"
+        meta_dict = mysql_client.query_mysql_dict(sql)
+        # 使用meta_dict的长度作为总步骤数
+        total_steps = len(meta_dict)
+
+        for step, item in enumerate(meta_dict):  # 假设meta_dict是一个列表，如果它是字典，请根据实际情况调整遍历方式
+            await response.write(f'data: {{"type": "progress", "progress": {(step+1)*10}, "total": {total_steps}}}\n\n')
+            # await response.write(f'data: {{"type": "log", "message": "处理中... 步骤 {step} / {total_steps}"}}\n\n')
+            await response.write(f'data: {{"type": "log", "message": "{item["page_title"]}"}}\n\n')
+
+            # 使用 run_in_executor 在单独的线程中运行 extract_function
+            loop = asyncio.get_running_loop()
+            answer = await loop.run_in_executor(executor, extract_function, item["page_content"])
+            think_content = re.search(r"<think>(.*?)</think>", answer, re.DOTALL).group(1)
+            remaining_content = re.sub(r"<think>.*?</think>", "", answer, flags=re.DOTALL).strip()
+            await response.write(
+                "data:"
+                + json.dumps(
+                    {"type": "log", "message": "思考过程:" + think_content},
+                    ensure_ascii=False,
+                )
+                + "\n\n"
+            )
+
+            await response.write(
+                "data:"
+                + json.dumps(
+                    {"type": "log", "message": "功能点:" + remaining_content},
+                    ensure_ascii=False,
+                )
+                + "\n\n"
+            )
+
+        # 完成后发送完成标志
+        await response.write('data: {"type": "complete"}\n\n')
+        await response.write("\n\n")
+    except Exception as e:
+        logging.error(f"Error Invoke diFy: {e}")
+        traceback.print_exception(e)
+
+
+result_format = """["功能点1","功能点2"]"""
+
+
+def build_prompt(doc_content) -> str:
+    """
+    构建提示词
+     # system: 你是一个测试专家精通从需求文档内容中抽取具体功能点
+    :return:
+    """
+    prompt_content = f"""
+    # 任务: 从需求文档内容中抽取具体功能点
+    -----------
+    # 需求文档内容: {doc_content}
+    -----------
+
+    # 约束:
+    - 严格依据需求文档内容回答不要虚构
+    - 每个功能点信息字数限制在30字以内
+    - 根据需求文档内容尽量列举出所有功能点信息
+     确保只以JSON格式回答，具体格式如下:{result_format}
+    """
+    return prompt_content
+
+
+def extract_function(doc_content):
+    """
+
+    :return:
+    """
+    # Ollama 服务器地址
+    url = "http://127.0.0.1:11434/api/generate"
+
+    # 构建请求体
+    payload = {
+        "prompt": build_prompt(doc_content),
+        "model": "deepseek-r1:7b",
+        "stream": False,
+        "think_output": False,
+        "max_tokens": 40960,
+        "temperature": 0,
+        "top_k": 1,
+        "top_p": 0.9,
+        "repeat_penalty": 1.1,
+    }
+
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(url, data=json.dumps(payload), headers=headers)
+
+    if response.status_code == 200:
+        # 解析响应中的结果
+        result = response.text
+        return json.loads(result)["response"]
+    else:
+        logger.error(f"Error: {response.status_code}")
