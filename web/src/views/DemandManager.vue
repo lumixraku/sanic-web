@@ -43,7 +43,7 @@
                             <n-dropdown
                                 trigger="click"
                                 :options="dropdownOptions"
-                                @select="(key) => handleSelect(key, index)"
+                                @select="(key) => handleSelect(key, item.id)"
                             >
                                 <button class="card-button">...</button>
                             </n-dropdown>
@@ -94,6 +94,31 @@
                 <n-button @click="closeModal">取消</n-button>
             </template>
         </n-modal>
+
+        <n-modal
+            v-model:show="showAbModal"
+            :closable="false"
+            preset="dialog"
+            title="抽取功能"
+            :mask-closable="false"
+            style="width: 800px"
+        >
+            <div v-if="progress !== null">
+                <n-progress type="line" :percentage="progress"></n-progress>
+            </div>
+            <div v-else>正在准备...</div>
+
+            <!-- 实时显示推送的内容 -->
+            <div class="real-time-content" ref="realTimeContent">
+                <p v-for="(message, index) in messages" :key="index">
+                    {{ message }}
+                </p>
+                <div
+                    class="i-svg-spinners:pulse-2 c-#fff"
+                    style="width: 24px; height: 24px"
+                ></div>
+            </div>
+        </n-modal>
     </LayoutCenterPanel>
 </template>
 
@@ -104,6 +129,7 @@ import * as GlobalAPI from '@/api'
 
 const loading = ref(true)
 
+//文件上传
 const uploadDocRef = ref()
 const finish_upload = (res) => {
     if (res.event.target.responseText) {
@@ -121,6 +147,63 @@ const finish_upload = (res) => {
     }
 }
 
+//抽取信息
+const showAbModal = ref(false)
+const progress = ref(null)
+const messages = ref([])
+const realTimeContent = ref(null) // 引用容器元素
+
+function startExtraction(itemId) {
+    showAbModal.value = true
+    progress.value = 0 // 初始化进度为0
+    const eventSource = new EventSource(
+        `${location.origin}/sanic/ta/abstract_doc_func/${itemId}`
+    )
+
+    eventSource.onmessage = function (event) {
+        console.log(event)
+        const data = JSON.parse(event.data)
+        if (data.type === 'progress') {
+            // 更新进度条
+            progress.value = data.progress
+            messages.value.push(`进度: ${data.progress}%`)
+        } else if (data.type === 'log') {
+            // 显示日志信息
+            messages.value.push(data.message)
+        } else if (data.type === 'complete') {
+            // 关闭模态框
+            messages.value.push('任务完成')
+            eventSource.close()
+            setTimeout(() => {
+                showAbModal.value = false
+                messages.value = []
+            }, 1000)
+        }
+        scrollToBottom() // 每次收到消息后滚动到底部
+    }
+
+    eventSource.onerror = function (error) {
+        console.error('EventSource failed:', error)
+        messages.value = []
+        messages.value.push('发生错误，请稍后再试')
+        eventSource.close()
+        showAbModal.value = false
+    }
+}
+
+// 滚动到底部的函数
+function scrollToBottom() {
+    if (realTimeContent.value) {
+        realTimeContent.value.scrollTop = realTimeContent.value.scrollHeight
+    }
+}
+
+onMounted(() => {
+    // 页面加载时也可以调用一次滚动到底部
+    scrollToBottom()
+})
+
+//Form表单
 const showModal = ref(false)
 const items = ref([])
 
@@ -152,6 +235,10 @@ const closeModal = () => {
 
 const dropdownOptions = [
     {
+        label: '抽取',
+        key: 'abstract'
+    },
+    {
         label: '编辑',
         key: 'edit'
     },
@@ -159,20 +246,22 @@ const dropdownOptions = [
         label: '删除',
         key: 'delete'
     }
-    // 可以根据需要添加更多选项
 ]
 
 const handleSelect = async (key, index) => {
     switch (key) {
+        //抽取功能
+        case 'abstract':
+            console.log(`Editing item at index ${index}`)
+            startExtraction(index)
+            break
         case 'edit':
             console.log(`Editing item at index ${index}`)
             // 编辑项目的逻辑
             break
         case 'delete':
-            // if (confirm('确定要删除此项目吗？')) {
-            GlobalAPI.delete_demand_records(items.value[index].id)
+            GlobalAPI.delete_demand_records(`${index}`)
             await query_demand_records()
-            // }
             break
         default:
             console.log(`Selected option not handled: ${key}`)
@@ -285,5 +374,17 @@ form-item-inline {
 .form-item-inline .n-form-item__label {
     width: 120px; /* 设置标签宽度 */
     margin-right: 15px; /* 设置标签与输入框之间的间距 */
+}
+
+.real-time-content {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    border-top: 0px solid #ccc;
+    padding-top: 10px;
+    background-color: black; /* 黑色背景 */
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif;
 }
 </style>

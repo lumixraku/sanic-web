@@ -4,7 +4,7 @@
 
 一个轻量级、支持全链路且易于二次开发的大模型应用项目 
 
-支持**DeepSeek/Qwen2等大模模型**
+已适配**DeepSeek/Qwen2.5等大模型**
 
 基于 Dify 、Ollama&Vllm、Sanic 和 Text2SQL 📊 等技术构建的一站式大模型应用开发项目，采用 Vue3、TypeScript 和 Vite 5 打造现代UI。它支持通过 ECharts 📈 实现基于大模型的数据图形化问答，具备处理 CSV 文件 📂 表格问答的能力。同时，能方便对接第三方开源 RAG 系统 检索系统 🌐等，以支持广泛的通用知识问答。
 
