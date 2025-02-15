@@ -5,15 +5,15 @@ import markdownItHighlight from 'markdown-it-highlightjs'
 import { preWrapperPlugin } from './preWrapper'
 
 const md = new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true
+    html: true,
+    linkify: true,
+    typographer: true
 })
 
 md.use(markdownItHighlight, {
-  hljs
+    hljs
 }).use(preWrapperPlugin, {
-  hasSingleTheme: true
+    hasSingleTheme: true
 })
 
 export default md
