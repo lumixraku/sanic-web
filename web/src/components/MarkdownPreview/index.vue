@@ -176,7 +176,7 @@ const readTextStream = async () => {
             }
 
             //每条消息换行显示
-            textBuffer.value += stream.content + '\n'
+            textBuffer.value += stream.content
 
             if (typingAnimationFrame === null) {
                 showText()
