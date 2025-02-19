@@ -124,7 +124,7 @@
 ## 🛠️ **本地开发**
 - 第一步克隆代码到本地
 - 第二步参考上面**大模型部署**先安装Ollama部署Qwen2.5模型和DeepSeek R1模型
-  - 第三步本地开发环境Dify配置，参考上面**Dify环境配置里 获取Dify画布的api-key ** **同时修改.env.dev文件里面的DIFY_DATABASE_QA_API_KEY**
+- 第三步本地开发环境Dify配置，参考上面 **Dify环境配置里 获取Dify画布的api-key 同时修改.env.dev文件里面的DIFY_DATABASE_QA_API_KEY**
 - 第四步本地开发环境Minio配置,修改env.dev文件里面的Minio相关密钥信息
 - 第五步安装前后端项目依赖并启动前后端服务具体步骤如下:
 
