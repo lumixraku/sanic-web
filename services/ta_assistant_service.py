@@ -237,14 +237,33 @@ async def abstract_doc_func(response, doc_id):
         meta_dict = mysql_client.query_mysql_dict(sql)
         total_steps = len(meta_dict)
 
-        for step, item in enumerate(meta_dict):
-            await response.write(f'data: {{"type": "progress", "progress": {step*10}, "total": {total_steps}}}\n\n')
-            await response.write(f'data: {{"type": "log", "message": "{"#### 模块: "+item["page_title"]}"}}\n\n')
+        # 确定每个步骤应该增加的百分比
+        step_percentage = 10 if total_steps <= 10 else (100 / total_steps)
 
-            # 使用 run_in_executor 在单独的线程中运行 extract_function 避免阻塞主线程
+        function_array = []
+        for step, item in enumerate(meta_dict):
+            # 计算当前进度，如果是最后一步，则直接设为100%
+            current_progress = min(100, int((step + 1) * step_percentage))
+            await response.write(f'data: {{"type": "progress", "progress": {current_progress}, "total": 100}}\n\n')
+            await response.write(f'data: {{"type": "log", "message": "{"#### 模块: " + item["page_title"]}"}}\n\n')
+
+            # 这里避免阻塞主线程
             loop = asyncio.get_running_loop()
             answer = await loop.run_in_executor(executor, extract_function, item["page_content"])
-            for index, func in enumerate(json.loads(answer)):
+
+            case_info = {
+                "demand_id": item["demand_id"],
+                "section_id": item["id"],
+                "section_name": item["page_title"],
+                "fun_names": [],
+            }
+
+            logger.info(answer)
+            answer_arr = json.loads(answer.strip("```json\n").strip("\n```"))
+            case_info["fun_names"].extend(answer_arr)
+            function_array.append(case_info)
+
+            for index, func in enumerate(answer_arr):
                 await response.write(
                     "data:"
                     + json.dumps(
@@ -265,6 +284,8 @@ async def abstract_doc_func(response, doc_id):
         # 完成后发送完成标志
         await response.write('data: {"type": "complete"}\n\n')
         await response.write("\n\n")
+
+        logger.info(function_array)
     except Exception as e:
         logging.error(f"Error Invoke diFy: {e}")
         traceback.print_exception(e)
@@ -290,7 +311,9 @@ def build_prompt(doc_content) -> str:
     - 严格依据需求文档内容回答不要虚构
     - 每个功能点信息字数限制在30字以内
     - 根据需求文档内容尽量列举出所有功能点信息
-    确保只以JSON格式回答，具体格式如下:{result_format}
+    # 返回格式
+    请一步步思考并按照以下JSON格式回复：{result_format}
+    确保返回正确的json并且可以被Python json.loads方法解析.
     """
     return prompt_content
 
@@ -309,7 +332,7 @@ def extract_function(doc_content):
         "model": "qwen2.5",
         "stream": False,
         "think_output": False,
-        "max_tokens": 40960,
+        "max_tokens": 8192,
         "temperature": 0,
         "top_k": 1,
         "top_p": 0.9,
