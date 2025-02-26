@@ -37,7 +37,7 @@
                                 >功能点: {{ item.fun_num }}</span
                             >
                             <span class="card-date">{{
-                                item.create_time
+                                item.update_time
                             }}</span>
                             <!-- 使用 n-dropdown 组件替换原有的按钮 -->
                             <n-dropdown
@@ -179,6 +179,7 @@ function startExtraction(itemId) {
             setTimeout(() => {
                 showAbModal.value = false
                 messages.value = []
+                query_demand_records()
             }, 1000)
         }
         scrollToBottom() // 每次收到消息后滚动到底部

@@ -196,7 +196,8 @@ class DiFyRequest:
             await self.res_end(res)
 
     async def handle_think_tag(self, answer):
-        """处理<think>标签内的内容
+        """
+        处理<think>标签内的内容
         :param answer
         """
         think_content = re.search(r"<think>(.*?)</think>", answer, re.DOTALL).group(1)
