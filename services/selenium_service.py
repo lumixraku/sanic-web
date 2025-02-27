@@ -74,12 +74,12 @@ def get_webpage_content(url, driver):
         return None
 
 
-async def get_search_results_links(query, num_links=2):
+async def get_search_results_links(query, num_links=1):
     """
-    根据查询获取指定数量的搜索结果链接。
+    根据查询获取指定数量的搜索结果链接，忽略前两个。
     :param query: 搜索关键词。
-    :param num_links: 需要获取的结果链接数量，默认为1。
-    :return: 搜索结果链接列表。
+    :param num_links: 需要获取的结果链接数量，默认为2（此参数现在表示除了前两个之外还需要几个链接）。
+    :return: 从第三个开始的搜索结果链接列表。
     """
     driver = setup_chrome_driver()
     links = []
@@ -93,10 +93,13 @@ async def get_search_results_links(query, num_links=2):
         wait = WebDriverWait(driver, 10)
         search_results = wait.until(EC.presence_of_all_elements_located((By.XPATH, '//li[@class="b_algo"]/h2/a')))
 
-        for i in range(min(num_links, len(search_results))):
+        # 忽略前两个链接，收集剩余的链接
+        for i in range(2, min(2 + num_links, len(search_results))):
             link = search_results[i].get_attribute("href")
             links.append(link)
+
         if links:
+            logging.info(f"""获取的网址信息{links}""")
             return aggregate_webpage_contents(links)
     finally:
         driver.quit()
