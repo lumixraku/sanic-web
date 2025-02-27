@@ -34,10 +34,10 @@
                         </div>
                         <div class="card-footer">
                             <span class="card-info"
-                                >抽取功能: {{ item.fun_num }}</span
+                                >功能点: {{ item.fun_num }}</span
                             >
                             <span class="card-date">{{
-                                item.create_time
+                                item.update_time
                             }}</span>
                             <!-- 使用 n-dropdown 组件替换原有的按钮 -->
                             <n-dropdown
@@ -179,6 +179,7 @@ function startExtraction(itemId) {
             setTimeout(() => {
                 showAbModal.value = false
                 messages.value = []
+                query_demand_records()
             }, 1000)
         }
         scrollToBottom() // 每次收到消息后滚动到底部
@@ -319,7 +320,7 @@ onMounted(() => {
 
 .card {
     width: 250px;
-    margin-top: 40px;
+    margin-top: 10px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     background-color: #ffffff;
