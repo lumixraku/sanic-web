@@ -34,7 +34,7 @@
 在开始之前，请确保您的开发环境满足以下最低配置要求：
 
 - **操作系统**：Windows 10/11, macOs M系列, Centos/Ubuntu
-- **GPU**: 本地使用ollama部署，推荐使用Nvidia显卡或CPU模式。
+- **GPU**: 本地使用ollama部署，推荐使用Nvidia显卡或CPU模式。或公网购买APIKEY形式
 - **内存**：8GB+
 
 ## 🔧 **前置条件**
@@ -50,6 +50,7 @@
 - [参考Ollama部署](https://qwen.readthedocs.io/zh-cn/latest/run_locally/ollama.html)
 - 模型: Qwen2.5 7B 模型
 - 模型: DeepSeek R1 7B 模型
+- [阿里云公网APIKEY形式](http://aliyun.com/product/bailian)
 
 ## ⚙️ **Dify环境配置**
 1. **安装Dify**
@@ -132,7 +133,7 @@
    # 安装依赖根目录执行
    # 设置国内仓库
    poetry source add --priority=primary mirrors https://pypi.tuna.tsinghua.edu.cn/simple/
-   poetry install
+   poetry install --no-root
 
 2. **安装中间件**
    ```bash
@@ -203,10 +204,10 @@
 - **一对一技术支持 我将亲自远程帮您部署和启动、并讲解项目架构以及二开思路等.**
 - **长期技术支持方式 拉你加入群(一线算法、架构大佬群)，为你提供技术指导，项目解决方案等。**
 
-| 技术支持方式                     | 赞助(元)  | 
-|:---------------------------|:------:|
-| 加 QQ：343397495，微信：weber812 | 18.8/次 |
-| 长期技术支持（不限次数，提供技术指导，项目解决方等） |  100   |                  
+| 技术支持方式                     | 赞助(元) | 
+|:---------------------------|:-----:|
+| 加 QQ：343397495，微信：weber812 | 50/次  |
+| 长期技术支持（不限次数，提供技术指导，项目解决方等） |  100  |                  
 
 
 ## QA交流群
