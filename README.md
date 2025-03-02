@@ -105,13 +105,21 @@
 
 4. **数据初始化**
    ```bash
+   
+   # 安装依赖包
+   pip install pymysql
+   
+   # Mac or Linux 用户执行
+   
    cd docker
    ./init.sh
    
-   或执行
+   # Windows 用户执行
    
-   cd docker
-   python3 ../common/initialize_mysql.py
+   cd common
+   python initialize_mysql.py
+   
+   
    
 5. **访问服务**
  - 前端服务：http://localhost:8081
@@ -148,13 +156,14 @@
 4. **初始化数据库**
    - 如果使用本地环境mysql,初始化数据时需修改源码initialize_mysql，修改数据库连接信息即可
    ```bash
+    # Mac or Linux 用户执行
      cd docker
      ./init.sh
       
-     或执行
+    # Windows 用户执行
       
-     cd docker
-     python3 ../common/initialize_mysql.py
+     cd common
+     python initialize_mysql.py
 
 5. **前端依赖安装**  
    - 前端是基于开源项目[可参考chatgpt-vue3-light-mvp安装](https://github.com/pdsuwwz/chatgpt-vue3-light-mvp)二开
