@@ -59,6 +59,9 @@ function newChat() {
     conversationItems.value = []
     stylizingLoading.value = false
     suggested_array.value = []
+
+    // 新增：生成当前问答类型的新uuid
+    uuids.value[qa_type.value] = uuidv4()
 }
 
 /**
@@ -228,7 +231,8 @@ const contentLoadingStates = ref(
 // )
 
 // chat_id定义
-const uuid = ref('')
+const uuids = ref<Record<string, string>>({}) // 改为对象存储不同问答类型的uuid
+
 //提交对话
 const handleCreateStylized = async (send_text = '') => {
     // 滚动到底部
@@ -285,10 +289,14 @@ const handleCreateStylized = async (send_text = '') => {
         : send_text
     inputTextString.value = ''
 
+    if (!uuids.value[qa_type.value]) {
+        uuids.value[qa_type.value] = uuidv4()
+    }
+
     if (textContent) {
         // 存储该轮用户对话消息
         conversationItems.value.push({
-            chat_id: uuid.value,
+            chat_id: uuids.value[qa_type.value],
             qa_type: qa_type.value,
             question: textContent,
             file_key: '',
@@ -300,10 +308,9 @@ const handleCreateStylized = async (send_text = '') => {
         contentLoadingStates.value[currentRenderIndex.value] = true
     }
 
-    uuid.value = uuidv4()
     const { error, reader, needLogin } =
         await businessStore.createAssistantWriterStylized(
-            uuid.value,
+            uuids.value[qa_type.value],
             currentChatId.value,
             {
                 text: textContent,
@@ -330,7 +337,7 @@ const handleCreateStylized = async (send_text = '') => {
         outputTextReader.value = reader
         // 存储该轮AI回复的消息
         conversationItems.value.push({
-            chat_id: uuid.value,
+            chat_id: uuids.value[qa_type.value],
             qa_type: qa_type.value,
             question: textContent,
             file_key: `${businessStore.$state.file_url}`,
@@ -541,6 +548,9 @@ const onAqtiveChange = (val) => {
     qa_type.value = val
     businessStore.update_qa_type(val)
 
+    // 新增：切换类型时生成新uuid
+    uuids.value[val] = uuidv4()
+
     //清空文件上传历史url
     if (val == 'FILEDATA_QA') {
         businessStore.update_file_url('')
@@ -551,7 +561,7 @@ const onAqtiveChange = (val) => {
 const suggested_array = ref([])
 const query_dify_suggested = async () => {
     if (!isInit.value) {
-        const res = await GlobalAPI.dify_suggested(uuid.value)
+        const res = await GlobalAPI.dify_suggested(uuids.value[qa_type.value])
         const json = await res.json()
         if (json?.data?.data !== undefined) {
             suggested_array.value = json.data.data
