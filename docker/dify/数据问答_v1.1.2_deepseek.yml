@@ -3,7 +3,7 @@ app:
   icon: 🤖
   icon_background: '#FFEAD5'
   mode: advanced-chat
-  name: 数据问答-deepseek
+  name: 数据问答_v1.1.2_deepseek
   use_icon_as_answer_icon: false
 dependencies:
 - current_identifier: null
@@ -461,12 +461,23 @@ workflow:
       zIndex: 0
     - data:
         isInIteration: false
+        sourceType: if-else
+        targetType: llm
+      id: 1732517672259-true-1740559499175-target
+      source: '1732517672259'
+      sourceHandle: 'true'
+      target: '1740559499175'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
         sourceType: llm
         targetType: code
-      id: 1740559499175-source-1740560541072-target
+      id: 1740559499175-source-1742191522192-target
       source: '1740559499175'
       sourceHandle: source
-      target: '1740560541072'
+      target: '1742191522192'
       targetHandle: target
       type: custom
       zIndex: 0
@@ -474,21 +485,10 @@ workflow:
         isInIteration: false
         sourceType: code
         targetType: answer
-      id: 1740560541072-source-1740381923341-target
-      source: '1740560541072'
+      id: 1742191522192-source-1740381923341-target
+      source: '1742191522192'
       sourceHandle: source
       target: '1740381923341'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
-        sourceType: if-else
-        targetType: llm
-      id: 1732517672259-true-1740559499175-target
-      source: '1732517672259'
-      sourceHandle: 'true'
-      target: '1740559499175'
       targetHandle: target
       type: custom
       zIndex: 0
@@ -634,7 +634,7 @@ workflow:
         title: 直接回复
         type: answer
         variables: []
-      height: 141
+      height: 142
       id: '1721978416917'
       position:
         x: 1550
@@ -833,7 +833,7 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/llm/process_llm_out
         variables: []
-      height: 164
+      height: 163
       id: '1724295046398'
       position:
         x: 2158
@@ -922,7 +922,7 @@ workflow:
         title: 返回失败
         type: answer
         variables: []
-      height: 141
+      height: 142
       id: '1724295640306'
       position:
         x: 3070
@@ -1016,7 +1016,7 @@ workflow:
         title: 响应结果集
         type: answer
         variables: []
-      height: 198
+      height: 197
       id: '1724296111387'
       position:
         x: 3678
@@ -1055,7 +1055,7 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/llm/query_guided_report
         variables: []
-      height: 136
+      height: 135
       id: '1730887499318'
       position:
         x: 1854
@@ -1142,7 +1142,7 @@ workflow:
         title: 返回结果
         type: answer
         variables: []
-      height: 141
+      height: 142
       id: '1730887662105'
       position:
         x: 2766
@@ -1242,7 +1242,7 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/file/read_file
         variables: []
-      height: 136
+      height: 135
       id: '1732520123593'
       position:
         x: 2462
@@ -1351,7 +1351,7 @@ workflow:
         title: 文件内容总结
         type: answer
         variables: []
-      height: 141
+      height: 142
       id: '1732520428762'
       position:
         x: 3678
@@ -1489,7 +1489,7 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/file/read_file_column
         variables: []
-      height: 136
+      height: 135
       id: '17355251156380'
       position:
         x: 2462
@@ -1619,7 +1619,7 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/file/process_file_llm_out
         variables: []
-      height: 154
+      height: 138
       id: '17355298585890'
       position:
         x: 3374
@@ -1705,7 +1705,7 @@ workflow:
         title: 直接回复
         type: answer
         variables: []
-      height: 141
+      height: 142
       id: '1735530121003'
       position:
         x: 4286
@@ -1727,7 +1727,7 @@ workflow:
         title: 直接回复
         type: answer
         variables: []
-      height: 198
+      height: 197
       id: '1735530155560'
       position:
         x: 4894
@@ -1815,13 +1815,13 @@ workflow:
       type: custom
       width: 244
     - data:
-        answer: '{{#1721978276391.dify_0_t02#}}{{#1740560541072.llm_out#}}{{#1721978276391.dify_1_t02#}}'
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1742191522192.llm_out#}}{{#1721978276391.dify_1_t02#}}'
         desc: ''
         selected: false
         title: 返回问答结果
         type: answer
         variables: []
-      height: 141
+      height: 142
       id: '1740381923341'
       position:
         x: 2462
@@ -1839,6 +1839,14 @@ workflow:
           enabled: false
           variable_selector: []
         desc: ''
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: true
+            size: 100
         model:
           completion_params:
             temperature: 0.4
@@ -1854,8 +1862,8 @@ workflow:
           text: '# 用户问题: {{#sys.query#}}
 
             # 任务: 分析用户问题进行回复'
-        selected: true
-        title: 总结提出内容
+        selected: false
+        title: 通用问答
         type: llm
         variables: []
         vision:
@@ -1874,8 +1882,8 @@ workflow:
       type: custom
       width: 244
     - data:
-        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"llm_out\"\
-          : llm_out\n    }\n"
+        code: "def main(llm_out:str) -> dict:\n    return {\n        \"llm_out\":\
+          \ llm_out\n    }\n"
         code_language: python3
         desc: ''
         outputs:
@@ -1883,7 +1891,7 @@ workflow:
             children: null
             type: string
         selected: false
-        title: 获取大模型内容
+        title: 获取结果
         type: code
         variables:
         - value_selector:
@@ -1891,7 +1899,7 @@ workflow:
           - text
           variable: llm_out
       height: 54
-      id: '1740560541072'
+      id: '1742191522192'
       position:
         x: 2158
         y: 1304.5
@@ -1904,6 +1912,6 @@ workflow:
       type: custom
       width: 244
     viewport:
-      x: -744
-      y: -403
+      x: -1312
+      y: -310.9999999999999
       zoom: 0.7

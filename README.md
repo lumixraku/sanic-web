@@ -64,7 +64,7 @@
    
 2. **Dify配置**
    - 添加Dify大模型提供商Ollama,配置Qwen2.5模型和DeepSeek R1模型
-   - 导入项目根目录下的**docker/dify/数据问答_v1.1.1_deepseek.yml画布** 
+   - 导入项目根目录下的**docker/dify/数据问答_v1.1.2_deepseek.yml画布** 
    - 获取画布对应的api-key先复制出来下面步骤会使用
    - 导入画布后需要手动选择一下你本地配置的大模型并保存
 
