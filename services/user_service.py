@@ -88,6 +88,15 @@ async def get_user_info(request) -> dict:
 
 async def add_question_record(user_token, conversation_id, message_id, task_id, chat_id, question, t02_answer, t04_answer, qa_type):
     """
+    @param user_token: 用户token
+    @param conversation_id: dify会话ID
+    @param message_id: 消息ID
+    @param task_id: 任务ID
+    @param chat_id: 聊天ID
+    @param question: 问题
+    @param t02_answer: 回答
+    @param t04_answer: 回答
+    @param qa_type: 问答类型
     记录用户问答记录，如果记录已存在，则更新之；否则，创建新记录。
     """
     try:
@@ -101,11 +110,13 @@ async def add_question_record(user_token, conversation_id, message_id, task_id, 
             file_key = question.split("|")[0]
             question = question.split("|")[1]
 
-        sql = f"select * from t_user_qa_record where user_id={user_id} and chat_id='{chat_id}'"
+        sql = f"select * from t_user_qa_record where user_id={user_id} and chat_id='{chat_id}' and message_id='{message_id}'"
         log_dict = mysql_client.query_mysql_dict(sql)
+
+        # 根据 message_id 判断是否是同一个问题
         if len(log_dict) > 0:
             sql = f"""update t_user_qa_record set to4_answer='{json.dumps(t04_answer, ensure_ascii=False)}' 
-                    where user_id={user_id} and chat_id='{chat_id}'"""
+                    where user_id={user_id} and chat_id='{chat_id}' and message_id='{message_id}'"""
             mysql_client.update(sql)
         else:
             insert_params = [

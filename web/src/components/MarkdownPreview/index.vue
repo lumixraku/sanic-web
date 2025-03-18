@@ -611,7 +611,7 @@ const onChartCompletedReader = function () {
     margin-right: 10%;
     background-color: #ffffff;
     // background: linear-gradient(to right, #f0effe, #d4eefc);
-    padding: 4px 18px;
+    padding: 1px 18px;
     font-family: 'PMingLiU';
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;

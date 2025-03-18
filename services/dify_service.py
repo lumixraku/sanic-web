@@ -74,7 +74,7 @@ class DiFyRequest:
             app_key = self._get_authorization_token(qa_type)
 
             # 构建请求参数
-            dify_service_url, body_params, headers = self._build_request(cleaned_query, app_key, qa_type)
+            dify_service_url, body_params, headers = self._build_request(chat_id, cleaned_query, app_key, qa_type)
 
             async with aiohttp.ClientSession(read_bufsize=1024 * 16) as session:
                 async with session.post(
@@ -283,18 +283,28 @@ class DiFyRequest:
         )
 
     @staticmethod
-    def _build_request(query, app_key, qa_type):
+    def _build_request(chat_id, query, app_key, qa_type):
         """
         构建请求参数
-        :param app_key:
+        :param chat_id: 对话id
+        :param app_key: api key
         :param query: 用户问题
         :param qa_type: 问答类型
         :return:
         """
+
+        # 通用问答时，使用上次会话id 实现多轮对话效果
+        conversation_id = ""
+        if qa_type == DiFyAppEnum.COMMON_QA.value[0]:
+            qa_record = query_user_qa_record(chat_id)
+            if qa_record and len(qa_record) > 0:
+                conversation_id = qa_record[0]["conversation_id"]
+
         body_params = {
             "query": query,
             "inputs": {"qa_type": qa_type},
             "response_mode": "streaming",
+            "conversation_id": conversation_id,
             "user": "abc-123",
         }
         headers = {

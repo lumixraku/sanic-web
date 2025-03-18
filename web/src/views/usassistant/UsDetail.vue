@@ -5,7 +5,7 @@
                 <div class="size-26 i-hugeicons:ai-chat-02" />
                 <div class="header-content">测试用例生成工具</div>
             </n-layout-header>
-            <n-layout-content>
+            <n-layout-content style="height: calc(100% - 55px); flex: 1">
                 <n-layout class="sub-layout">
                     <n-layout-header class="sub-header">
                         <n-button
@@ -44,7 +44,9 @@
                             </template>
                         </n-button>
                     </n-layout-header>
-                    <n-layout-content>
+                    <n-layout-content
+                        style="height: calc(100% - 55px); flex: 1"
+                    >
                         <n-split
                             direction="horizontal"
                             style="height: 100%"
@@ -53,7 +55,11 @@
                             max="500px"
                         >
                             <template #1>
-                                <n-space vertical :size="12">
+                                <n-space
+                                    vertical
+                                    :size="12"
+                                    style="height: 100%; flex: 1"
+                                >
                                     <n-space
                                         style="justify-content: space-between"
                                     >
@@ -62,7 +68,7 @@
                                             icon-placement="right"
                                             strong
                                             style="
-                                                width: 30px;
+                                                width: 100px;
                                                 height: 38px;
                                                 margin-top: 8px;
                                                 align-self: center;
@@ -75,7 +81,7 @@
                                             icon-placement="right"
                                             strong
                                             style="
-                                                width: 35px;
+                                                width: 100px;
                                                 height: 38px;
                                                 margin-top: 8px;
                                                 align-self: center;
@@ -87,8 +93,10 @@
                                         class="custom-table"
                                         style="
                                             font-size: 14px;
-                                            height: 500px;
+                                            height: 100%;
+                                            flex: 1;
                                             --n-td-color-hover: #d5dcff;
+                                            --n-body-overflow-y: auto;
                                             font-family: -apple-system,
                                                 BlinkMacSystemFont, 'Segoe UI',
                                                 Roboto, 'Helvetica Neue', Arial,

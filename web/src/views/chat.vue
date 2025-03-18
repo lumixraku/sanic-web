@@ -59,6 +59,9 @@ function newChat() {
     conversationItems.value = []
     stylizingLoading.value = false
     suggested_array.value = []
+
+    // 新增：生成当前问答类型的新uuid
+    uuids.value[qa_type.value] = uuidv4()
 }
 
 /**
@@ -228,7 +231,8 @@ const contentLoadingStates = ref(
 // )
 
 // chat_id定义
-const uuid = ref('')
+const uuids = ref<Record<string, string>>({}) // 改为对象存储不同问答类型的uuid
+
 //提交对话
 const handleCreateStylized = async (send_text = '') => {
     // 滚动到底部
@@ -285,10 +289,14 @@ const handleCreateStylized = async (send_text = '') => {
         : send_text
     inputTextString.value = ''
 
+    if (!uuids.value[qa_type.value]) {
+        uuids.value[qa_type.value] = uuidv4()
+    }
+
     if (textContent) {
         // 存储该轮用户对话消息
         conversationItems.value.push({
-            chat_id: uuid.value,
+            chat_id: uuids.value[qa_type.value],
             qa_type: qa_type.value,
             question: textContent,
             file_key: '',
@@ -300,10 +308,9 @@ const handleCreateStylized = async (send_text = '') => {
         contentLoadingStates.value[currentRenderIndex.value] = true
     }
 
-    uuid.value = uuidv4()
     const { error, reader, needLogin } =
         await businessStore.createAssistantWriterStylized(
-            uuid.value,
+            uuids.value[qa_type.value],
             currentChatId.value,
             {
                 text: textContent,
@@ -330,7 +337,7 @@ const handleCreateStylized = async (send_text = '') => {
         outputTextReader.value = reader
         // 存储该轮AI回复的消息
         conversationItems.value.push({
-            chat_id: uuid.value,
+            chat_id: uuids.value[qa_type.value],
             qa_type: qa_type.value,
             question: textContent,
             file_key: `${businessStore.$state.file_url}`,
@@ -541,6 +548,9 @@ const onAqtiveChange = (val) => {
     qa_type.value = val
     businessStore.update_qa_type(val)
 
+    // 新增：切换类型时生成新uuid
+    uuids.value[val] = uuidv4()
+
     //清空文件上传历史url
     if (val == 'FILEDATA_QA') {
         businessStore.update_file_url('')
@@ -551,7 +561,7 @@ const onAqtiveChange = (val) => {
 const suggested_array = ref([])
 const query_dify_suggested = async () => {
     if (!isInit.value) {
-        const res = await GlobalAPI.dify_suggested(uuid.value)
+        const res = await GlobalAPI.dify_suggested(uuids.value[qa_type.value])
         const json = await res.json()
         if (json?.data?.data !== undefined) {
             suggested_array.value = json.data.data
@@ -1133,41 +1143,26 @@ const hideScrollbar = () => {
                                     "
                                 >
                                     <template #icon>
-                                        <n-icon>
+                                        <n-icon size="14">
                                             <svg
-                                                t="1732513350517"
+                                                t="1742194713465"
                                                 class="icon"
                                                 viewBox="0 0 1024 1024"
                                                 version="1.1"
                                                 xmlns="http://www.w3.org/2000/svg"
-                                                p-id="29434"
-                                                width="64"
-                                                height="64"
+                                                p-id="8188"
+                                                width="60"
+                                                height="60"
                                             >
                                                 <path
-                                                    d="M428.6 2C193.5 2 2.2 193.3 2.2 428.4s191.3 426.4 426.4 426.4S855 663.5 855 428.4 663.8 2 428.6 2z m0 823.4c-218.9 0-397-178.1-397-397s178.1-397 397-397 397 178.1 397 397-178 397-397 397z"
-                                                    fill="#333234"
-                                                    p-id="29435"
-                                                ></path>
-                                                <path
-                                                    d="M447 751.9c-170.3 0-308.8-145.1-308.8-323.5 0-8.1-6.6-14.7-14.7-14.7s-14.7 6.6-14.7 14.7c0 194.6 151.7 352.9 338.2 352.9 8.1 0 14.7-6.6 14.7-14.7s-6.6-14.7-14.7-14.7z"
-                                                    fill="#333234"
-                                                    p-id="29436"
-                                                ></path>
-                                                <path
-                                                    d="M527.9 733.5m-16.5 0a16.5 16.5 0 1 0 33 0 16.5 16.5 0 1 0-33 0Z"
-                                                    fill="#333234"
-                                                    p-id="29437"
-                                                ></path>
-                                                <path
-                                                    d="M1019.7 998.6L810.2 796.5c-5.9-5.6-15.2-5.5-20.8 0.4-5.7 5.8-5.5 15.1 0.3 20.8l209.5 202.2c2.9 2.8 6.5 4.1 10.2 4.1 3.8 0 7.7-1.5 10.6-4.5 5.7-5.9 5.5-15.2-0.3-20.9z"
-                                                    fill="#333234"
-                                                    p-id="29438"
+                                                    d="M80.867881 469.76534l0.916659 0.916659 79.711097-79.711097L160.655367 389.901467a162.210364 162.210364 0 0 1 229.164631-229.164631l236.345122 236.345122L706.028994 317.332667l-236.345123-236.803452a275.112139 275.112139 0 0 0-388.81599 389.27432z m472.690245-388.81599l-0.916658 0.916659 79.711097 79.711097 0.916659-0.916658A162.210364 162.210364 0 0 1 862.663019 389.901467l-236.345122 236.345122 79.711097 79.711098 236.803452-236.345123a275.112139 275.112139 0 0 0-389.27432-388.81599z m-84.027031 861.506236l0.916659-0.916659-79.711098-79.711097-0.916658 0.916658a162.210364 162.210364 0 0 1-229.164631-229.431989l236.345122-236.345123L317.251198 317.332667l-236.803452 236.345122a275.112139 275.112139 0 0 0 389.27432 388.815991z m99.801197-372.736272a81.811773 81.811773 0 0 0 21.197728-78.794439 80.895115 80.895115 0 0 0-57.59671-57.596711 81.620803 81.620803 0 1 0 36.398982 136.352956z m373.156407-15.659583l-0.916659-0.916659-79.711097 79.711097 0.916658 0.916659a162.248559 162.248559 0 0 1-229.431989 229.431989L396.885907 626.704918 317.251198 706.568792l236.345122 236.803452A275.073945 275.073945 0 0 0 942.374117 554.136119z"
+                                                    fill="#297CE9"
+                                                    p-id="8189"
                                                 ></path>
                                             </svg>
                                         </n-icon>
                                     </template>
-                                    通用问答
+                                    深度思考
                                 </n-button>
                                 <n-button
                                     type="default"
