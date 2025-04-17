@@ -9,7 +9,11 @@ dependencies:
 - current_identifier: null
   type: marketplace
   value:
-    marketplace_plugin_unique_identifier: langgenius/ollama:0.0.3@9ded90ac00e8510119a24be7396ba77191c9610d5e1e29f59d68fa1229822fc7
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.0.4@925a003ff416de88ca7d3624b53ea1307cf1b4bf8315924d37c7eb704230ed28
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.5@fd6efd37c2a931911de8ab9ca3ba2da303bef146d45ee87ad896b04b36d09403
 kind: app
 version: 0.1.5
 workflow:
@@ -170,30 +174,6 @@ workflow:
       zIndex: 0
     - data:
         isInIteration: false
-        sourceType: llm
-        targetType: code
-      id: 1724295728093-source-1724295911042-target
-      selected: false
-      source: '1724295728093'
-      sourceHandle: source
-      target: '1724295911042'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
-        sourceType: code
-        targetType: answer
-      id: 1724295911042-source-1724296111387-target
-      selected: false
-      source: '1724295911042'
-      sourceHandle: source
-      target: '1724296111387'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
         sourceType: http-request
         targetType: code
       id: 1730887499318-source-1730887562850-target
@@ -233,6 +213,7 @@ workflow:
         sourceType: if-else
         targetType: llm
       id: 1732517672259-d7c25be0-954f-4965-a2f1-20d29f530704-1721978504647-target
+      selected: false
       source: '1732517672259'
       sourceHandle: d7c25be0-954f-4965-a2f1-20d29f530704
       target: '1721978504647'
@@ -244,6 +225,7 @@ workflow:
         sourceType: http-request
         targetType: code
       id: 1732520123593-source-1732520201744-target
+      selected: false
       source: '1732520123593'
       sourceHandle: source
       target: '1732520201744'
@@ -255,6 +237,7 @@ workflow:
         sourceType: code
         targetType: llm
       id: 1732520201744-source-1732520268554-target
+      selected: false
       source: '1732520201744'
       sourceHandle: source
       target: '1732520268554'
@@ -263,31 +246,10 @@ workflow:
       zIndex: 0
     - data:
         isInIteration: false
-        sourceType: llm
-        targetType: code
-      id: 1732520268554-source-1732520761704-target
-      source: '1732520268554'
-      sourceHandle: source
-      target: '1732520761704'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
-        sourceType: code
-        targetType: answer
-      id: 1732520761704-source-1732520428762-target
-      source: '1732520761704'
-      sourceHandle: source
-      target: '1732520428762'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
         sourceType: if-else
         targetType: http-request
       id: 1732517672259-c1319e61-38af-4482-979b-3a2e2c4e6026-1730887499318-target
+      selected: false
       source: '1732517672259'
       sourceHandle: c1319e61-38af-4482-979b-3a2e2c4e6026
       target: '1730887499318'
@@ -299,6 +261,7 @@ workflow:
         sourceType: if-else
         targetType: if-else
       id: 1721978465891-false-1732517672259-target
+      selected: false
       source: '1721978465891'
       sourceHandle: 'false'
       target: '1732517672259'
@@ -310,6 +273,7 @@ workflow:
         sourceType: if-else
         targetType: code
       id: 1732517672259-68588ce1-7f5d-4af9-8191-4320e927e7fd-1734683532736-target
+      selected: false
       source: '1732517672259'
       sourceHandle: 68588ce1-7f5d-4af9-8191-4320e927e7fd
       target: '1734683532736'
@@ -321,6 +285,7 @@ workflow:
         sourceType: code
         targetType: if-else
       id: 1734683532736-source-1734683610947-target
+      selected: false
       source: '1734683532736'
       sourceHandle: source
       target: '1734683610947'
@@ -332,6 +297,7 @@ workflow:
         sourceType: if-else
         targetType: http-request
       id: 1734683610947-true-1732520123593-target
+      selected: false
       source: '1734683610947'
       sourceHandle: 'true'
       target: '1732520123593'
@@ -343,6 +309,7 @@ workflow:
         sourceType: if-else
         targetType: http-request
       id: 1734683610947-false-17355251156380-target
+      selected: false
       source: '1734683610947'
       sourceHandle: 'false'
       target: '17355251156380'
@@ -354,6 +321,7 @@ workflow:
         sourceType: http-request
         targetType: code
       id: 17355251156380-source-1735525806917-target
+      selected: false
       source: '17355251156380'
       sourceHandle: source
       target: '1735525806917'
@@ -365,6 +333,7 @@ workflow:
         sourceType: code
         targetType: llm
       id: 1735525806917-source-1735526005555-target
+      selected: false
       source: '1735525806917'
       sourceHandle: source
       target: '1735526005555'
@@ -376,6 +345,7 @@ workflow:
         sourceType: llm
         targetType: http-request
       id: 1735526005555-source-17355298585890-target
+      selected: false
       source: '1735526005555'
       sourceHandle: source
       target: '17355298585890'
@@ -387,6 +357,7 @@ workflow:
         sourceType: http-request
         targetType: code
       id: 17355298585890-source-1735530100215-target
+      selected: false
       source: '17355298585890'
       sourceHandle: source
       target: '1735530100215'
@@ -398,6 +369,7 @@ workflow:
         sourceType: code
         targetType: if-else
       id: 1735530100215-source-1735530110523-target
+      selected: false
       source: '1735530100215'
       sourceHandle: source
       target: '1735530110523'
@@ -409,6 +381,7 @@ workflow:
         sourceType: if-else
         targetType: answer
       id: 1735530110523-true-1735530121003-target
+      selected: false
       source: '1735530110523'
       sourceHandle: 'true'
       target: '1735530121003'
@@ -420,6 +393,7 @@ workflow:
         sourceType: if-else
         targetType: llm
       id: 1735530110523-false-17355423844960-target
+      selected: false
       source: '1735530110523'
       sourceHandle: 'false'
       target: '17355423844960'
@@ -429,30 +403,9 @@ workflow:
     - data:
         isInIteration: false
         sourceType: llm
-        targetType: code
-      id: 17355423844960-source-17355424274730-target
-      source: '17355423844960'
-      sourceHandle: source
-      target: '17355424274730'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
-        sourceType: code
-        targetType: answer
-      id: 17355424274730-source-1735530155560-target
-      source: '17355424274730'
-      sourceHandle: source
-      target: '1735530155560'
-      targetHandle: target
-      type: custom
-      zIndex: 0
-    - data:
-        isInIteration: false
-        sourceType: llm
         targetType: http-request
       id: 1721978504647-source-1724295046398-target
+      selected: false
       source: '1721978504647'
       sourceHandle: source
       target: '1724295046398'
@@ -464,6 +417,7 @@ workflow:
         sourceType: if-else
         targetType: llm
       id: 1732517672259-true-1740559499175-target
+      selected: false
       source: '1732517672259'
       sourceHandle: 'true'
       target: '1740559499175'
@@ -471,24 +425,46 @@ workflow:
       type: custom
       zIndex: 0
     - data:
-        isInIteration: false
+        isInLoop: false
         sourceType: llm
-        targetType: code
-      id: 1740559499175-source-1742191522192-target
+        targetType: answer
+      id: 1740559499175-source-1740381923341-target
       source: '1740559499175'
       sourceHandle: source
-      target: '1742191522192'
+      target: '1740381923341'
       targetHandle: target
       type: custom
       zIndex: 0
     - data:
-        isInIteration: false
-        sourceType: code
+        isInLoop: false
+        sourceType: llm
         targetType: answer
-      id: 1742191522192-source-1740381923341-target
-      source: '1742191522192'
+      id: 1724295728093-source-1724296111387-target
+      source: '1724295728093'
       sourceHandle: source
-      target: '1740381923341'
+      target: '1724296111387'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 1732520268554-source-1732520428762-target
+      source: '1732520268554'
+      sourceHandle: source
+      target: '1732520428762'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 17355423844960-source-1735530155560-target
+      source: '17355423844960'
+      sourceHandle: source
+      target: '1735530155560'
       targetHandle: target
       type: custom
       zIndex: 0
@@ -509,10 +485,10 @@ workflow:
       id: '1721978213302'
       position:
         x: 30
-        y: 270.5
+        y: 271.5
       positionAbsolute:
         x: 30
-        y: 270.5
+        y: 271.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -536,10 +512,10 @@ workflow:
       id: '1721978268262'
       position:
         x: 334
-        y: 270.5
+        y: 271.5
       positionAbsolute:
         x: 334
-        y: 270.5
+        y: 271.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -618,10 +594,10 @@ workflow:
       id: '1721978276391'
       position:
         x: 638
-        y: 270.5
+        y: 271.5
       positionAbsolute:
         x: 638
-        y: 270.5
+        y: 271.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -634,14 +610,14 @@ workflow:
         title: 直接回复
         type: answer
         variables: []
-      height: 142
+      height: 143
       id: '1721978416917'
       position:
         x: 1550
-        y: 270.5
+        y: 271.5
       positionAbsolute:
         x: 1550
-        y: 270.5
+        y: 271.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -670,10 +646,10 @@ workflow:
       id: '1721978435688'
       position:
         x: 942
-        y: 270.5
+        y: 271.5
       positionAbsolute:
         x: 942
-        y: 270.5
+        y: 271.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -701,10 +677,10 @@ workflow:
       id: '1721978465891'
       position:
         x: 1246
-        y: 270.5
+        y: 271.5
       positionAbsolute:
         x: 1246
-        y: 270.5
+        y: 271.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -720,8 +696,8 @@ workflow:
             num_thread: 4
             temperature: 0.5
           mode: chat
-          name: qwen2.5
-          provider: langgenius/ollama/ollama
+          name: qwen2.5-72b-instruct
+          provider: langgenius/tongyi/tongyi
         prompt_template:
         - id: 857c0bfd-73a8-47b2-b6fe-b7e738894b8d
           role: system
@@ -796,10 +772,10 @@ workflow:
       id: '1721978504647'
       position:
         x: 1854
-        y: 516
+        y: 518
       positionAbsolute:
         x: 1854
-        y: 516
+        y: 518
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -833,14 +809,14 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/llm/process_llm_out
         variables: []
-      height: 163
+      height: 164
       id: '1724295046398'
       position:
         x: 2158
-        y: 516
+        y: 518
       positionAbsolute:
         x: 2158
-        y: 516
+        y: 518
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -876,10 +852,10 @@ workflow:
       id: '1724295169935'
       position:
         x: 2462
-        y: 516
+        y: 518
       positionAbsolute:
         x: 2462
-        y: 516
+        y: 518
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -906,10 +882,10 @@ workflow:
       id: '1724295615269'
       position:
         x: 2766
-        y: 516
+        y: 518
       positionAbsolute:
         x: 2766
-        y: 516
+        y: 518
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -922,14 +898,14 @@ workflow:
         title: 返回失败
         type: answer
         variables: []
-      height: 142
+      height: 143
       id: '1724295640306'
       position:
         x: 3070
-        y: 516
+        y: 518
       positionAbsolute:
         x: 3070
-        y: 516
+        y: 518
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -946,8 +922,8 @@ workflow:
             num_thread: 4
             temperature: 0.7
           mode: chat
-          name: deepseek-r1:7b
-          provider: langgenius/ollama/ollama
+          name: deepseek-reasoner
+          provider: langgenius/deepseek/deepseek
         prompt_template:
         - id: 48d8610a-aab1-4e2e-8fd1-3111b94de508
           role: system
@@ -957,7 +933,8 @@ workflow:
         - id: d424dafa-ebed-4271-90e5-4bafff0ca243
           role: user
           text: "# 任务: 从诈骗数据中总结分析出数据趋势\n\n----\n# 诈骗数据:  {{#1724295169935.res_data#}}\n\
-            ----\n# 约束:\n - 输出结果不能出现英文和繁体字\n - 严格依据数据集回答不要虚构\n\n# 输出格式: 选择合适的形式"
+            ----\n# 约束:\n - 输出结果不能出现英文和繁体字\n - 严格依据数据集回答不要虚构\n - 不要输出 ```markdown\n\
+            \n# 输出格式: markdown格式输出"
         selected: false
         title: 分析总结结果
         type: llm
@@ -968,47 +945,17 @@ workflow:
       id: '1724295728093'
       position:
         x: 3070
-        y: 697
+        y: 701
       positionAbsolute:
         x: 3070
-        y: 697
-      selected: false
+        y: 701
+      selected: true
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 244
     - data:
-        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"llm_out_wrapper\"\
-          : llm_out+\"详情如下图:\"\n    }\n"
-        code_language: python3
-        desc: ''
-        outputs:
-          llm_out_wrapper:
-            children: null
-            type: string
-        selected: false
-        title: 提取大模型文本
-        type: code
-        variables:
-        - value_selector:
-          - '1724295728093'
-          - text
-          variable: llm_out
-      height: 54
-      id: '1724295911042'
-      position:
-        x: 3374
-        y: 685.5
-      positionAbsolute:
-        x: 3374
-        y: 685.5
-      selected: false
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 244
-    - data:
-        answer: '{{#1721978276391.dify_0_t02#}}{{#1724295911042.llm_out_wrapper#}}{{#1721978276391.dify_1_t02#}}
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1724295728093.text#}}{{#1721978276391.dify_1_t02#}}
 
           {{#1721978276391.dify_0_t04#}}{{#1724295046398.body#}}{{#1721978276391.dify_1_t04#}}'
         desc: ''
@@ -1016,14 +963,14 @@ workflow:
         title: 响应结果集
         type: answer
         variables: []
-      height: 197
+      height: 200
       id: '1724296111387'
       position:
-        x: 3678
-        y: 685.5
+        x: 3374
+        y: 688.5
       positionAbsolute:
-        x: 3678
-        y: 685.5
+        x: 3374
+        y: 688.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1055,14 +1002,14 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/llm/query_guided_report
         variables: []
-      height: 135
+      height: 136
       id: '1730887499318'
       position:
         x: 1854
-        y: 715
+        y: 721
       positionAbsolute:
         x: 1854
-        y: 715
+        y: 721
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1096,10 +1043,10 @@ workflow:
       id: '1730887562850'
       position:
         x: 2158
-        y: 779
+        y: 784
       positionAbsolute:
         x: 2158
-        y: 779
+        y: 784
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1126,10 +1073,10 @@ workflow:
       id: '1730887626621'
       position:
         x: 2462
-        y: 688
+        y: 693.5
       positionAbsolute:
         x: 2462
-        y: 688
+        y: 693.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1142,14 +1089,14 @@ workflow:
         title: 返回结果
         type: answer
         variables: []
-      height: 142
+      height: 143
       id: '1730887662105'
       position:
         x: 2766
-        y: 716.5
+        y: 721
       positionAbsolute:
         x: 2766
-        y: 716.5
+        y: 721
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1209,10 +1156,10 @@ workflow:
       id: '1732517672259'
       position:
         x: 1550
-        y: 451.5
+        y: 454.5
       positionAbsolute:
         x: 1550
-        y: 451.5
+        y: 454.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1242,14 +1189,14 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/file/read_file
         variables: []
-      height: 135
+      height: 136
       id: '1732520123593'
       position:
         x: 2462
-        y: 854
+        y: 859.5
       positionAbsolute:
         x: 2462
-        y: 854
+        y: 859.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1283,10 +1230,10 @@ workflow:
       id: '1732520201744'
       position:
         x: 2766
-        y: 931
+        y: 936
       positionAbsolute:
         x: 2766
-        y: 931
+        y: 936
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1301,8 +1248,8 @@ workflow:
           completion_params:
             temperature: 0.7
           mode: chat
-          name: deepseek-r1:7b
-          provider: langgenius/ollama/ollama
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
         prompt_template:
         - id: d8002acb-7dd8-4675-8db6-df76a44094de
           role: system
@@ -1335,60 +1282,30 @@ workflow:
       id: '1732520268554'
       position:
         x: 3070
-        y: 920.5
+        y: 926.5
       positionAbsolute:
         x: 3070
-        y: 920.5
+        y: 926.5
       selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 244
     - data:
-        answer: '{{#1721978276391.dify_0_t02#}}{{#1732520761704.result#}}{{#1721978276391.dify_1_t02#}}'
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1732520268554.text#}}{{#1721978276391.dify_1_t02#}}'
         desc: ''
         selected: false
         title: 文件内容总结
         type: answer
         variables: []
-      height: 142
+      height: 143
       id: '1732520428762'
       position:
-        x: 3678
-        y: 923.5
-      positionAbsolute:
-        x: 3678
-        y: 923.5
-      selected: false
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 244
-    - data:
-        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"result\"\
-          : llm_out\n    }\n"
-        code_language: python3
-        desc: ''
-        outputs:
-          result:
-            children: null
-            type: string
-        selected: false
-        title: 提取大模型文本
-        type: code
-        variables:
-        - value_selector:
-          - '1732520268554'
-          - text
-          variable: llm_out
-      height: 54
-      id: '1732520761704'
-      position:
         x: 3374
-        y: 895
+        y: 928.5
       positionAbsolute:
         x: 3374
-        y: 895
+        y: 928.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1426,10 +1343,10 @@ workflow:
       id: '1734683532736'
       position:
         x: 1854
-        y: 927
+        y: 932
       positionAbsolute:
         x: 1854
-        y: 927
+        y: 932
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1456,10 +1373,10 @@ workflow:
       id: '1734683610947'
       position:
         x: 2158
-        y: 914
+        y: 918.5
       positionAbsolute:
         x: 2158
-        y: 914
+        y: 918.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1489,14 +1406,14 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/file/read_file_column
         variables: []
-      height: 135
+      height: 136
       id: '17355251156380'
       position:
         x: 2462
-        y: 1030
+        y: 1048
       positionAbsolute:
         x: 2462
-        y: 1030
+        y: 1048
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1530,10 +1447,10 @@ workflow:
       id: '1735525806917'
       position:
         x: 2766
-        y: 1107
+        y: 1124.5
       positionAbsolute:
         x: 2766
-        y: 1107
+        y: 1124.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1548,8 +1465,8 @@ workflow:
           completion_params:
             temperature: 0.5
           mode: chat
-          name: qwen2.5
-          provider: langgenius/ollama/ollama
+          name: qwen2.5-72b-instruct
+          provider: langgenius/tongyi/tongyi
         prompt_template:
         - id: ea976c24-3e29-4aeb-9c63-195bf30d4790
           role: system
@@ -1582,10 +1499,10 @@ workflow:
       id: '1735526005555'
       position:
         x: 3070
-        y: 1096.5
+        y: 1115
       positionAbsolute:
         x: 3070
-        y: 1096.5
+        y: 1115
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1619,14 +1536,14 @@ workflow:
         type: http-request
         url: http://host.docker.internal:8088/file/process_file_llm_out
         variables: []
-      height: 138
+      height: 154
       id: '17355298585890'
       position:
         x: 3374
-        y: 1021
+        y: 1111.5
       positionAbsolute:
         x: 3374
-        y: 1021
+        y: 1111.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1659,10 +1576,10 @@ workflow:
       id: '1735530100215'
       position:
         x: 3678
-        y: 1143
+        y: 1088.5
       positionAbsolute:
         x: 3678
-        y: 1143
+        y: 1088.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1689,10 +1606,10 @@ workflow:
       id: '1735530110523'
       position:
         x: 3982
-        y: 1071
+        y: 1088.5
       positionAbsolute:
         x: 3982
-        y: 1071
+        y: 1088.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1705,21 +1622,21 @@ workflow:
         title: 直接回复
         type: answer
         variables: []
-      height: 142
+      height: 143
       id: '1735530121003'
       position:
         x: 4286
-        y: 1071
+        y: 1088.5
       positionAbsolute:
         x: 4286
-        y: 1071
+        y: 1088.5
       selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 244
     - data:
-        answer: '{{#1721978276391.dify_0_t02#}}{{#17355424274730.llm_out_wrapper#}}{{#1721978276391.dify_1_t02#}}
+        answer: '{{#1721978276391.dify_0_t02#}}{{#17355423844960.text#}}{{#1721978276391.dify_1_t02#}}
 
           {{#1721978276391.dify_0_t04#}}{{#17355298585890.body#}}{{#1721978276391.dify_1_t04#}}'
         desc: ''
@@ -1727,14 +1644,14 @@ workflow:
         title: 直接回复
         type: answer
         variables: []
-      height: 197
+      height: 200
       id: '1735530155560'
       position:
-        x: 4894
-        y: 1240.5
+        x: 4590
+        y: 1259
       positionAbsolute:
-        x: 4894
-        y: 1240.5
+        x: 4590
+        y: 1259
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1751,8 +1668,8 @@ workflow:
             num_thread: 4
             temperature: 0.5
           mode: chat
-          name: deepseek-r1:7b
-          provider: langgenius/ollama/ollama
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
         prompt_template:
         - id: 48d8610a-aab1-4e2e-8fd1-3111b94de508
           role: system
@@ -1775,60 +1692,30 @@ workflow:
       id: '17355423844960'
       position:
         x: 4286
-        y: 1252
+        y: 1271.5
       positionAbsolute:
         x: 4286
-        y: 1252
+        y: 1271.5
       selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 244
     - data:
-        code: "\ndef main(llm_out:str) -> dict:\n    return {\n        \"llm_out_wrapper\"\
-          : llm_out+\"详情如下图:\"\n    }\n"
-        code_language: python3
-        desc: ''
-        outputs:
-          llm_out_wrapper:
-            children: null
-            type: string
-        selected: false
-        title: 提取大模型文本
-        type: code
-        variables:
-        - value_selector:
-          - '17355423844960'
-          - text
-          variable: llm_out
-      height: 54
-      id: '17355424274730'
-      position:
-        x: 4590
-        y: 1240.5
-      positionAbsolute:
-        x: 4590
-        y: 1240.5
-      selected: false
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 244
-    - data:
-        answer: '{{#1721978276391.dify_0_t02#}}{{#1742191522192.llm_out#}}{{#1721978276391.dify_1_t02#}}'
+        answer: '{{#1721978276391.dify_0_t02#}}{{#1740559499175.text#}}{{#1721978276391.dify_1_t02#}}'
         desc: ''
         selected: false
         title: 返回问答结果
         type: answer
         variables: []
-      height: 142
+      height: 143
       id: '1740381923341'
       position:
-        x: 2462
-        y: 1206
+        x: 2158
+        y: 1084.5
       positionAbsolute:
-        x: 2462
-        y: 1206
+        x: 2158
+        y: 1084.5
       selected: false
       sourcePosition: right
       targetPosition: left
@@ -1851,8 +1738,8 @@ workflow:
           completion_params:
             temperature: 0.4
           mode: chat
-          name: deepseek-r1:7b
-          provider: langgenius/ollama/ollama
+          name: deepseek-chat
+          provider: langgenius/deepseek/deepseek
         prompt_template:
         - id: 5e995084-c4fd-44cd-903c-0937bee29500
           role: system
@@ -1872,46 +1759,16 @@ workflow:
       id: '1740559499175'
       position:
         x: 1854
-        y: 1263.5
+        y: 1088.5
       positionAbsolute:
         x: 1854
-        y: 1263.5
-      selected: true
-      sourcePosition: right
-      targetPosition: left
-      type: custom
-      width: 244
-    - data:
-        code: "def main(llm_out:str) -> dict:\n    return {\n        \"llm_out\":\
-          \ llm_out\n    }\n"
-        code_language: python3
-        desc: ''
-        outputs:
-          llm_out:
-            children: null
-            type: string
-        selected: false
-        title: 获取结果
-        type: code
-        variables:
-        - value_selector:
-          - '1740559499175'
-          - text
-          variable: llm_out
-      height: 54
-      id: '1742191522192'
-      position:
-        x: 2158
-        y: 1304.5
-      positionAbsolute:
-        x: 2158
-        y: 1304.5
+        y: 1088.5
       selected: false
       sourcePosition: right
       targetPosition: left
       type: custom
       width: 244
     viewport:
-      x: -1312
-      y: -310.9999999999999
+      x: -1513
+      y: -263.0000000000001
       zoom: 0.7
