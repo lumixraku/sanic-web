@@ -94,7 +94,7 @@ export const transformStreamValue: Record<
     qwen2(readValue) {
         const stream = JSON.parse(readValue)
         return {
-            content: stream.content + '\n'
+            content: stream.content
         }
     }
 }

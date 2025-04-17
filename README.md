@@ -113,7 +113,7 @@
    # Mac or Linux 用户执行
    
    cd docker
-   ./init.sh
+   ./init_data.sh
    
    # Windows 用户执行
    
@@ -159,7 +159,7 @@
    ```bash
     # Mac or Linux 用户执行
      cd docker
-     ./init.sh
+     ./init_data.sh
       
     # Windows 用户执行
       
