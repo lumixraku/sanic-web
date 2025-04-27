@@ -72,17 +72,8 @@ if __name__ == "__main__":
 async def exe_file_sql_query(file_key, model_out_str):
     """
     文件问答: 执行大模型解析出的SQL语句并返回结果集
-
-    Args:
-        file_key (str): 文件key
-        model_out_str (str): 大模型输出信息
-
-    Returns:
-        dict: {"column":[], "result":[]}
-
-    Raises:
-        MyException: 当文件问答大模型返回结果为空或SQL语句为空时抛出异常
     """
+    print("model out str", file_key, model_out_str)
     if not model_out_str:
         logger.error("文件问答大模型返回结果为空")
         raise MyException(SysCode.c_9999)
@@ -108,8 +99,9 @@ async def exe_file_sql_query(file_key, model_out_str):
 
         # 解析模型输出并获取SQL语句
         model_out_json = json.loads(model_out_str)
-        sql = model_out_json.get("sql", "").replace("`", "")  # 移除反引号以避免SQL语法错误
-
+        sql = model_out_json.get("sql", "")
+        logger.info(f"即将执行的SQL语句: {sql}")  # 添加SQL日志输出
+        
         if not sql.strip():
             logger.error("文件问答大模型返回SQL语句为空")
             raise MyException(SysCode.c_9999)

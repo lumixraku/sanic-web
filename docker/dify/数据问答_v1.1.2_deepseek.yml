@@ -1488,7 +1488,8 @@ workflow:
             \ SELECT 产地, COUNT(*) as 商品数量 FROM excel_table GROUP BY 产地\n- 只能使用表结构信息中提供的表来生成\
             \ sql，如果无法根据提供的表结构中生成 sql ，请说：'提供的表结构信息不足以生成 sql 查询。'禁止随意捏造信息。\n- 请从如下给出的展示方式种选择最形象的一种用以进行数据渲染，将类型名称放入返回要求格式的name参数值中，如果找不到最合适的则使用'Table'作为展示方式，数据展示方式如下:\n\
             \ {{#1721978276391.nl2sql_display_type#}}\n# 返回格式:\n 请一步步思考并按照以下JSON格式回复：{{#1721978276391.nl2sql_response#}}\n\
-            \ 确保返回正确的json并且可以被Python json.loads方法解析."
+            \ 确保返回正确的json并且可以被Python json.loads方法解析.不需要 json``` 包裹，使用方会将这个数据直接用于 parse
+            \另外注意若用到了UNPIVOT， 为了使 UNPIVOT 操作能够正常工作，需要将所有列转换为同一数据类型。通常，将所有列转换为 VARCHAR 类型是一个常见的解决方案。"
         selected: false
         title: 文件问答
         type: llm

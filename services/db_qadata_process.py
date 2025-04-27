@@ -127,20 +127,21 @@ def process(data):
             type_enum = ChartTypeEnum.TABLE_CHART
         elif type_enum == ChartTypeEnum.PIE_CHART and len(column_data) > 2:
             type_enum = ChartTypeEnum.TABLE_CHART
-        elif type_enum == ChartTypeEnum.BAR_CHART:
+        # elif type_enum == ChartTypeEnum.BAR_CHART:
+            
             # 如果大模型返回柱状图且如果包含多列中文，则使用表格展示
-            if chart_data:
-                json_object = chart_data[0]
-                if json_object is not None:
-                    count = sum(1 for key in json_object.keys() if (item := json_object.get(key)) and pattern.match(str(item)))
-                    if count > 1:
-                        type_enum = ChartTypeEnum.TABLE_CHART
+            # if chart_data:
+            #     json_object = chart_data[0]
+            #     if json_object is not None:
+            #         count = sum(1 for key in json_object.keys() if (item := json_object.get(key)) and pattern.match(str(item)))
+            #         if count > 1:
+            #             type_enum = ChartTypeEnum.TABLE_CHART
 
-            # 如果 columnData 列表中的元素数量大于3，则更改图表类型为表格
-            if len(column_data) > 3:
-                type_enum = ChartTypeEnum.TABLE_CHART
-        elif type_enum == ChartTypeEnum.LINE_CHART and len(column_data) > 2:
-            type_enum = ChartTypeEnum.TABLE_CHART
+            # # 如果 columnData 列表中的元素数量大于3，则更改图表类型为表格
+            # if len(column_data) > 3:
+            #     type_enum = ChartTypeEnum.TABLE_CHART
+        # elif type_enum == ChartTypeEnum.LINE_CHART and len(column_data) > 2:
+            # type_enum = ChartTypeEnum.TABLE_CHART
 
         handlers = {
             ChartTypeEnum.TABLE_CHART: process_table_chart,
@@ -244,10 +245,10 @@ def process_bar_chart(llm_info: Dict[str, Any], column_data: List[str], chart_da
                 first_item = chart_data[0]
                 for key in first_item.keys():
                     item_value = first_item[key]
-                    if is_numeric(item_value):
-                        column_array[k] = "数量"
-                    elif is_valid_date(item_value):
-                        column_array[k] = "日期"
+                    # if is_numeric(item_value):
+                    #     column_array[k] = "数量"
+                    # elif is_valid_date(item_value):
+                    #     column_array[k] = "日期"
 
         data_list.append(column_array)
 
