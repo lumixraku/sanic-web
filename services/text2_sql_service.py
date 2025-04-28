@@ -95,6 +95,7 @@ async def exe_file_sql_query(file_key, model_out_str):
 
         # 连接到DuckDB (这里使用内存数据库) 并注册DataFrame
         con = duckdb.connect(database=":memory:")
+        # 这里将完整数据加载到DuckDB
         con.register("excel_table", df)
 
         # 解析模型输出并获取SQL语句
