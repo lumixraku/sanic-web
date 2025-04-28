@@ -356,6 +356,7 @@ def build_prompt(doc_content) -> str:
     # 返回格式
     请一步步思考并按照以下JSON格式回复：{result_format}
     确保返回正确的json并且可以被Python json.loads方法解析.
+    不需要 json``` 包裹，使用方会将这个数据直接用于 parse
     """
     return prompt_content
 

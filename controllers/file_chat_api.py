@@ -22,16 +22,28 @@ async def read_file(req: Request):
     :param req:
     :return:
     """
+    try:
+        file_key = req.args.get("file_qa_str")
+        if not file_key:
+            file_key = req.json.get("file_qa_str")
 
-    file_key = req.args.get("file_qa_str")
-    if not file_key:
-        file_key = req.json.get("file_qa_str")
+        file_key = file_key.split("|")[0]  # 取文档地址
+        print(f"Processing file key: {file_key}")  # 打印file_key
 
-    file_key = file_key.split("|")[0]  # 取文档地址
+        file_url = minio_utils.get_file_url_by_key(object_key=file_key)
+        print(f"File URL: {file_url}")  # 打印file_url
 
-    file_url = minio_utils.get_file_url_by_key(object_key=file_key)
-    result = await read_excel(file_url)
-    return result
+        excel_data = await read_excel(file_url)
+        result = {
+            "file_key": file_key,
+            "file_url": file_url,
+            "excel_data": excel_data
+        }
+        return excel_data
+    except Exception as e:
+        print(f"Error processing file: {file_key}")  # 打印出错的file_key
+        print(f"File URL: {file_url}")  # 打印出错的file_url
+        raise
 
 
 @bp.post("/read_file_column")
@@ -107,7 +119,7 @@ async def process_file_llm_out(req):
         # 文件key
         file_key = req.args.get("file_key")
         logging.info(f"query param: {body_str}")
-
+        
         result = await exe_file_sql_query(file_key, body_str)
         return result
     except Exception as e:

@@ -212,11 +212,19 @@ async def read_excel(file_url: str):
     try:
         # 分割URL以获取文件名部分
         extension = file_url.split("/")[-1].split(".")[-1].split("?")[0]
+        print(f"[DEBUG] 开始读取文件: {file_url}, 扩展名: {extension}")  # 添加文件信息日志
+        
         if extension in ["xlsx", "xls"]:
             with pd.ExcelFile(file_url) as xls:
-                sheets_data = {sheet_name: xls.parse(sheet_name).head(1) for sheet_name in xls.sheet_names}
+                print(f"[DEBUG] 找到工作表: {xls.sheet_names}")  # 添加工作表列表日志
+                sheets_data = {}
+                for sheet_name in xls.sheet_names:
+                    df = xls.parse(sheet_name).head(1)
+                    print(f"[DEBUG] 工作表 '{sheet_name}' 读取到 {len(df)} 行数据")  # 添加每表数据日志
+                    sheets_data[sheet_name] = df
         elif extension in "csv":
             xls = pd.read_csv(file_url)
+            print(f"[DEBUG] CSV文件读取到 {len(xls)} 行数据")  # 添加CSV数据日志
             sheets_data = {"sheet1": xls.head(1)}
         else:
             raise ValueError("Unsupported file extension")
@@ -224,9 +232,14 @@ async def read_excel(file_url: str):
         # 遍历每个工作表并转换为所需的列表格式
         sheets_data_list_format = {}
         for sheet_name, df in sheets_data.items():
-            sheets_data_list_format[sheet_name] = {"excel表头": df.columns.tolist(), "excel数据": df.values.tolist()}
+            print(f"[DEBUG] 处理工作表 '{sheet_name}' 数据")  # 添加数据处理日志
+            sheets_data_list_format[sheet_name] = {
+                "excel表头": df.columns.tolist(), 
+                "excel数据": df.values.tolist()
+            }
         return json.dumps(sheets_data_list_format, ensure_ascii=False, cls=DateEncoder)
     except Exception as e:
+        print(f"[ERROR] 读取文件失败: {str(e)}")  # 增强错误日志
         traceback.print_exception(e)
 
 
@@ -255,6 +268,7 @@ async def read_file_columns(file_url: str):
 
         # 获取列名称并转换为列表
         columns = df.columns.tolist()
+        
 
         # 将列名称转为JSON格式返回
         return json.dumps(columns, ensure_ascii=False)

@@ -94,7 +94,7 @@ onMounted(() => {
         // 遍历数据
         data.forEach((item) => {
             const product = item[0]
-            const cases = parseInt(item[1], 10)
+            const cases = parseInt(item[item.length -1], 10)
 
             // 只当转换为数字成功时才添加到数组中
             if (!isNaN(cases)) {

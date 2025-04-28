@@ -17,3 +17,11 @@ web/.vscode/
 logs/
 # 环境变量文件
 .pytest_cache/
+
+.DS_Store
+.pem
+docker/dify/docker/volumes/app/storage
+docker/dify/docker/volumes/db/data
+docker/dify/docker/volumes/plugin_daemon
+docker/dify/docker/volumes/weaviate
+docker/dify/docker/volumes/redis
